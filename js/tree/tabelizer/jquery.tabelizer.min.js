@@ -1,0 +1,19 @@
+/*
+ * 
+ * Tabelizer 1.0.3 - multi level grouping indicators for tables
+ * Version 1.0.3
+ * @requires jQuery v1.6+ and jQuery.ui core
+ * 
+ * Copyright (c) 2014 Rafael Huisman
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ */
+/*
+ * @description Create a table with multi level grouping indicators.
+ * @example $('#table1').tabelize();
+ * @demo http://powerconsulting.co/Samples/Tabelizer
+ * @desc Create a simple tabelized interface.
+ */
+
+!function(e){var n={};n.isFunction=function(e){return e&&"[object Function]"==={}.toString.call(e)},n.rowClicker=function(l){"undefined"!=typeof n.conf.onBeforeRowClick&&n.isFunction(n.conf.onBeforeRowClick)&&n.conf.onBeforeRowClick.apply(n.getPublicObj(),[l]);var o=e(l.currentTarget);o.is("tr")||(o=o.parentsUntil("tr").parent()),$row=o;var a=$row.attr("id");return $row.hasClass("contracted")?($row.removeClass("contracted").addClass("expanded"),n.toggleChildren(a,!0)):($row.removeClass("expanded").addClass("contracted"),n.toggleChildren(a,!1)),n.updateLines(),"undefined"!=typeof n.conf.onAfterRowClick&&n.isFunction(n.conf.onAfterRowClick)&&n.conf.onAfterRowClick.apply(n.getPublicObj(),[l]),n.getPublicObj()},n.updateLines=function(){var l="",o="";if($prevRow=null,n.caller.find("tr:not(.hidden):not(.hiding)").each(function(){if($row=e(this),!$row.hasClass("header")){l=$row.data("level");for(var a=n.maxLevel;a>0;a--)$row.removeClass("l"+a+"-first").removeClass("l"+a+"-last");var t="";if(l!=o)if(""!=o&&o>l)for(var a=o;a>=l;a--)$prevRow.addClass(" l"+parseInt(a)+"-last");else""!=o&&l>o&&$prevRow.addClass(" l"+o+"-first");$row.addClass(t),o=l,$prevRow=$row}}),null!=$prevRow&&""!=o&&o>1)for(var a=o-1;a>0;a--)$prevRow.addClass(" l"+parseInt(a)+"-last");return n.getPublicObj()},n.toggleChildren=function(l,o){var a=!1,t=!1,r=null,i=0;return n.caller.find("tr").each(function(){var n=e(this),d=n.attr("id"),c=n.data("level"),s=!1;a||d!=l?a&&!t&&null!=r&&c==i?t=!0:o&&a&&!t&&null!=r&&c!=i+1?s=!0:!o&&a&&!t&&null!=r&&i>c&&(t=!0,s=!0):(a=!0,i=c),s||!a||t||d==l||(o?(n.removeClass("hidden"),n.find("td").wrapInner('<div style="display: none;" />').parent().find("td > div").slideDown(100,function(){var n=e(this);n.replaceWith(n.contents())})):(n.addClass("hiding"),n.find("td").wrapInner('<div style="" />').parent().find("td > div").slideUp(100,function(){var l=e(this);l.replaceWith(l.contents()),n.addClass("hidden"),n.removeClass("hiding")}),n.removeClass("expanded"),n.addClass("contracted"))),r=c}),n.getPublicObj()},n.updateData=function(){n.caller.data("tabelizer",n)},n.maxLevel=0,n.init=function(){var l="",o="";return $prevRow=null,n.caller.find("tr").each(function(){if($row=e(this),!$row.hasClass("header")){l=$row.data("level");var a="l"+l+" contracted "+(l>1?" hidden":"");l>n.maxLevel&&(n.maxLevel=parseInt(l)),$row.addClass(a),$firstCol=e($row.children("td")[0]);for(var t='<div class="label">'+$firstCol.html()+"</div>",r='<div class="control"> ',i=0;l-1>=i;i++)r+=' <div class="line level'+(i+1)+'"><div class="vert"></div><div class="horz"></div></div> ';r+="</div>",$firstCol.html(r+' <div class="expander"></div> '+t),n.conf.fullRowClickable?$row.on("click",n.conf.onRowClick):$row.find(".expander").on("click",n.conf.onRowClick),o=l,$prevRow=$row}}),n.updateLines(),"undefined"!=typeof n.conf.onReady&&n.isFunction(n.conf.onReady)&&n.conf.onReady.apply(n.getPublicObj(),[]),n.getPublicObj()},n.getPublicObj=function(){return{options:n.conf,toggleChildren:n.toggleChildren,updateLines:n.updateLines,rowClicker:n.rowClicker,maxLevel:n.maxLevel,updateData:n.updateData}},n.conf={onRowClick:n.rowClicker,fullRowClickable:!0,onBeforeRowClick:null,onAfterRowClick:null,onReady:null},e.fn.tabelize=function(l){var o=this.data("tabelizer");return"undefined"==typeof o?(e.extend(n.conf,l),n.caller=this,n.init()):(n=o,e.extend(n.conf,l)),n.updateData(),n.getPublicObj()}}(jQuery);

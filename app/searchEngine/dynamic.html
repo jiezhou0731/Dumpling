@@ -1,0 +1,37 @@
+<div class="docs-box" ng-controller="dynamicController">
+	<div class="row">
+		<div class="col-sm-12" ng-repeat="doc in $root.docs">
+			<div class="box">
+				<div class="box-body" ng-click="clickContent(doc);">
+					<div class="row">
+						<div class="col-sm-1">
+							<div ng-click="$event.stopPropagation();" class="float-left">
+								<div class='click-relevant' ng-class="{'up-green':doc.upVote}" ng-click="clickUpVote($event, doc);"></div>
+								<div class='click-off-topic' ng-class="{'down-green':doc.downVote}" ng-click="clickDownVote($event, doc);"></div>
+							</div>
+						</div>
+						<div class="col-sm-11">
+							<div>
+								<div class="title">
+									{{doc.title}}
+								</div>
+								<div class="content" ng-bind-html="doc.highlighting">
+									{{doc.highlighting}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 dataTables_paginate paging_bootstrap">
+			<ul class="pagination">
+				<li ng-class="{'disabled':$root.page==1}" ng-click="clickPreviousPage();"><span>← Previous</span></li>
+				<li ng-class="{'disabled':$root.docs.length!=$root.resultPerPage}" ng-click="clickNextPage();"><span>Next →</span></li>
+			
+			</ul>
+		</div>
+	</div>
+</div>

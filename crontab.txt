@@ -1,0 +1,1 @@
+*/40 * * * * wget "http://localhost/speed/index.php?r=customer/speed/createSpeedlog&customer_id=1"

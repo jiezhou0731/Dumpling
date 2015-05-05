@@ -1,0 +1,50 @@
+<ul class="nav navbar-nav margin-left">
+	<li class="dropdown tasks-menu">
+		<div class="drop-btn bg-white dropdown-toggle" data-toggle="dropdown">
+			<i class="fa fontello-wrench   text-navy"></i>
+		</div>
+		<ul class="dropdown-menu drop-task" ng-controller="preferenceController">
+
+			<li class="header bg-red"><span></span>Preference</li>
+
+			<li>
+				<!-- inner menu: contains the actual data -->
+				<ul class="menu bg-white">
+					<!-- 
+					<li>
+						<div class="col-sm-2 dataset">
+							<div class="head">Dataset</div>
+							<div class="option">
+								<select>
+									<option>CMU CatB</option>
+								</select>
+							</div>
+
+						</div>
+					</li>
+ 					-->
+					<li>
+						<div class="task-list-item checkbox">
+							<div class="row">
+								<div class="col-sm-10 head">User State Tracking Panel</div>
+								<div class="col-sm-2 option" ng-class="{'option-selected':$root.preference.userStatePanelDisplay}" ng-click="switchCheckbox($event,'userStatePanelDisplay')">
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="task-list-item checkbox">
+							<div class="row">
+								<div class="col-sm-10 head">Interaction Logging Panel</div>
+								<div class="col-sm-2 option" ng-class="{'option-selected':$root.preference.userInteractionPanelDisplay}" ng-click="switchCheckbox($event,'userInteractionPanelDisplay')">
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</li>
+
+			<li class="footer-red"></li>
+		</ul>
+	</li>
+</ul>
