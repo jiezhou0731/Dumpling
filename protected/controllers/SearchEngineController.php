@@ -11,6 +11,10 @@ class SearchEngineController extends Controller
 		$this->render('index');
 	}
 	
+	public function actionUserState(){
+		$this->render('userState');
+	}
+	
 	public function actionDownloadFullPage($url="http://localhost/direwolf/index.php?r=crawler"){
 		$url=stripslashes($url);
 		$folder = "/var/www/direwolf/components/download-temperary-webpage";
