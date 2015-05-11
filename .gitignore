@@ -1,5 +1,3 @@
-assets/*
-!assets/.gitignore
 protected/runtime/*
 protected/config/main_onserver.php
 !protected/runtime/.gitignore
