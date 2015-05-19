@@ -13,8 +13,10 @@ var floors = [];
 var movingBall;
 var moveBallToDirection=0; // stay, up, down
 
+var labelExploration,labelExploitation;
+
 var words=[], wordSprites=[];
-var particleGroup, particleAttributes;
+var particleGroup, particleAttributes, radiusRange = 300;;
 
 var projector, mouse = { x: 0, y: 0 }, INTERSECTED;
 var sprite1;
@@ -38,9 +40,8 @@ function init()
 	
 }
 
-function changeWords(){
-	moveBallToDirection = (moveBallToDirection+1)%3;
-	words = ["aaa","bbb","cccc","dddd","eee","ffff"];
+function changeWords(toWords){
+	words = toWords;
 
 	// Remove the old particle group.
 	scene.remove( particleGroup );
@@ -48,27 +49,30 @@ function changeWords(){
 
 	// Create new word sprites.
 	for (var i=0; i<words.length; i++){
-		var spritey = makeTextSprite( words[i], 
-				{ fontsize: 32, borderColor: {r:255, g:0, b:0, a:1.0}, backgroundColor: {r:255, g:100, b:100, a:0.8} } );
-		spritey.position.set(-500,55+i*10,100);
-		wordSprites.push(spritey);
+		var sprite = makeTextSprite( words[i], 
+				{ fontsize: 100, borderColor: {r:82, g:179, b:217, a:1.0}, backgroundColor: {r:82, g:179, b:217, a:0.8} } );
+		sprite.position.set(-500,55+i*10,100);
+		wordSprites.push(sprite);
 	}
 
 	// Add to the new particle group.
 	particleGroup = new THREE.Object3D();
-	particleAttributes = { startSize: [], startPosition: [], randomness: [] };
 	
-	var radiusRange = 100;
 	for( var i = 0; i < words.length; i++ ) 
 	{
 		var sprite = wordSprites[i];
-		sprite.scale.set( 80, 80, 1.0 ); // imageWidth, imageHeight
-		sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 );
-		sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
+		sprite.angle=Math.random()*Math.PI*2;
+		sprite.radiusRange = Math.random()*radiusRange+300;
+		if (sprite.radiusRange>400) {
+			sprite.speed=Math.random()*0.5+0.1;
+		} else {
+			sprite.speed=Math.random()+0.2;
+		}
+		sprite.position.x = sprite.radiusRange*Math.cos(sprite.angle);
+		sprite.position.y = Math.random()*60;
+		sprite.position.z = 100*Math.sin(sprite.angle);
 		
 		particleGroup.add( sprite );
-		particleAttributes.startPosition.push( sprite.position.clone() );
-		particleAttributes.randomness.push( Math.random() );
 	}
 
 	particleGroup.position.y = movingBall.position.y;

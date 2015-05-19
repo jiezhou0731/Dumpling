@@ -24,10 +24,10 @@ function createBackground(){
 	scene = new THREE.Scene();
 	// CAMERA
 	var SCREEN_WIDTH =$( '#ThreeJS' ).width(), SCREEN_HEIGHT = $( '#ThreeJS' ).height();
-	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 10000;
 	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
 	scene.add(camera);
-	camera.position.set(0,150,400);
+	camera.position.set(0,0,400);
 	camera.lookAt(scene.position);	
 	// RENDERER
 	if ( Detector.webgl )
@@ -44,6 +44,8 @@ function createBackground(){
 	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
 	// CONTROLS
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
+	controls.minDistance = 400;
+	controls.maxDistance = 400;
 	// LIGHT
 	var light = new THREE.PointLight(0xffffff);
 	light.position.set(0,250,0);
@@ -57,19 +59,32 @@ function createBackground(){
 	// FLOOR
 	var floorTexture = new THREE.ImageUtils.loadTexture( 'img/floor.jpg' );
 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
-	floorTexture.repeat.set( 60, 2 );
+	floorTexture.repeat.set( 40, 10 );
 	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-	var floorGeometry = new THREE.PlaneGeometry(floorLength, 100, 10, 10);
+	var floorGeometry = new THREE.PlaneGeometry(floorLength, 500, 10, 10);
 	
 	for (var i=0; i<3; i++){
 		var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 		floor.position.y = 0;
 		floor.position.x = floorLength*(i-1);
-		floor.rotation.x = Math.PI / 2;
+		floor.rotation.x = Math.PI / 2+0.05;
 		floor.name = "Checkerboard Floor";
 		floors.push(floor);
 		scene.add(floor);
 	}
+	
+	// State
+	labelExploration = makeTextSprite("Exploration", 
+			{ fontsize: 50} );
+	labelExploration.position.set(-800,120,0);
+	labelExploration.scale.set(150,150,1.0);
+	scene.add(labelExploration);
+	
+	labelExploitation = makeTextSprite("Exploitation", 
+			{ fontsize: 50} );
+	labelExploitation.position.set(-800,-100,0);
+	labelExploitation.scale.set(150,150,1.0);
+	scene.add(labelExploitation);
 }
 
 function makeTextSprite( message, parameters )
@@ -99,7 +114,7 @@ function makeTextSprite( message, parameters )
     
 	// get size data (height depends only on font size)
 	var metrics = context.measureText( message );
-	var textWidth = metrics.width;
+	var textWidth = metrics.width;//message.length*fontsize+50
 	
 	// background color
 	context.fillStyle   = "rgba(" + backgroundColor.r + "," + backgroundColor.g + ","
@@ -147,30 +162,27 @@ function roundRect(ctx, x, y, w, h, r)
 }
 
 function wordSpriteParticleGroupUpdate(){
-	var time = 2 * clock.getElapsedTime();
-	
+	var rotateAngle = -Math.PI / 2 * delta;
 	for ( var c = 0; c < particleGroup.children.length; c ++ ) 
 	{
 		var sprite = particleGroup.children[ c ];
 		var a = particleAttributes.randomness[c] + 1;
-		var pulseFactor = Math.sin(a * time) * 0.1 + 0.9;
-		sprite.position.x = particleAttributes.startPosition[c].x * pulseFactor;
-		sprite.position.y = particleAttributes.startPosition[c].y * pulseFactor;
-		sprite.position.z = particleAttributes.startPosition[c].z * pulseFactor;	
+		
+		sprite.angle+=rotateAngle*sprite.speed;
+		sprite.position.x = sprite.radiusRange*Math.cos(sprite.angle);
+		sprite.position.z = 100*Math.sin(sprite.angle);
+		console.log(sprite.position.z);
 	}
-
-	// rotate the entire group
-	particleGroup.rotation.y = time * 0.75;
 }
 
 //	Ball
 function createBall(){
 	var materialArray = [];
-	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/floor.jpg' ) }));
+	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/face.jpg' ) }));
 	var movingBallMat = new THREE.MeshFaceMaterial(materialArray);
-	var movingBallGeom = new THREE.SphereGeometry( 50, 30, 32 );//THREE.BallGeometry( 50, 50, 50, 1, 1, 1, materialArray );
+	var movingBallGeom = new THREE.SphereGeometry( 50, 50, 50 );//THREE.BallGeometry( 50, 50, 50, 1, 1, 1, materialArray );
 	movingBall = new THREE.Mesh( movingBallGeom, movingBallMat );
-	movingBall.position.set(0, 25.1, 0);
+	movingBall.position.set(0, 0, 0);
 	scene.add( movingBall );	
 }
 
@@ -181,7 +193,7 @@ function ballUpdate(){
 	
 	// move the ball up
 	if (moveBallToDirection==1){
-		if (movingBall.position.y<100){
+		if (movingBall.position.y<70){
 			movingBall.position.y+=moveDistance;
 			particleGroup.position.y+=moveDistance;
 		} 
@@ -189,7 +201,7 @@ function ballUpdate(){
 	
 	// move the ball down
 	if (moveBallToDirection==2){
-		if (movingBall.position.y>-100){
+		if (movingBall.position.y>-70){
 			movingBall.position.y-=moveDistance;
 			particleGroup.position.y-=moveDistance;
 		} 
@@ -202,6 +214,36 @@ function moveBallToAbove(){
 
 function moveBallToBelow(){
 	moveBallToDirection=2;
+}
+
+function changeStateLabel(state){
+	scene.remove(labelExploration);
+	scene.remove(labelExploitation);
+	if (state==1){
+		labelExploration = makeTextSprite("Exploration", 
+				{ fontsize: 50, borderColor: {r:255, g:0, b:0, a:1.0}, backgroundColor: {r:255, g:100, b:100, a:0.8}} );
+		labelExploration.position.set(-800,120,0);
+		labelExploration.scale.set(150,150,1.0);
+		scene.add(labelExploration);
+		
+		labelExploitation = makeTextSprite("Exploitation", 
+				{ fontsize: 50} );
+		labelExploitation.position.set(-800,-100,0);
+		labelExploitation.scale.set(150,150,1.0);
+		scene.add(labelExploitation);
+	} else {
+		labelExploration = makeTextSprite("Exploration", 
+				{ fontsize: 50} );
+		labelExploration.position.set(-800,120,0);
+		labelExploration.scale.set(150,150,1.0);
+		scene.add(labelExploration);
+		
+		labelExploitation = makeTextSprite("Exploitation", 
+				{ fontsize: 50, borderColor: {r:255, g:0, b:0, a:1.0}, backgroundColor: {r:255, g:100, b:100, a:0.8}} );
+		labelExploitation.position.set(-800,-100,0);
+		labelExploitation.scale.set(150,150,1.0);
+		scene.add(labelExploitation);
+	}
 }
 
 //	Floor

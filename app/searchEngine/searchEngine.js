@@ -143,7 +143,7 @@ dumplingApp.controller('searchBoxController', function($rootScope, $scope, $sce,
 	
 	$scope.clearHistory=function(){
 		solrService.clearHistory();
-		$rootScope.stateHistory=[];
+		//$rootScope.stateHistory=[];
 		$rootScope.readDocEvents=[]
 		$rootScope.docs=[];
 		$rootScope.$broadcast('interactionEmit',{title:"Clear history", detail:""});
@@ -190,7 +190,8 @@ dumplingApp.controller('dynamicController', function($scope, $rootScope, $sce, s
 	// Prepare to start
 	$rootScope.readDocEvents=[];
 	$rootScope.docs=[];
-	
+	//moveBallToDirection = 2;
+	//changeWords(["haha","hahaaaa","hahaxxx"]);
 	// When user send a new query.
 	$scope.$on('sendQuery',function(event, args){
 		$rootScope.readDocEvents=[];
@@ -198,11 +199,17 @@ dumplingApp.controller('dynamicController', function($scope, $rootScope, $sce, s
 			var transition;
 			if (data.userState=="RELEVANT_EXPLOITATION"){
 				transition="Find out more";
+				changeStateLabel(0);
+				moveBallToDirection = 2;
+				changeWords(args.query.split(" ").concat(["human","abuse","trafficking","sex","child"]));
 			} else {
 				transition="Next topic";
+				changeStateLabel(1);
+				moveBallToDirection = 1;
+				changeWords(args.query.split(" "));
 			}
 			$rootScope.docs = data.docs;
-			$rootScope.stateHistory.push({query:args.query, transition: transition});
+			//$rootScope.stateHistory.push({query:args.query, transition: transition});
 		});
 	});
 	
