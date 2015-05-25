@@ -11,7 +11,9 @@ function update()
 	ballUpdate();
 	floorUpdate();
 	wordSpriteParticleGroupUpdate();
+	movingHistoryUpdate();
 	controls.update();
+	camera.lookAt(movingBall.position);
 }
 
 function render() 
@@ -171,7 +173,6 @@ function wordSpriteParticleGroupUpdate(){
 		sprite.angle+=rotateAngle*sprite.speed;
 		sprite.position.x = sprite.radiusRange*Math.cos(sprite.angle);
 		sprite.position.z = 100*Math.sin(sprite.angle);
-		console.log(sprite.position.z);
 	}
 }
 
@@ -186,13 +187,27 @@ function createBall(){
 	scene.add( movingBall );	
 }
 
+var singleForwardMovementDistance = 200;
+var moveForwardCount;
 function ballUpdate(){
 	var moveDistance = 200 * delta; // 200 pixels per second
 	var rotateAngle = Math.PI / 2 * delta;   // pi/2 radians (90 degrees) per second
 	movingBall.rotateOnAxis( new THREE.Vector3(0,1,0), rotateAngle);
+
+	// move the ball forward, if moveBallToDirection is negative.
+	var xSpeed=2;
+	if (moveBallToDirection<-0.1){
+		if (moveForwardCount>0){
+			moveForwardCount-=xSpeed*moveDistance;
+			movingBall.position.x+=xSpeed*moveDistance;
+			particleGroup.position.x+=xSpeed*moveDistance;
+		} else {
+			moveBallToDirection=Math.abs(moveBallToDirection);
+		}
+	}
 	
 	// move the ball up
-	if (moveBallToDirection==1){
+	if (Math.abs(moveBallToDirection)==1){
 		if (movingBall.position.y<70){
 			movingBall.position.y+=moveDistance;
 			particleGroup.position.y+=moveDistance;
@@ -200,7 +215,7 @@ function ballUpdate(){
 	}
 	
 	// move the ball down
-	if (moveBallToDirection==2){
+	if (Math.abs(moveBallToDirection)==2){
 		if (movingBall.position.y>-70){
 			movingBall.position.y-=moveDistance;
 			particleGroup.position.y-=moveDistance;
@@ -209,12 +224,15 @@ function ballUpdate(){
 }
 
 function moveBallToAbove(){
-	moveBallToDirection=1;
+	moveBallToDirection=-1;
+	moveForwardCount=singleForwardMovementDistance;
 }
 
 function moveBallToBelow(){
-	moveBallToDirection=2;
+	moveBallToDirection=-2;
+	moveForwardCount=singleForwardMovementDistance;
 }
+
 
 function changeStateLabel(state){
 	scene.remove(labelExploration);
@@ -258,3 +276,21 @@ function floorUpdate(){
 	}
 }
 
+
+// History;
+var movingHistory={
+	snapShots:new Array(),
+	clear:function(){
+		this.snapShots=[];
+	},
+	snapshot:function(){
+		var newShot = {};
+		newShot.ball = movingBall.clone();
+		this.snapShots.push(newShot);
+	}
+};
+function movingHistoryUpdate(){
+	for (var i=0; i<movingHistory.snapShots.length; i++){
+		scene.add(movingHistory.snapShots[i].ball);
+	}
+}

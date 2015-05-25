@@ -200,15 +200,16 @@ dumplingApp.controller('dynamicController', function($scope, $rootScope, $sce, s
 			if (data.userState=="RELEVANT_EXPLOITATION"){
 				transition="Find out more";
 				changeStateLabel(0);
-				moveBallToDirection = 2;
+				moveBallToAbove();
 				changeWords(args.query.split(" ").concat(["human","abuse","trafficking","sex","child"]));
 			} else {
 				transition="Next topic";
 				changeStateLabel(1);
-				moveBallToDirection = 1;
+				moveBallToBelow();
 				changeWords(args.query.split(" "));
 			}
 			$rootScope.docs = data.docs;
+			movingHistory.snapshot();
 			//$rootScope.stateHistory.push({query:args.query, transition: transition});
 		});
 	});
