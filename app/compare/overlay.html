@@ -1,0 +1,47 @@
+<script type='text/javascript' src="assets/andrew/andrew.js"></script>
+<div class="andrew-overlay" ng-controller='overlayController' ng-click="hideOverlay()">
+	<div class="andrew-overlay-scene">
+	<div class="andrew-overlay-esc" ng-click="hideOverlay()">X</div>
+		<div class="overlay-title">{{doc.title}} </div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="pull-right box-tools">
+				 <button class="btn btn-primary" ng-click="unBlurImage();" ng-show="imageBlur == true;">Clear Image</button>
+				 <button class="btn btn-primary" ng-click="blurImage();" ng-show="imageBlur == false;">Blur &nbsp; Image</button>
+				 <button class="btn btn-primary" ng-click="highlightContent();" style="display:none;">Highlight</button>
+				 <a target="_blank" href="{{doc.url}}"><button class="btn btn-primary"">Go to live page</button></a>
+              </div>
+			</div>
+		</div>
+		<div class="row full_webpage_loading" style="display:none;">
+			<div class="col-lg-12">
+				<canvas height="60" width="60" id="full_webpage_loading"></canvas>
+			</div>
+		</div>
+		<div class="row full_webpage_fail" style="display:none;">
+			<div class="col-lg-12">
+				{{doc.url}} is no longer available.
+			</div>
+		</div>
+		<iframe id="full_webpage_iframe" ng-src="{{trustSrc(fullPagePath)}}" width="100%" >
+		  <p>Your browser does not support iframes.</p>
+		</iframe>
+	</div>
+</div>
+
+<script type="text/javascript">
+    (function($) {
+        "use strict";
+        var icons = new Skycons({
+                "windColor": "LightSteelBlue"
+            }),
+            list = [
+                "wind"
+            ],
+            i;
+
+        for (i = list.length; i--;) 
+            icons.set("full_webpage_loading", "wind");
+        icons.play();
+    })(jQuery);
+ </script>

@@ -34,15 +34,22 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.6/angular.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.6/angular-animate.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-sanitize.min.js"></script>
-<script src="app/laborTrafficking/laborTrafficking.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-sanitize.min.js"></script>
+<script src="app/compare/searchEngine.js"></script>
+
+<style>
+.click-relevant, .click-off-topic{
+	margin:10px 0px;
+}
+</style>
+
 </head>
 
 <body ng-app="dumplingApp">
 <div id="preloader">
 		<div id="status">&nbsp;</div>
 </div>
-	<div ng-include="'app/laborTrafficking/overlay.html'"></div> 
+	<div ng-include="'app/compare/overlay.html'"></div> 
 
 	<div ng-include="'app/topNavi.html'"></div>
 
@@ -56,7 +63,7 @@
 
 				<!-- menu right -->
 				<div class="navbar-right">
-                     <div class="toolbox" ng-include="'app/laborTrafficking/preference.html'"></div>
+                     <div class="toolbox" ng-include="'app/compare/preference.html'"></div>
                 </div>
 				<!-- end of menu right -->
 				
@@ -77,8 +84,8 @@
 									</h3>
 								</li>
 								<li>
-									<a  
-									class="tooltip-tip" href="index.php?r=laborTrafficking" title="Dashboard">
+									<a style="border-left: 4px solid #5F9BDB; padding: 0 0 0 16px;"
+									class="tooltip-tip" href="index.php?r=searchEngine" title="Dashboard">
 									 	<i class="fontello-search-outline"></i> 
 									 	<span>Search Engine</span>
 									</a>
@@ -91,7 +98,7 @@
 									</a>
 								</li>
 								<li>
-									<a  style="border-left: 4px solid #5F9BDB; padding: 0 0 0 16px;"
+									<a  
 									class="tooltip-tip" href="index.php?r=laborTrafficking" title="Dashboard">
 									 	<i class="fa fa-fw fa-users"></i> 
 									 	<span>Labor Trafficking</span>
@@ -114,22 +121,25 @@
 		
 			<!-- CONTENT -->
 			<div class="wrap-fluid" id="paper-bg">
-				<div ng-include="'app/laborTrafficking/searchBox.html'"></div>
+				<div ng-include="'app/compare/searchBox.html'"></div>
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="row">
 							<div class="col-sm-12 user-state-box-show-hide padding-bottom-0" ng-show="$root.preference.userStatePanelDisplay">
 								<div class="row">
-									<div ng-include="'app/laborTrafficking/userState.html'"></div>
+									<div ng-include="'app/compare/userState.html'"></div>
 								</div>
 							</div>
-							<div class="col-sm-12 padding-0 padding-right-5 dynamic-box-show-hide" ng-class="{'col-sm-10':$root.preference.userInteractionPanelDisplay}">
-								<div ng-include="'app/laborTrafficking/dynamic.html'"></div>
+							<div class="col-sm-6 padding-0 padding-right-5 compare-box-show-hide" ng-class="{'col-sm-5':$root.preference.userInteractionPanelDisplay}">
+								<div ng-include="'app/compare/dynamic.html'"></div>
+							</div>
+							<div class="col-sm-6 padding-0 padding-right-5 compare-box-show-hide" ng-class="{'col-sm-5':$root.preference.userInteractionPanelDisplay}">
+								<div ng-include="'app/compare/static.html'"></div>
 							</div>
 							<div class="col-sm-2 user-interaction-box-show-hide" ng-show="$root.preference.userInteractionPanelDisplay" >
 								<div class="row">
 									<div class="col-sm-12 padding-0">
-										<div ng-include="'app/laborTrafficking/userInteraction.html'"></div>
+										<div ng-include="'app/compare/userInteraction.html'"></div>
 									</div>
 								</div>
 

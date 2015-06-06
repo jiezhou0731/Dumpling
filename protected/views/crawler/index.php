@@ -98,6 +98,13 @@
 									 	<span>Labor Trafficking</span>
 									</a>
 								</li>
+								<li>
+									<a  
+									class="tooltip-tip" href="index.php?r=compare" title="Dashboard">
+									 	<i class="fontello-popup-1"></i> 
+									 	<span>Compare</span>
+									</a>
+								</li>
 								<li class="devider-horizontal"></li>
 							</ul>
 						</div>

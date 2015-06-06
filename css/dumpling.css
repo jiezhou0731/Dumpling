@@ -184,6 +184,8 @@
 
 .user-state-box{
 	padding:0px;
+	padding-left:10px;
+	padding-bottom: 10px;
 	height: 120px;
 	background:white;
 	overflow: scroll;
@@ -243,7 +245,7 @@
 }
 
 .dynamic-box-show-hide.col-sm-12 {
-	-webkit-transition:width 0.5s linear;
+  -webkit-transition:width 0.5s linear;
   transition:width 0.5s linear;
 	
 }
@@ -251,6 +253,17 @@
 	-webkit-transition:width 0.5s linear;
   transition:width 0.5s linear;
 }
+
+.compare-box-show-hide.col-sm-6 {
+  -webkit-transition:width 0.5s linear;
+  transition:width 0.5s linear;
+	
+}
+.compare-box-show-hide.col-sm-5{
+	-webkit-transition:width 0.5s linear;
+  transition:width 0.5s linear;
+}
+
 
 .docs-box {
 	background:#f5f5f5;

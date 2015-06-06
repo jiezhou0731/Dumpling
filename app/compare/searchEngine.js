@@ -1,5 +1,6 @@
 var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize']);
 var solrQueryUrl = 'http://141.161.20.98:8080/solr/humantrafficking/winwin';
+var solrStaticQueryUrl = 'http://141.161.20.98:8080/solr/humantrafficking/select';
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
 var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
@@ -128,6 +129,63 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 		 });
 		 return defer.promise;;
 	}
+	
+	this.queryStaticSearchData = function (query,start){
+		 var docs=[];
+		 var defer = $q.defer();
+		 $http(
+		            {method: 'JSONP',
+		             url: solrStaticQueryUrl,
+		             params:{
+		            	 	'q': 'content:'+query,
+		            	    'json.wrf': 'JSON_CALLBACK',
+		                    'wt':'json',
+		                    'hl':true,
+		                    'hl.fl':'*',
+		                    'hl.simple.pre':'',
+		                    'hl.simple.post':'',
+		                    'hl.fragsize':500,
+		                    'row':10,
+		                    'start':start
+		                    }
+		            })
+		            .success(function(response) {
+		            	docs= response.response.docs;
+		              	for (var prop in  response.highlighting) {
+		            	  	for (var doc in docs){
+		            		  	if (docs[doc].id==prop){
+		            		  		try {
+		            		  			docs[doc].highlighting=highlight(response.highlighting[prop].content[0],query);
+		            		  		} catch (err){
+		            		  			docs[doc].highlighting="";
+		            		  		}
+		            		  	}
+		            	  	}
+		              	}
+		              	for (var i in docs) {
+		      				// Convert NULL title to "No Title"
+		      				if (docs[i].title==null ||docs[i].title=="") {
+		      					docs[i].title="No Title";
+		      				}
+		      			
+		      				// Unescape highlights' HTML 
+		      				try{
+		      					docs[i].highlighting=$sce.trustAsHtml(docs[i].highlighting.trim());
+		      				} catch (err){
+		      				}
+		      				docs[i].escapedUlr=docs[i].url;
+		      				docs[i].url=unescape(docs[i].url);
+		      				$sce.trustAsResourceUrl(docs[i].url);
+		      				docs[i].upVote=null;
+		      				docs[i].downVote=null;
+		      			}
+		              	data = {docs:docs};
+		              	defer.resolve(data);
+		            }).error(function() {
+		            	defer.reject('Can not get data from Solr');
+		 });
+		 return defer.promise;;
+	}
 });
 
 // Search controller
@@ -146,6 +204,7 @@ dumplingApp.controller('searchBoxController', function($rootScope, $scope, $sce,
 		$rootScope.stateHistory=[];
 		$rootScope.readDocEvents=[]
 		$rootScope.docs=[];
+		$rootScope.staticSearchDocs=[];
 		$rootScope.$broadcast('interactionEmit',{title:"Clear history", detail:""});
 	}
 	
@@ -190,23 +249,14 @@ dumplingApp.controller('dynamicController', function($scope, $rootScope, $sce, s
 	// Prepare to start
 	$rootScope.readDocEvents=[];
 	$rootScope.docs=[];
-	//moveBallToDirection = 2;
-	//changeWords(["haha","hahaaaa","hahaxxx"]);
-	// When user send a new query.
 	$scope.$on('sendQuery',function(event, args){
 		$rootScope.readDocEvents=[];
 		solrService.queryData(args.query, args.start).then(function (data){
 			var transition;
 			if (data.userState=="RELEVANT_EXPLOITATION"){
 				transition="Find out more";
-				//changeStateLabel(0);
-				//moveBallToAbove();
-				//changeWords(args.query.split(" ").concat(["human","abuse","trafficking","sex","child"]));
 			} else {
 				transition="Next topic";
-				//changeStateLabel(1);
-				//moveBallToBelow();
-				//changeWords(args.query.split(" "));
 			}
 			$rootScope.docs = data.docs;
 			//movingHistory.snapshot();
@@ -244,6 +294,61 @@ dumplingApp.controller('dynamicController', function($scope, $rootScope, $sce, s
 			$rootScope.$broadcast('changePage',{query:$rootScope.lastQuery, start:($rootScope.page-1)*$rootScope.resultPerPage});
 			$rootScope.$broadcast('interactionEmit',{title:"Change page", detail:"Query: "+$rootScope.lastQuery+", Page:"+$rootScope.page});
 		}
+	}
+});
+
+//Static result controller
+dumplingApp.controller('staticController', function($scope, $rootScope, $sce, solrService) {
+	// Click doc content
+	$scope.clickContent=function(doc){
+		$rootScope.readDocEvents.push({id:doc.id,url:doc.escapedUlr, content:"", startTime:Date.now()});
+		$rootScope.$broadcast('overlayDisplay',{title:doc.title, url:doc.url, content:doc.content});
+	};
+
+	// Click up vote button
+	$scope.clickUpVote=function(event, doc){
+		$rootScope.$broadcast('interactionEmit',{title:"Vote Up", detail:"From static search, Doc ID: "+doc.id, extra_1:doc.escapedUlr});
+		
+		// Send to server
+		solrService.sendUpVote(doc);
+		
+		doc.upVote="checked";
+		doc.downVote=null;
+		event.stopPropagation();
+	};
+	
+	// Click down vote button
+	$scope.clickDownVote=function(event, doc){
+		$rootScope.$broadcast('interactionEmit',{title:"Vote Down", detail:"From static search, Doc ID: "+doc.id, extra_1:doc.escapedUlr});
+		doc.downVote="checked";
+		solrService.sendDownVote(doc);
+		doc.upVote=null;
+		event.stopPropagation();
+	};
+	
+	// Debug
+	/*
+	solrService.queryStaticSearchData("a").then(function (data){
+		$rootScope.staticSearchDocs = data.docs;
+	});
+	*/
+	// Prepare to start
+	$rootScope.staticSearchDocs=[];
+	$scope.$on('sendQuery',function(event, args){
+		solrService.queryData(args.query, args.start).then(function (data){
+			$rootScope.staticSearchDocs = data.docs;
+		});
+	});
+	
+	// When user send a new query.
+	$scope.$on('changePage',function(event, args){
+		solrService.queryStaticSearchData(args.query, args.start).then(function (data){
+			$rootScope.staticSearchDocs = data.docs;
+		});
+	});
+	
+	$scope.trustHtml = function(html) {
+	    return $sce.trustAsHtml(html);
 	}
 });
 
