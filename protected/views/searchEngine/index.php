@@ -7,6 +7,7 @@
 <link href="ico/favicon.ico" rel="shortcut icon">
 <title>Dumpling Search Engine</title>
 <!-- css loader -->
+ <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css">
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="assets/andrew/andrew.css">
 <link rel="stylesheet" href="css/custom.css">
@@ -34,7 +35,10 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.6/angular.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.6/angular-animate.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-sanitize.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+<script src="assets/angularjs/angular-cookies.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-sanitize.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.js"></script>
 <script src="app/searchEngine/searchEngine.js"></script>
 </head>
 
@@ -67,49 +71,7 @@
 			<div id="skin-select">
 				<a id="toggle"> <span class="fa icon-menu"></span>
 				</a>
-				<div class="skin-part">
-					<div id="tree-wrap">
-						<div class="side-bar">
-							<ul id="menu-showhide" class="topnav">
-								<li class="devider-title">
-									<h3>
-										<span>Dumpling Menu</span>
-									</h3>
-								</li>
-								<li>
-									<a style="border-left: 4px solid #5F9BDB; padding: 0 0 0 16px;"
-									class="tooltip-tip" href="index.php?r=searchEngine" title="Dashboard">
-									 	<i class="fontello-search-outline"></i> 
-									 	<span>Search Engine</span>
-									</a>
-								</li>
-								<li>
-									<a
-									class="tooltip-tip" href="index.php?r=crawler" title="Dashboard">
-									 	<i class="fontello-download"></i> 
-									 	<span>Crawler</span>
-									</a>
-								</li>
-								<li>
-									<a  
-									class="tooltip-tip" href="index.php?r=laborTrafficking" title="Dashboard">
-									 	<i class="fa fa-fw fa-users"></i> 
-									 	<span>Labor Trafficking</span>
-									</a>
-								</li>
-								<li>
-									<a  
-									class="tooltip-tip" href="index.php?r=compare" title="Dashboard">
-									 	<i class="fontello-popup-1"></i> 
-									 	<span>Compare</span>
-									</a>
-								</li>
-								<li class="devider-horizontal"></li>
-							</ul>
-						</div>
-					</div>
-					
-				</div>
+				<div ng-include="'app/sideMenu.html'"></div>
 			</div>
 		
 			<!-- CONTENT -->

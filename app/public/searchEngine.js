@@ -1,5 +1,6 @@
-var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies']);
-var solrQueryUrl = 'http://141.161.20.98:8080/solr/humantrafficking/winwin';
+var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize']);
+var solrQueryUrl = 'http://141.161.20.98:8080/solr/ebola/winwin';
+var solrStaticQueryUrl = 'http://141.161.20.98:8080/solr/ebola/select';
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
 var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
@@ -71,7 +72,7 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 		 return defer.promise;;
 	}
 	
-	this.queryData = function (query,start,status){
+	this.queryData = function (query,start){
 		 var docs=[];
 		 var defer = $q.defer();
 		 $http(
@@ -87,8 +88,7 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 		                    'hl.simple.post':'',
 		                    'hl.fragsize':500,
 		                    'row':10,
-		                    'start':start,
-		                    'status':status
+		                    'start':start
 		                    }
 		            })
 		            .success(function(response) {
@@ -129,69 +129,89 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 		 });
 		 return defer.promise;;
 	}
-});
-
-// Cookie
-dumplingApp.service('rootCookie',function($rootScope,$cookies){
-	this.get = function (key){
-		var value = $cookies.getObject(key);
-		if (value){
-			return value;	
-		} else {
-			if (key=="interactionHistory" || key=="stateHistory") {
-				return [];
-			} else if (key=="lastQuery"){
-				return "";
-			}
-			return {};
-		}
+	
+	this.queryStaticSearchData = function (query,start){
+		 var docs=[];
+		 var defer = $q.defer();
+		 $http(
+		            {method: 'JSONP',
+		             url: solrStaticQueryUrl,
+		             params:{
+		            	 	'q': 'content:'+query,
+		            	    'json.wrf': 'JSON_CALLBACK',
+		                    'wt':'json',
+		                    'hl':true,
+		                    'hl.fl':'*',
+		                    'hl.simple.pre':'',
+		                    'hl.simple.post':'',
+		                    'hl.fragsize':500,
+		                    'row':10,
+		                    'start':start
+		                    }
+		            })
+		            .success(function(response) {
+		            	docs= response.response.docs;
+		              	for (var prop in  response.highlighting) {
+		            	  	for (var doc in docs){
+		            		  	if (docs[doc].id==prop){
+		            		  		try {
+		            		  			docs[doc].highlighting=highlight(response.highlighting[prop].content[0],query);
+		            		  		} catch (err){
+		            		  			docs[doc].highlighting="";
+		            		  		}
+		            		  	}
+		            	  	}
+		              	}
+		              	for (var i in docs) {
+		      				// Convert NULL title to "No Title"
+		      				if (docs[i].title==null ||docs[i].title=="") {
+		      					docs[i].title="No Title";
+		      				}
+		      			
+		      				// Unescape highlights' HTML 
+		      				try{
+		      					docs[i].highlighting=$sce.trustAsHtml(docs[i].highlighting.trim());
+		      				} catch (err){
+		      				}
+		      				docs[i].escapedUlr=docs[i].url;
+		      				docs[i].url=unescape(docs[i].url);
+		      				$sce.trustAsResourceUrl(docs[i].url);
+		      				docs[i].upVote=null;
+		      				docs[i].downVote=null;
+		      			}
+		              	data = {docs:docs};
+		              	defer.resolve(data);
+		            }).error(function() {
+		            	defer.reject('Can not get data from Solr');
+		 });
+		 return defer.promise;;
 	}
-	this.put = function (key,value){
-		if (key=="interactionHistory"){
-			var maxLength=6
-			if (value.length>maxLength) {
-				var slicedValue = [];
-				for (var i=value.length-maxLength; i<value.length; i++){
-					slicedValue.push(value[i]);
-				}
-				$cookies.putObject(key,slicedValue);
-			} else {
-				$cookies.putObject(key,value);
-			}
-		} else {
-			$cookies.putObject(key,value);
-		}
-	}
 });
-
 
 // Search controller
-dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $cookies, $scope, $sce, solrService) {
+dumplingApp.controller('searchBoxController', function($rootScope, $scope, $sce, solrService) {
 	$rootScope.lastQuery="";
 	
 	$scope.clickSubmit=function(){
-		$rootScope.lastQuery=$rootScope.query;
-		rootCookie.put("lastQuery",$rootScope.lastQuery);
+		$rootScope.lastQuery=$scope.query;
 		$rootScope.page = 1;
-		$rootScope.$broadcast('sendQuery',{query:$rootScope.query, start:($rootScope.page-1)*$rootScope.resultPerPage});
-		$rootScope.$broadcast('interactionEmit',{title:"Send query", detail:"Query: "+$rootScope.query});
+		$rootScope.$broadcast('sendQuery',{query:$scope.query, start:($rootScope.page-1)*$rootScope.resultPerPage});
+		$rootScope.$broadcast('interactionEmit',{title:"Send query", detail:"Query: "+$scope.query});
 	};
 	
 	$scope.clearHistory=function(){
-		$rootScope.query="";
-		rootCookie.put("lastQuery","");
 		solrService.clearHistory();
 		$rootScope.stateHistory=[];
-		rootCookie.put("stateHistory",$rootScope.stateHistory);
 		$rootScope.readDocEvents=[]
 		$rootScope.docs=[];
+		$rootScope.staticSearchDocs=[];
 		$rootScope.$broadcast('interactionEmit',{title:"Clear history", detail:""});
 	}
 	
 });
 
 // Dynamic result controller
-dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootScope, $sce, solrService) {
+dumplingApp.controller('dynamicController', function($scope, $rootScope, $sce, solrService) {
 	// Click doc content
 	$scope.clickContent=function(doc){
 		$rootScope.readDocEvents.push({id:doc.id,url:doc.escapedUlr, content:"", startTime:Date.now()});
@@ -219,46 +239,35 @@ dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootSco
 		event.stopPropagation();
 	};
 	
-	// Resend last query in cookie.
-	$rootScope.query=rootCookie.get("lastQuery");
-	if ($rootScope.query && $rootScope.query.length>0){
-		solrService.queryData($rootScope.query,0,"oldQuery").then(function (data){
-			$rootScope.docs = data.docs;
-		});
-	}
-	
+	// Debug
+	/*
+	solrService.queryData("a").then(function (data){
+		$rootScope.docs = data.docs;
+		$rootScope.stateHistory.push({query:"a", transition: ""});
+	});
+	*/
 	// Prepare to start
 	$rootScope.readDocEvents=[];
 	$rootScope.docs=[];
-	//moveBallToDirection = 2;
-	//changeWords(["haha","hahaaaa","hahaxxx"]);
-	// When user send a new query.
 	$scope.$on('sendQuery',function(event, args){
 		$rootScope.readDocEvents=[];
-		solrService.queryData(args.query, args.start, "newQuery").then(function (data){
+		solrService.queryData(args.query, args.start).then(function (data){
 			var transition;
 			if (data.userState=="RELEVANT_EXPLOITATION"){
 				transition="Find out more";
-				//changeStateLabel(0);
-				//moveBallToAbove();
-				//changeWords(args.query.split(" ").concat(["human","abuse","trafficking","sex","child"]));
 			} else {
 				transition="Next topic";
-				//changeStateLabel(1);
-				//moveBallToBelow();
-				//changeWords(args.query.split(" "));
 			}
 			$rootScope.docs = data.docs;
 			//movingHistory.snapshot();
 			$rootScope.stateHistory.push({query:args.query, transition: transition});
-			rootCookie.put("stateHistory",$rootScope.stateHistory);
 		});
 	});
 	
 	// When user send a new query.
 	$scope.$on('changePage',function(event, args){
 		$rootScope.readDocEvents=[];
-		solrService.queryData(args.query, args.start, "oldQuery").then(function (data){
+		solrService.queryData(args.query, args.start).then(function (data){
 			$rootScope.docs = data.docs;
 		});
 	});
@@ -288,9 +297,64 @@ dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootSco
 	}
 });
 
+//Static result controller
+dumplingApp.controller('staticController', function($scope, $rootScope, $sce, solrService) {
+	// Click doc content
+	$scope.clickContent=function(doc){
+		$rootScope.readDocEvents.push({id:doc.id,url:doc.escapedUlr, content:"", startTime:Date.now()});
+		$rootScope.$broadcast('overlayDisplay',{title:doc.title, url:doc.url, content:doc.content});
+	};
+
+	// Click up vote button
+	$scope.clickUpVote=function(event, doc){
+		$rootScope.$broadcast('interactionEmit',{title:"Vote Up", detail:"From static search, Doc ID: "+doc.id, extra_1:doc.escapedUlr});
+		
+		// Send to server
+		solrService.sendUpVote(doc);
+		
+		doc.upVote="checked";
+		doc.downVote=null;
+		event.stopPropagation();
+	};
+	
+	// Click down vote button
+	$scope.clickDownVote=function(event, doc){
+		$rootScope.$broadcast('interactionEmit',{title:"Vote Down", detail:"From static search, Doc ID: "+doc.id, extra_1:doc.escapedUlr});
+		doc.downVote="checked";
+		solrService.sendDownVote(doc);
+		doc.upVote=null;
+		event.stopPropagation();
+	};
+	
+	// Debug
+	/*
+	solrService.queryStaticSearchData("a").then(function (data){
+		$rootScope.staticSearchDocs = data.docs;
+	});
+	*/
+	// Prepare to start
+	$rootScope.staticSearchDocs=[];
+	$scope.$on('sendQuery',function(event, args){
+		solrService.queryData(args.query, args.start).then(function (data){
+			$rootScope.staticSearchDocs = data.docs;
+		});
+	});
+	
+	// When user send a new query.
+	$scope.$on('changePage',function(event, args){
+		solrService.queryStaticSearchData(args.query, args.start).then(function (data){
+			$rootScope.staticSearchDocs = data.docs;
+		});
+	});
+	
+	$scope.trustHtml = function(html) {
+	    return $sce.trustAsHtml(html);
+	}
+});
+
 // User state track controller
-dumplingApp.controller('userStateController', function(rootCookie,$scope, $rootScope) {
-	$rootScope.stateHistory=rootCookie.get("stateHistory");
+dumplingApp.controller('userStateController', function($scope, $rootScope) {
+	$rootScope.stateHistory=[];
 	
 	// Scroll down to button
 	$rootScope.$watch("stateHistory",function(){
@@ -324,14 +388,13 @@ dumplingApp.controller('feedbackController', function($scope, $rootScope) {
 
 
 // User interaction track controller
-dumplingApp.controller('userInteractionController', function(rootCookie,$scope, $rootScope, phpService) {
-	$scope.interactionHistory=rootCookie.get("interactionHistory");
+dumplingApp.controller('userInteractionController', function($scope, $rootScope, phpService) {
+	$scope.interactionHistory=[];
 	
 	// Other controllers emit interactions, and this controller will catch them.
 	$scope.$on('interactionEmit',function(event, args){
 		phpService.uploadInteraction(args);
 		$scope.interactionHistory.push(args);
-		rootCookie.put("interactionHistory",$scope.interactionHistory);
 		var h=$("#userInteractionList").children().first().height();
 		$("#userInteractionList").css('margin-top',-h);
 		$( "#userInteractionList" ).animate({"margin-top": "0px"}, 300);
@@ -438,6 +501,7 @@ dumplingApp.controller('overlayController', function($scope, $rootScope,$sce , p
 		$("#full_webpage_iframe").hide();
 		$(".full_webpage_fail").show();
 		$('.full_webpage_loading').hide();
+		
 	}
 	
 	$("#full_webpage_iframe").on("load", function () {
@@ -466,6 +530,7 @@ function highlight(target, keyword){
 	return target;
 }
 
+
 function htmlHighlighting(target, query){
     var re;
     var terms = query.split(/[^\w\.]+/);
@@ -481,4 +546,3 @@ function htmlHighlighting(target, query){
         //};
     };
 };
-

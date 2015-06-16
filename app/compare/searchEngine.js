@@ -75,11 +75,12 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 	this.queryData = function (query,start){
 		 var docs=[];
 		 var defer = $q.defer();
+		 var query1 =query.replace(/ /g, '+');
 		 $http(
 		            {method: 'JSONP',
 		             url: solrQueryUrl,
 		             params:{
-		            	 	'q': 'content:'+query,
+		            	 	'q': 'content:'+query1,
 		            	    'json.wrf': 'JSON_CALLBACK',
 		                    'wt':'json',
 		                    'hl':true,
@@ -133,11 +134,12 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 	this.queryStaticSearchData = function (query,start){
 		 var docs=[];
 		 var defer = $q.defer();
+		 var query1 =query.replace(/ /g, '+');
 		 $http(
 		            {method: 'JSONP',
 		             url: solrStaticQueryUrl,
 		             params:{
-		            	 	'q': 'content:'+query,
+		            	 	'q': 'content:'+query1,
 		            	    'json.wrf': 'JSON_CALLBACK',
 		                    'wt':'json',
 		                    'hl':true,
@@ -335,7 +337,7 @@ dumplingApp.controller('staticController', function($scope, $rootScope, $sce, so
 	// Prepare to start
 	$rootScope.staticSearchDocs=[];
 	$scope.$on('sendQuery',function(event, args){
-		solrService.queryData(args.query, args.start).then(function (data){
+		solrService.queryStaticSearchData(args.query, args.start).then(function (data){
 			$rootScope.staticSearchDocs = data.docs;
 		});
 	});
@@ -494,6 +496,7 @@ dumplingApp.controller('overlayController', function($scope, $rootScope,$sce , p
 		$(".full_webpage_fail").hide();
 		$('.full_webpage_loading').hide();
 		
+		htmlHighlighting($("#full_webpage_iframe").contents().find("body"),$rootScope.lastQuery);
 	}
 	
 	$scope.failLoading = function(){
@@ -507,22 +510,6 @@ dumplingApp.controller('overlayController', function($scope, $rootScope,$sce , p
 		$scope.blurImage();
 		$scope.finishLoading();
 	})
-	
-	$scope.highlightContent = function(){
-		$("#full_webpage_iframe")
-			.contents().find("body").contents()
-			.filter(function(){
-				if ($(this).text().indexOf("a")!=-1) {
-					return true;
-				}
-				return false;
-			})
-			.wrap("<div class='direwolf-tag'></div>");
-		$("#full_webpage_iframe")
-		.contents().find(".direwolf-tag").each(function(){
-			$(this).html(highlight($(this).html(),"Aline"));
-		});
-	}
 });
 
 //Highlight all the keywords in target string.
@@ -544,3 +531,18 @@ function highlight(target, keyword){
 	return target;
 }
 
+function htmlHighlighting(target, query){
+    var re;
+    var terms = query.split(/[^\w\.]+/);
+    for (i=0;i<terms.length;i++){
+        //if (stopwords.indexOf(terms[i].toLowerCase()) == -1 && terms[i].length>=2){
+    			target.find('script').remove();
+    			re1 = new RegExp('(>[^<>]*)('+ terms[i] + ')([^<>]*>)','gi');
+                re2 = new RegExp('(<[^<>]*)('+ terms[i] + ')([^<>]*<)','gi');
+                re3 = new RegExp('(>[^<>]*)('+ terms[i] + ')([^<>]*<)','gi');
+                target.html(target.html().replace(re1, '$1<span style="background-color:#DB0A5B;color:white;padding:2px;" >$2</span>$3').toString());
+                target.html(target.html().replace(re2, '$1<span style="background-color:#DB0A5B;color:white;padding:2px;">$2</span>$3').toString());
+                target.html(target.html().replace(re3, '$1<span style="background-color:#DB0A5B;color:white;padding:2px;">$2</span>$3').toString());
+        //};
+    };
+};

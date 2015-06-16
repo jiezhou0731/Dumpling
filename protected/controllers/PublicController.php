@@ -5,7 +5,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 ?>
 <?php
 
-class CompareController extends Controller
+class PublicController extends Controller
 {
 	public function actionIndex(){
 		$this->render('index');

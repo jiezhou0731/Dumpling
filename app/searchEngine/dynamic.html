@@ -1,16 +1,26 @@
+<style>
+.vote-panel{
+	float: left;
+	margin-right:10px;
+}
+.doc-rank {
+  margin-top: 2px;
+  margin-bottom: 5px;
+  float: left;
+}
+</style>
 <div class="docs-box" ng-controller="dynamicController">
 	<div class="row">
 		<div class="col-sm-12" ng-repeat="doc in $root.docs">
 			<div class="box">
 				<div class="box-body" ng-click="clickContent(doc);">
 					<div class="row">
-						<div class="col-sm-1">
-							<div ng-click="$event.stopPropagation();" class="float-left">
+						<div class="col-sm-12">
+							<div class="vote-panel" ng-click="$event.stopPropagation();" class="float-left">
+								<div class='doc-rank'># {{$index+1}}</div>
 								<div class='click-relevant' ng-class="{'up-green':doc.upVote}" ng-click="clickUpVote($event, doc);"></div>
 								<div class='click-off-topic' ng-class="{'down-green':doc.downVote}" ng-click="clickDownVote($event, doc);"></div>
 							</div>
-						</div>
-						<div class="col-sm-11">
 							<div>
 								<div class="title">
 									{{doc.title}}

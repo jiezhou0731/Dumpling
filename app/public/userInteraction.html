@@ -1,0 +1,28 @@
+<div class="box"  ng-controller="userInteractionController">
+	<div class="box-header">
+		<!-- tools box -->
+		<div class="media direction">
+			<div class="media-body">
+				<h5 style="margin: -2px 0 0; padding-bottom: 2px;"
+					class="media-heading">My Interaction Log</h5>
+				<span class="pull-right"></span>
+			</div>
+		</div>
+	</div>
+	<div class="box-body no-padding">
+		<div class="list-unstyled newsticker interaction-bg">
+			<div id="userInteractionList">
+				<ul class="list-unstyled jalur-nest bg-red" ng-repeat="iteraction in interactionHistory.slice().reverse()">
+					<li>{{iteraction.title}}</li>
+					<li>{{iteraction.detail}}</li>
+				</ul>
+			</div>
+		</div>
+		<br> <br>
+	</div>
+	<a href='http://pixelanimators.com/dumpling/index.php?r=index/interactionLogExport'>
+		<div class='interaction-log-export-button'
+			style="visibility: hidden;">export</div>
+	</a>
+	<!-- /.box-body -->
+</div>
