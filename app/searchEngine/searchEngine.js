@@ -1,4 +1,4 @@
-var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies']);
+var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies', 'ngMaterial','countrySelect']);
 var solrQueryUrl = 'http://141.161.20.98:8080/solr/humantrafficking/winwin';
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
@@ -43,7 +43,7 @@ dumplingApp.service('phpService',function($http,$sce, $q){
 	}
 });
 
-dumplingApp.service('solrService',function($http,$sce, $q){
+dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 	this.sendUpVote = function (doc){
 		console.log("up vote sent");
 	}
@@ -74,6 +74,16 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 	this.queryData = function (query,start,status){
 		 var docs=[];
 		 var defer = $q.defer();
+		 var excludeKeywords={};
+		 excludeKeywords.content = null;
+		 excludeKeywords.title = null;
+		 if ($rootScope.queryAdvanced.exclude!=undefined && $rootScope.queryAdvanced.exclude.length>0){
+			 excludeKeywords.content="-content:";
+			 excludeKeywords.title = "-title:";
+			 excludeKeywords.content+=$rootScope.queryAdvanced.exclude.replace(/ /g, '+');
+			 excludeKeywords.title+=$rootScope.queryAdvanced.exclude.replace(/ /g, '+');
+		 }
+		 
 		 $http(
 		            {method: 'JSONP',
 		             url: solrQueryUrl,
@@ -82,6 +92,8 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 		            	    'json.wrf': 'JSON_CALLBACK',
 		                    'wt':'json',
 		                    'hl':true,
+		                    'fq':excludeKeywords.content,
+		                    'fq':excludeKeywords.title,
 		                    'hl.fl':'*',
 		                    'hl.simple.pre':'',
 		                    'hl.simple.post':'',
@@ -122,7 +134,7 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 		      				docs[i].upVote=null;
 		      				docs[i].downVote=null;
 		      			}
-		              	data = {userState:userState, docs:docs};
+		              	data = {userState:userState, docs:docs, numFound:response.response.numFound};
 		              	defer.resolve(data);
 		            }).error(function() {
 		            	defer.reject('Can not get data from Solr');
@@ -169,7 +181,50 @@ dumplingApp.service('rootCookie',function($rootScope,$cookies){
 dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $cookies, $scope, $sce, solrService) {
 	$rootScope.lastQuery="";
 	
+	$scope.searchboxMenu = {
+		        topDirections: ['left', 'up'],
+		        bottomDirections: ['down', 'right'],
+		        isOpen: false,
+		        availableModes: ['md-fling', 'md-scale'],
+		        selectedMode: 'md-fling',
+		        availableDirections: ['up', 'down', 'left', 'right'],
+		        selectedDirection: 'down'
+		      };
+	
+	$rootScope.numFound=0;
+	$rootScope.queryPhone={};
+	$rootScope.queryPhone.country="01";
+	
+	$rootScope.queryEmail={};
+	
+	$rootScope.queryAddress={};
+	
+	$rootScope.queryAdvanced={};
+	
+	$rootScope.queryMode="regular";
+	
 	$scope.clickSubmit=function(){
+		if ($rootScope.queryMode=="phone"){
+			$rootScope.query="";
+			if ($rootScope.queryPhone.country!="01"){
+				$rootScope.query+=$rootScope.queryPhone.country+" ";
+			}
+			$rootScope.query+=checkString($rootScope.queryPhone.area)+" ";
+			$rootScope.query+=checkString($rootScope.queryPhone.prefix)+" ";
+			$rootScope.query+=checkString($rootScope.queryPhone.line);
+		} else if ($rootScope.queryMode=="email"){
+			$rootScope.query="";
+			$rootScope.query+=checkString($rootScope.queryEmail.part1)+" ";
+			$rootScope.query+=checkString($rootScope.queryEmail.part2)+" ";
+			$rootScope.query+=checkString($rootScope.queryEmail.part1)+"@"+checkString($rootScope.queryEmail.part2);
+		} else if ($rootScope.queryMode=="address"){
+			$rootScope.query="";
+			$rootScope.query+=checkString($rootScope.queryAddress.part1)+" ";
+			$rootScope.query+=checkString($rootScope.queryAddress.part2)+" ";
+			$rootScope.query+=checkString($rootScope.queryAddress.part3)+" ";
+			$rootScope.query+=checkString($rootScope.queryAddress.part4);
+		}
+		$rootScope.query=$rootScope.query.trim().replace(/\s\s+/g, ' ');
 		$rootScope.lastQuery=$rootScope.query;
 		rootCookie.put("lastQuery",$rootScope.lastQuery);
 		$rootScope.page = 1;
@@ -178,6 +233,10 @@ dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $
 	};
 	
 	$scope.clearHistory=function(){
+		$rootScope.numFound=0;
+		$rootScope.queryEmail={};
+		$rootScope.queryAddress={};
+		$rootScope.queryAdvanced={};
 		$rootScope.query="";
 		rootCookie.put("lastQuery","");
 		solrService.clearHistory();
@@ -224,6 +283,7 @@ dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootSco
 	if ($rootScope.query && $rootScope.query.length>0){
 		solrService.queryData($rootScope.query,0,"oldQuery").then(function (data){
 			$rootScope.docs = data.docs;
+			$rootScope.numFound = data.numFound;
 		});
 	}
 	
@@ -236,6 +296,7 @@ dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootSco
 	$scope.$on('sendQuery',function(event, args){
 		$rootScope.readDocEvents=[];
 		solrService.queryData(args.query, args.start, "newQuery").then(function (data){
+			$rootScope.numFound = data.numFound;
 			var transition;
 			if (data.userState=="RELEVANT_EXPLOITATION"){
 				transition="Find out more";
@@ -453,6 +514,8 @@ function highlight(target, keyword){
 	if (target==undefined){
 		return "";
 	}
+	keyword=keyword.replace(/\W/g, ' ');
+	keyword=keyword.trim().replace(/\s\s+/g, ' ');
 	if (target instanceof Array){
 		target=target[0];
 	}
@@ -482,3 +545,10 @@ function htmlHighlighting(target, query){
     };
 };
 
+function checkString(str){
+	if (str==undefined) {
+		return "";
+	} else {
+		return str;
+	}
+}

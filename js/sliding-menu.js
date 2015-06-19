@@ -53,8 +53,8 @@ $(document).ready(function() {
 	
 	
 	// show skin select for a second
-	setTimeout(function(){ $("#skin-select #toggle").addClass('active').trigger('click'); },10)
-	
+	setTimeout(function(){ $("#skin-select #toggle").removeClass('active').trigger('click'); },100);
+	setTimeout(function(){ $("#skin-select #toggle").removeClass('active').trigger('click'); },1000);
 	
 }); // end doc.ready
 

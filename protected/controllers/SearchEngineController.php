@@ -11,6 +11,10 @@ class SearchEngineController extends Controller
 		$this->render('index');
 	}
 	
+	public function actionTest(){
+		$this->render('indexTest');
+	}
+	
 	public function actionUserState(){
 		$this->render('userState');
 	}

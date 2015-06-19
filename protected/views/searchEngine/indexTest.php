@@ -78,7 +78,7 @@
 		
 			<!-- CONTENT -->
 			<div class="wrap-fluid" id="paper-bg">
-				<div ng-include="'app/searchEngine/searchBox.html'"></div>
+				<div ng-include="'app/searchEngine/searchBoxTest.html'"></div>
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="row">
