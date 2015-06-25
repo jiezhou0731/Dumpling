@@ -25,7 +25,7 @@ function toNextInput(elmnt,content,event)
 <div class="row search-box" ng-controller="searchBoxController" ng-keydown="$event.which === 13 && clickSubmit();">
 	<div class="col-sm-8 padding-0">
 		 <div  ng-show="$root.queryMode == 'regular';">
-			<input type="text" placeholder="Search" ng-model="$root.query" style="width:95%; float:left;"/>
+			<input type="text" placeholder="Search" ng-model="$root.queryRegular" style="width:95%; float:left;"/>
 		 </div>
 		 
 		 <div  ng-show="$root.queryMode == 'phone';"  id="phoneNumberForm">
@@ -59,6 +59,10 @@ function toNextInput(elmnt,content,event)
 			<span>Exclude:</span>
 			<input type="text" ng-model="$root.queryAdvanced.exclude" style="width:37%; float:left;" />
 		 </div>
+		 <div  ng-show="$root.queryMode == 'structural';">
+		 	<span>Structural Search:</span>
+		  	<input type="text" ng-model="$root.queryStructural" style="width:80%; float:left;"/>
+		 </div>
 		 
 		 <md-fab-speed-dial style="position:absolute;left:95%; width:5%" md-open="searchboxMenu.isOpen" md-direction="{{searchboxMenu.selectedDirection}}"
 		                         ng-class="searchboxMenu.selectedMode">
@@ -81,7 +85,10 @@ function toNextInput(elmnt,content,event)
 			       Regular Search
 			       </md-button>
 			       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'advanced';">
-			       Advanced Search
+			       Exclude Search
+			       </md-button>
+			       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'structural';">
+			       Structural Search
 			       </md-button>
 		        </md-fab-actions>
 		</md-fab-speed-dial>

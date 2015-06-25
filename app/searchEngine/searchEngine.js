@@ -1,5 +1,7 @@
 var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies', 'ngMaterial','countrySelect']);
 var solrQueryUrl = 'http://141.161.20.98:8080/solr/humantrafficking/winwin';
+var solrSelectQueryUrl = 'http://141.161.20.98:8080/solr/humantrafficking/select';
+
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
 var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
@@ -83,12 +85,24 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 			 excludeKeywords.content+=$rootScope.queryAdvanced.exclude.replace(/ /g, '+');
 			 excludeKeywords.title+=$rootScope.queryAdvanced.exclude.replace(/ /g, '+');
 		 }
+		
+		 var url=solrQueryUrl;
+		 if ($rootScope.queryMode=="structural"){
+			 var old=query;
+			 query=convertStructuralQuery(query);
+			 // only /select support structural query.
+			 if (query!=old){
+				 url=solrSelectQueryUrl;
+			 } 
+		 } else {
+			 query='content:'+query;
+		 }
 		 
 		 $http(
 		            {method: 'JSONP',
-		             url: solrQueryUrl,
+		             url: url,
 		             params:{
-		            	 	'q': 'content:'+query,
+		            	 	'q': query,
 		            	    'json.wrf': 'JSON_CALLBACK',
 		                    'wt':'json',
 		                    'hl':true,
@@ -223,6 +237,10 @@ dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $
 			$rootScope.query+=checkString($rootScope.queryAddress.part2)+" ";
 			$rootScope.query+=checkString($rootScope.queryAddress.part3)+" ";
 			$rootScope.query+=checkString($rootScope.queryAddress.part4);
+		} else if ($rootScope.queryMode=="structural"){
+			$rootScope.query=$rootScope.queryStructural;
+		} else if ($rootScope.queryMode=="regular"){
+			$rootScope.query=$rootScope.queryRegular;
 		}
 		$rootScope.query=$rootScope.query.trim().replace(/\s\s+/g, ' ');
 		$rootScope.lastQuery=$rootScope.query;
@@ -237,6 +255,7 @@ dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $
 		$rootScope.queryEmail={};
 		$rootScope.queryAddress={};
 		$rootScope.queryAdvanced={};
+		$rootScope.queryStructural={};
 		$rootScope.query="";
 		rootCookie.put("lastQuery","");
 		solrService.clearHistory();
@@ -298,13 +317,20 @@ dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootSco
 		solrService.queryData(args.query, args.start, "newQuery").then(function (data){
 			$rootScope.numFound = data.numFound;
 			var transition;
+			if ($rootScope.lastQueryIsRelevant==true){
+				transition="Relevant. "
+			} else {
+				transition="Irrelevant. "
+			}
+			$rootScope.lastQueryIsRelevant = false;
+			
 			if (data.userState=="RELEVANT_EXPLOITATION"){
-				transition="Find out more";
+				transition+="Find out more";
 				//changeStateLabel(0);
 				//moveBallToAbove();
 				//changeWords(args.query.split(" ").concat(["human","abuse","trafficking","sex","child"]));
 			} else {
-				transition="Next topic";
+				transition+="Next topic";
 				//changeStateLabel(1);
 				//moveBallToBelow();
 				//changeWords(args.query.split(" "));
@@ -390,6 +416,11 @@ dumplingApp.controller('userInteractionController', function(rootCookie,$scope, 
 	
 	// Other controllers emit interactions, and this controller will catch them.
 	$scope.$on('interactionEmit',function(event, args){
+		// Set next query state to relevant;
+		if (args.title=="Read Doc" || args.title=="Vote Up" || args.title=="Change page" ){
+			$rootScope.lastQueryIsRelevant=true;
+		}
+		
 		phpService.uploadInteraction(args);
 		$scope.interactionHistory.push(args);
 		rootCookie.put("interactionHistory",$scope.interactionHistory);
@@ -522,6 +553,11 @@ function highlight(target, keyword){
 	var keywords=keyword.split(" ");
 	for (var i = 0; i < keywords.length; i++) {
 		keyword=keywords[i];
+		if (keyword.toUpperCase()=="AND" 
+			|| keyword.toUpperCase()=="OR"
+			|| keyword.toUpperCase()=="NOT") {
+			continue;
+		}
 		reg = new RegExp(keyword, 'gi');
 		target = target.replace(reg, '<span class="highlight" style="color:'+highlight_colors[i%highlight_colors.length]+'">'+keyword+'</span>');
 	}
@@ -551,4 +587,45 @@ function checkString(str){
 	} else {
 		return str;
 	}
+}
+
+// Convert structural query
+function convertStructuralQuery(st){
+    var newSt="";
+    var next =nextWord(st);
+    while (next!=undefined){
+        newSt+=next.word;
+        next =nextWord(next.st);
+    }
+    return newSt;
+}
+function nextWord(st){
+    if (st==undefined || st.length==0)
+        return undefined;
+    var next={};
+    next.word="";
+    next.st="";
+    if (isIgnoreOnes(st[0])){
+        next.word+=st[0];
+        next.st = st.substring(1);
+        return next;
+    }
+    var i=0;
+    while (i<st.length && !isIgnoreOnes(st[i])){
+        next.word+=st[i];
+        i++;
+    }
+   if (next.word.toUpperCase()!="AND"
+        && next.word.toUpperCase()!="OR"
+        && next.word.toUpperCase()!="NOT") {
+    next.word="content:"+next.word;
+   }
+   next.st=st.substring(i);
+    return next;
+}
+function isIgnoreOnes(ch){
+    if (ch==" " || ch=="(" || ch==")") {
+     return true;
+    }
+    return false;
 }
