@@ -40,32 +40,36 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-sanitize.min.js"></script>
 <script src='http://cdn.rawgit.com/angular/bower-material/v0.10.0/angular-material.js'></script>
 
+ <script src="assets/threejs/three.min.js"></script>
+	<script src="assets/threejs/Detector.js"></script>
+	<script src="assets/threejs/stats.min.js"></script>
+	
 <script src="assets/angularjs/angular.country-select.js"></script>
-<script src="app/searchEngine/searchEngine.js"></script>
+
 </head>
 
-<body ng-app="dumplingApp" style="overflow: scroll;">
+<body ng-app="dumplingApp" style="overflow: hidden; height:100vh;padding:0px;">
+<div  style="overflow: hidden; height:100vh;  padding: 0px;">
 <div id="preloader">
 		<div id="status">&nbsp;</div>
 </div>
-	<div ng-include="'app/searchEngine/overlay.html'"></div> 
+	<div ng-include="'app/counterfeit/overlay.html'"></div> 
 
 	<div ng-include="'app/topNavi.html'"></div>
 
 	<!-- CONTAINER -->
-	<div class="container-fluid paper-wrap bevel tlbr">
+	<div class="container-fluid paper-wrap bevel tlbr" style="margin:0px;  height: 100vh;">
 		<div id="paper-top">
 			<div class="row">
-				<div class="col-sm-2 no-pad">
-					<a class="navbar-brand logo-text" href="#">DUMPLING/DIREWOLF</a>
+				<div class="col-sm-4 no-pad">
+					<a class="navbar-brand logo-text" href="#">DUMPLING/DIREWOLF  {{$root.nextInNavi}}</a>
 				</div>
-
-				<!-- menu right -->
-				<div class="navbar-right">
-                     <div class="toolbox" ng-include="'app/searchEngine/preference.html'"></div>
-                </div>
-				<!-- end of menu right -->
-				
+				<div class="col-sm-8 no-pad" style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
+					<div ng-click="clickSubmit();" style="margin:auto;height:50px;width:50px;border-radius: 50%;  margin-top: -13px;background-color:white; border:2px solid #45B6B0; outline: none;"></div>
+				</div>
+				<div class="col-sm-8 no-pad" style="text-align: center;" ng-controller="dynamicController" ng-show="$root.nextInNavi=='nextPage'">
+					<div ng-click="clickNextPage();" style="margin:auto;height:50px;width:50px;border-radius: 50%;  margin-top: -13px;background-color:white; border:2px solid #45B6B0; outline: none;"></div>
+				</div>
 			</div>
 		</div>
 		<!-- SIDE MENU -->
@@ -77,23 +81,24 @@
 			</div>
 		
 			<!-- CONTENT -->
-			<div class="wrap-fluid" id="paper-bg">
-				<div ng-include="'app/searchEngine/searchBoxTest.html'"></div>
-				<div class="row">
-					<div class="col-sm-12">
+			<div class="wrap-fluid" id="paper-bg" style="  padding-top: 6px;">
+				
+				<div class="row" style="height:80vh;overflow:hidden;">
+					<div class="col-sm-4">
+						<div id="canvas" style="height:80vh;width: 95%;"></div>
+					</div>
+					<div class="col-sm-8" style="height:80vh;overflow-x:hidden; overflow-u:scroll;">
 						<div class="row">
 							<div class="col-sm-12 user-state-box-show-hide padding-bottom-0" ng-show="$root.preference.userStatePanelDisplay">
-								<div class="row">
-									<div ng-include="'app/searchEngine/userState.html'"></div>
-								</div>
+								
 							</div>
 							<div class="col-sm-12 padding-0 padding-right-5 dynamic-box-show-hide" ng-class="{'col-sm-10':$root.preference.userInteractionPanelDisplay}">
-								<div ng-include="'app/searchEngine/dynamic.html'"></div>
+								<div ng-include="'app/counterfeit/dynamic.html'"></div>
 							</div>
 							<div class="col-sm-2 user-interaction-box-show-hide" ng-show="$root.preference.userInteractionPanelDisplay" >
 								<div class="row">
 									<div class="col-sm-12 padding-0">
-										<div ng-include="'app/searchEngine/userInteraction.html'"></div>
+										<div ng-include="'app/counterfeit/userInteraction.html'"></div>
 									</div>
 								</div>
 
@@ -104,16 +109,19 @@
 						</div>
 					</div>
 				</div>
+				<div style="width:50vw;position:fixed;right:0px;bottom:55px;margin-right:29px;">
+					<div ng-include="'app/counterfeit/searchBox.html'"></div>
+				</div>
 			</div>
-			<!-- / END OF CONTENT -->
-			
-			<div ng-include="'app/footer.html'"></div>
 		</div>
 		<!-- END OF SIDE MENU -->
 		
 	</div>
 	<!-- END OF CONTAINER -->
-	
+</div>
+<div class="row" style="width:100vw;left:0px;position:fixed;;bottom:0vh; padding-left:10px; z-index: 2000; overflow:hidden;">
+	<div ng-include="'app/counterfeit/userState.html'"></div>
+</div>
 			<script type='text/javascript' src='js/date.js'></script>
 			<script type='text/javascript'
 				src='js/slimscroll/jquery.slimscroll.js'></script>
@@ -138,5 +146,9 @@
 			<script src="js/loader/demo.js" type="text/javascript"></script>
 			<script type="text/javascript" src="js/skycons/skycons.js"></script>
 			<script type='text/javascript' src='assets/foggy/jquery.foggy.min.js'></script>
+			
+			<script src="app/counterfeit/draw.js"></script>
+			<script src="app/counterfeit/counterfeit.js"></script>
+	
 </body>
 </html>

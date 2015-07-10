@@ -1,0 +1,39 @@
+<div class="docs-box">
+	<div class="row">
+		<div class="col-sm-9" style='padding-bottom: 0px;'>
+			<h2>Static Retrieval</h2>
+		</div>
+		<!-- 
+		<div class="col-sm-3" style='padding: 0px; top: 20px; left: -30px;'>
+			<div class="form-group">
+				<select class="form-control" id='staticOption'>
+					<option>Lucene</option>
+					<option>Google</option>
+				</select>
+			</div>
+		</div>
+		 -->
+	</div>
+
+
+	<div class="row" id="static_box" ng-controller="staticController">
+		<div class="col-sm-12" ng-repeat="doc in docs">
+			<div class="box">
+				<div class="box-body">
+					<div class="row">
+						<div class='clickOffTopic'>off-topic</div>
+						<div class='clickRelevant'>relevant</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-11">
+							<div class="title">{{doc.title}}</div>
+							<div class="content" ng-bind-html="doc.highlighting">
+								{{doc.highlighting}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

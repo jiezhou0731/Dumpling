@@ -7,7 +7,6 @@
 <link href="ico/favicon.ico" rel="shortcut icon">
 <title>Dumpling Search Engine</title>
 <!-- css loader -->
-<link rel='stylesheet prefetch' href='http://cdn.rawgit.com/angular/bower-material/v0.10.0/angular-material.css'>
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="assets/andrew/andrew.css">
 <link rel="stylesheet" href="css/custom.css">
@@ -33,18 +32,32 @@
 
 <script type="text/javascript" src="js/skycons/skycons.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.6/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.6/angular-animate.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
-<script src="assets/angularjs/angular-cookies.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-sanitize.min.js"></script>
-<script src='http://cdn.rawgit.com/angular/bower-material/v0.10.0/angular-material.js'></script>
-
-<script src="assets/angularjs/angular.country-select.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.6/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.6/angular-animate.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-sanitize.min.js"></script>
 <script src="app/searchEngine/searchEngine.js"></script>
 </head>
 
-<body ng-app="dumplingApp" style="overflow: scroll;">
+<body ng-app="dumplingApp">
+
+<script src="assets/three.js/js/Three.js"></script>
+<script src="assets/three.js/js/Detector.js"></script>
+<script src="assets/three.js/js/Stats.js"></script>
+<script src="assets/three.js/js/OrbitControls.js"></script>
+<script src="assets/three.js/js/THREEx.KeyboardState.js"></script>
+<script src="assets/three.js/js/THREEx.FullScreen.js"></script>
+<script src="assets/three.js/js/THREEx.WindowResize.js"></script>
+
+<!-- jQuery code to display an information button and box when clicked. -->
+<script type='text/javascript' src="js/jquery.js"></script>
+<script src="assets/three.js/js/jquery-ui.js"></script>
+<link rel=stylesheet href="assets/three.js/css/jquery-ui.css" />
+<link rel=stylesheet href="assets/three.js/css/info.css"/>
+<script src="assets/three.js/js/info.js"></script>
+
+<script src="app/searchEngine/userState.js"></script>
+
+<div id="infoButton" onclick="changeWords();">aaaaaaaaaaaaa</div>
 <div id="preloader">
 		<div id="status">&nbsp;</div>
 </div>
@@ -73,18 +86,53 @@
 			<div id="skin-select">
 				<a id="toggle"> <span class="fa icon-menu"></span>
 				</a>
-				<div ng-include="'app/sideMenu.html'"></div>
+				<div class="skin-part">
+					<div id="tree-wrap">
+						<div class="side-bar">
+							<ul id="menu-showhide" class="topnav">
+								<li class="devider-title">
+									<h3>
+										<span>Dumpling Menu</span>
+									</h3>
+								</li>
+								<li>
+									<a style="border-left: 4px solid #5F9BDB; padding: 0 0 0 16px;"
+									class="tooltip-tip" href="index.php?r=searchEngine" title="Dashboard">
+									 	<i class="fontello-search-outline"></i> 
+									 	<span>Search Engine</span>
+									</a>
+								</li>
+								<li>
+									<a
+									class="tooltip-tip" href="index.php?r=crawler" title="Dashboard">
+									 	<i class="fontello-download"></i> 
+									 	<span>Crawler</span>
+									</a>
+								</li>
+								<li>
+									<a  
+									class="tooltip-tip" href="index.php?r=laborTrafficking" title="Dashboard">
+									 	<i class="fa fa-fw fa-users"></i> 
+									 	<span>Labor Trafficking</span>
+									</a>
+								</li>
+								<li class="devider-horizontal"></li>
+							</ul>
+						</div>
+					</div>
+					
+				</div>
 			</div>
 		
 			<!-- CONTENT -->
 			<div class="wrap-fluid" id="paper-bg">
-				<div ng-include="'app/searchEngine/searchBoxTest.html'"></div>
+				<div ng-include="'app/searchEngine/searchBox.html'"></div>
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="row">
 							<div class="col-sm-12 user-state-box-show-hide padding-bottom-0" ng-show="$root.preference.userStatePanelDisplay">
 								<div class="row">
-									<div ng-include="'app/searchEngine/userState.html'"></div>
+									<div ng-include="'app/searchEngine/threejs.html'"></div>
 								</div>
 							</div>
 							<div class="col-sm-12 padding-0 padding-right-5 dynamic-box-show-hide" ng-class="{'col-sm-10':$root.preference.userInteractionPanelDisplay}">
@@ -112,6 +160,9 @@
 		<!-- END OF SIDE MENU -->
 		
 	</div>
+
+
+
 	<!-- END OF CONTAINER -->
 	
 			<script type='text/javascript' src='js/date.js'></script>

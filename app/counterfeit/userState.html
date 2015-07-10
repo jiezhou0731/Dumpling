@@ -1,0 +1,61 @@
+<div class="col-sm-12 user-state-box" id="userStateController" ng-controller="userStateController" style="overflow:auto; width: 100%;height: 55px;">
+	<div class='search-transition-pre' ng-repeat-start="state in $root.stateHistory" ng-show="!$first">
+		<img src='img/state_pre.png' />
+	</div>
+	<div class='search-transition' ng-show="!$first">
+		{{state.transition}}
+	</div>
+	<div class="search-transition-pre" ng-show="!$first">
+		<img src="img/state_suc.png">
+	</div>
+	<div class="one-query"  ng-repeat-end>
+		{{state.query}}
+	</div>
+</div>
+<!-- 
+<div  ng-controller="feedbackController">
+<div class="col-sm-2">
+	<div class="box">
+		<div class="box-body" style="padding: 10px 20px;">
+			<div class="news-widget" style="padding: 0px;">
+				<h2>
+					<span class="bg-blue">Explicit Feedback</span>
+				</h2>
+				<div class="current-feedback-box">
+					<div ng-repeat="item in $root.docs | filter:isRelevant">
+						Doc {{item.id}} is relevant.
+					</div>
+					<div ng-repeat="item in $root.docs | filter:isOffTopic">
+						Doc {{item.id}} is off-topic.
+					</div>
+					<div ng-show="noExplicitFeedback()">
+				        N/A
+				    </div>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-sm-2">
+	<div class="box">
+		<div class="box-body" style="padding: 10px 20px;">
+			<div class="news-widget" style="padding: 0px;">
+				<h2>
+					<span class="bg-blue">Implicit Feedback</span>
+				</h2>
+				<div class="current-feedback-box">
+					<div ng-repeat="item in $root.readDocEvents">
+						Doc {{item.id}} is read for {{item.duration}} seconds.
+					</div>
+					<div ng-show="noImplicitFeedback()">
+				        N/A
+				    </div>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+-->

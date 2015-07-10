@@ -1,12 +1,15 @@
 var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies', 'ngMaterial','countrySelect']);
-var solrQueryUrl = 'http://141.161.20.98:8080/solr/humantrafficking/winwin';
-var solrSelectQueryUrl = 'http://141.161.20.98:8080/solr/humantrafficking/select';
+var solrQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/winwin';
+var solrSelectQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/select';
+//var subtopicUrl = 'http://141.161.20.98/direwolf/index.php?r=counterfeit/subtopicTest';
+var subtopicUrl = 'http://141.161.20.98/topicTree/topicTree.cgi';
 
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
 var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
 
-dumplingApp.service('phpService',function($http,$sce, $q){
+dumplingApp.service('phpService',function($http,$sce, $q,$rootScope){
+	$rootScope.nextInNavi="search";
 	this.uploadInteraction = function (event){
 		 var defer = $q.defer();
 		 $http(
@@ -45,6 +48,26 @@ dumplingApp.service('phpService',function($http,$sce, $q){
 	}
 });
 
+dumplingApp.service('getSubtopicService',function($http,$sce, $q,$rootScope){
+	this.getSubtopic = function (args){
+		 var defer = $q.defer();
+		 $http(
+		            {
+		             method: 'post',
+		             url: subtopicUrl,
+		             data:args})
+		            .success(function(response) {
+		            	console.log(response);
+		            	var topics= response.topics;
+		            	resetCavas(topics);
+		              	defer.resolve();
+		            }).error(function() {
+		            	defer.reject('Can not connect to server');
+		 });
+		 return defer.promise;;
+	}
+});
+
 dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 	this.sendUpVote = function (doc){
 		console.log("up vote sent");
@@ -74,17 +97,23 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 	}
 	
 	this.queryData = function (query,start,status){
+		if (status!="oldQuery" && query==$rootScope.hackDoubleQuery){
+			return;
+		}
+		$rootScope.hackDoubleQuery=query;
+		
 		 var docs=[];
 		 var defer = $q.defer();
 		 var excludeKeywords={};
 		 excludeKeywords.content = null;
 		 excludeKeywords.title = null;
+		 /*
 		 if ($rootScope.queryAdvanced.exclude!=undefined && $rootScope.queryAdvanced.exclude.length>0){
 			 excludeKeywords.content="-content:";
 			 excludeKeywords.title = "-title:";
 			 excludeKeywords.content+=$rootScope.queryAdvanced.exclude.replace(/ /g, '+');
 			 excludeKeywords.title+=$rootScope.queryAdvanced.exclude.replace(/ /g, '+');
-		 }
+		 }*/
 		
 		 var url=solrQueryUrl;
 		 if ($rootScope.queryMode=="structural"){
@@ -120,6 +149,12 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 		            .success(function(response) {
 		            	userState = response.state;
 		            	docs= response.response.docs;
+		            	if ($rootScope.docs.length!=$rootScope.resultPerPage){
+		            		$rootScope.nextInNavi="search";
+		            	} else {
+		            		$rootScope.nextInNavi="nextPage";
+		            	}
+		            	console.log($rootScope.nextInNavi);
 		              	for (var prop in  response.highlighting) {
 		            	  	for (var doc in docs){
 		            		  	if (docs[doc].id==prop){
@@ -142,6 +177,7 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 		      					docs[i].highlighting=$sce.trustAsHtml(docs[i].highlighting.trim());
 		      				} catch (err){
 		      				}
+		      				docs[i].content=unescape(docs[i].content);
 		      				docs[i].escapedUlr=docs[i].url;
 		      				docs[i].url=unescape(docs[i].url);
 		      				$sce.trustAsResourceUrl(docs[i].url);
@@ -193,8 +229,7 @@ dumplingApp.service('rootCookie',function($rootScope,$cookies){
 
 // Search controller
 dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $cookies, $scope, $sce, solrService) {
-	$rootScope.lastQuery="";
-	
+
 	$scope.searchboxMenu = {
 		        topDirections: ['left', 'up'],
 		        bottomDirections: ['down', 'right'],
@@ -218,6 +253,8 @@ dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $
 	$rootScope.queryMode="regular";
 	
 	$scope.clickSubmit=function(){
+		$rootScope.nextInNavi="nextPage";
+		$rootScope.queryRegular=$rootScope.outterControllerQuery;
 		if ($rootScope.queryMode=="phone"){
 			$rootScope.query="";
 			if ($rootScope.queryPhone.country!="01"){
@@ -269,7 +306,7 @@ dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $
 });
 
 // Dynamic result controller
-dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootScope, $sce, solrService) {
+dumplingApp.controller('dynamicController', function(getSubtopicService, rootCookie,$scope, $rootScope, $sce, solrService) {
 	// Click doc content
 	$scope.clickContent=function(doc){
 		$rootScope.readDocEvents.push({id:doc.id,url:doc.escapedUlr, content:"", startTime:Date.now()});
@@ -297,15 +334,6 @@ dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootSco
 		event.stopPropagation();
 	};
 	
-	// Resend last query in cookie.
-	$rootScope.query=rootCookie.get("lastQuery");
-	if ($rootScope.query && $rootScope.query.length>0){
-		solrService.queryData($rootScope.query,0,"oldQuery").then(function (data){
-			$rootScope.docs = data.docs;
-			$rootScope.numFound = data.numFound;
-		});
-	}
-	
 	// Prepare to start
 	$rootScope.readDocEvents=[];
 	$rootScope.docs=[];
@@ -315,6 +343,14 @@ dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootSco
 	$scope.$on('sendQuery',function(event, args){
 		$rootScope.readDocEvents=[];
 		solrService.queryData(args.query, args.start, "newQuery").then(function (data){
+			var subtopicPostJson={};
+			subtopicPostJson.docno=new Array();
+			for (var i=0; i<data.docs.length; i++){
+				subtopicPostJson.docno.push(data.docs[i].id);
+			}
+			
+			getSubtopicService.getSubtopic(angular.toJson(subtopicPostJson));
+			
 			$rootScope.numFound = data.numFound;
 			var transition;
 			if ($rootScope.lastQueryIsRelevant==true){
@@ -344,9 +380,18 @@ dumplingApp.controller('dynamicController', function(rootCookie,$scope, $rootSco
 	
 	// When user send a new query.
 	$scope.$on('changePage',function(event, args){
+		console.log("11111111111");
 		$rootScope.readDocEvents=[];
 		solrService.queryData(args.query, args.start, "oldQuery").then(function (data){
 			$rootScope.docs = data.docs;
+			
+			console.log("dd");
+			var subtopicPostJson={};
+			subtopicPostJson.docno=new Array();
+			for (var i=0; i<data.docs.length; i++){
+				subtopicPostJson.docno.push(data.docs[i].id);
+			}
+			getSubtopicService.getSubtopic(angular.toJson(subtopicPostJson));
 		});
 	});
 	
@@ -459,6 +504,7 @@ dumplingApp.controller('overlayController', function($scope, $rootScope,$sce , p
 		$scope.doc={};
 		$scope.doc.url = args.url;
 		$scope.doc.title = args.title;
+		$scope.doc.content = args.content;
 		var maxTitleLength=200;
 		if ($scope.doc.title.length>maxTitleLength){
 			$scope.doc.title=$scope.doc.title.substring(0, maxTitleLength)+"...";
