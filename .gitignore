@@ -5,3 +5,4 @@ protected/data/*.db
 themes/classic/views/
 components/download-temperary-webpage/*
 assets/*
+.DS_Store

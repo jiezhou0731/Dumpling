@@ -40,9 +40,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-sanitize.min.js"></script>
 <script src='http://cdn.rawgit.com/angular/bower-material/v0.10.0/angular-material.js'></script>
 
- <script src="assets/threejs/three.min.js"></script>
-	<script src="assets/threejs/Detector.js"></script>
-	<script src="assets/threejs/stats.min.js"></script>
+<script src="assets/threejs/three.min.js"></script>
+<script src="assets/threejs/Detector.js"></script>
+<script src="assets/threejs/stats.min.js"></script>
 	
 <script src="assets/angularjs/angular.country-select.js"></script>
 

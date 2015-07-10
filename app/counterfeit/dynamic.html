@@ -14,7 +14,7 @@
 		<div class="col-sm-12" ng-repeat="doc in $root.docs">
 			<div class="box">
 				<div class="box-body" ng-click="clickContent(doc);">
-					<div class="row">
+					<div class="row" style="height:110px;; overflow:hidden;">
 						<div class="col-sm-12">
 							<div class="vote-panel" ng-click="$event.stopPropagation();" class="float-left">
 								<div class='doc-rank'># {{$index+1}}</div>
@@ -22,7 +22,7 @@
 								<div class='click-off-topic' ng-class="{'down-green':doc.downVote}" ng-click="clickDownVote($event, doc);"></div>
 							</div>
 							<div>
-								<div class="title">
+								<div class="title" style="height:25px;; overflow:hidden;">
 									{{doc.title}}
 								</div>
 								<div class="content" ng-bind-html="doc.highlighting">

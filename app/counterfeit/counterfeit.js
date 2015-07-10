@@ -1,8 +1,8 @@
 var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies', 'ngMaterial','countrySelect']);
 var solrQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/winwin';
 var solrSelectQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/select';
-//var subtopicUrl = 'http://141.161.20.98/direwolf/index.php?r=counterfeit/subtopicTest';
-var subtopicUrl = 'http://141.161.20.98/topicTree/topicTree.cgi';
+var subtopicUrl = 'http://141.161.20.98/direwolf/index.php?r=counterfeit/subtopicTest';
+//var subtopicUrl = 'http://141.161.20.98/topicTree/topicTree.cgi';
 
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';

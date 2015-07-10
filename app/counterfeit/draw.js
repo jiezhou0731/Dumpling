@@ -20,7 +20,7 @@ var resetCavas=function(topics){
 	
 	lines=Array();
 	var geometry = new THREE.Geometry();
-	for ( var i=0; i<topics.length; i++){
+	for ( var i=0; i<1; i++){
 		var topicVertex = new THREE.Vector3();
 		topicVertex.x = 0;
 		topicVertex.y = 0.2*windowY;
