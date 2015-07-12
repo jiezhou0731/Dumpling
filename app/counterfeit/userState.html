@@ -8,7 +8,7 @@
 	<div class="search-transition-pre" ng-show="!$first">
 		<img src="img/state_suc.png">
 	</div>
-	<div class="one-query"  ng-repeat-end>
+	<div class="one-query"  ng-repeat-end ng-click="clickPreviousQuery(state.query)">
 		{{state.query}}
 	</div>
 </div>

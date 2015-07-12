@@ -10,6 +10,10 @@ var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
 
 dumplingApp.service('phpService',function($http,$sce, $q,$rootScope){
 	$rootScope.nextInNavi="search";
+	$rootScope.clickEnter = function(){
+		$rootScope.$broadcast('outterControllerClickSubmit');
+	}
+
 	this.uploadInteraction = function (event){
 		 var defer = $q.defer();
 		 $http(
@@ -252,6 +256,10 @@ dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $
 	
 	$rootScope.queryMode="regular";
 	
+	$scope.$on("outterControllerClickSubmit",function(){
+		$scope.clickSubmit();
+	},true);
+
 	$scope.clickSubmit=function(){
 		$rootScope.nextInNavi="nextPage";
 		$rootScope.queryRegular=$rootScope.outterControllerQuery;
@@ -373,7 +381,11 @@ dumplingApp.controller('dynamicController', function(getSubtopicService, rootCoo
 			}
 			$rootScope.docs = data.docs;
 			//movingHistory.snapshot();
-			$rootScope.stateHistory.push({query:args.query, transition: transition});
+			if ($rootScope.doNotAddToUserStates==true){
+				$rootScope.doNotAddToUserStates==false;
+			} else {
+				$rootScope.stateHistory.push({query:args.query, transition: transition});
+			}
 			rootCookie.put("stateHistory",$rootScope.stateHistory);
 		});
 	});
@@ -422,12 +434,19 @@ dumplingApp.controller('dynamicController', function(getSubtopicService, rootCoo
 
 // User state track controller
 dumplingApp.controller('userStateController', function(rootCookie,$scope, $rootScope) {
-	$rootScope.stateHistory=rootCookie.get("stateHistory");
+	$rootScope.stateHistory=[];//rootCookie.get("stateHistory");
 	
 	// Scroll down to button
 	$rootScope.$watch("stateHistory",function(){
 		$('#userStateController').animate({scrollTop:$('#userStateController')[0].scrollHeight}, '600');
 	},true);
+
+	$scope.clickPreviousQuery= function(clickedQuery){
+		$rootScope.outterControllerQuery=clickedQuery;
+		$rootScope.doNotAddToUserStates = true;
+		$rootScope.$broadcast('outterControllerClickSubmit');
+		console.log(clickedQuery);
+	}
 });
 
 //User state track controller

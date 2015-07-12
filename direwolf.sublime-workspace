@@ -1,0 +1,196 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/jie/Sites/direwolf/app/searchEngine/dynamic.html",
+		"/Users/jie/Sites/direwolf/app/searchEngine/searchBoxTest.html",
+		"/Users/jie/Sites/dumpling/app/counterfeit/counterfeit.js",
+		"/Users/jie/Sites/dumpling/protected/views/counterfeit/index.php",
+		"/Users/jie/Sites/dumpling/app/counterfeit/searchBox.html",
+		"/Users/jie/Sites/dumpling/app/searchEngine/searchBox.html",
+		"/Users/jie/Sites/dumpling/protected/controllers/CounterfeitController.php",
+		"/Users/jie/Sites/dumpling/app/subTopic/subtopic.js",
+		"/Users/jie/Sites/dumpling/protected/views/subtopic/index.php",
+		"/Users/jie/Sites/dumpling/app/subTopic/draw.js",
+		"/Users/jie/Sites/dumpling/app/searchEngine/userState.js",
+		"/Users/jie/Sites/dumpling/app/subTopic/subtopic.css",
+		"/Users/jie/Sites/dumpling/app/searchEngine/threejs.html",
+		"/Users/jie/Sites/dumpling/app/searchEngine/userState.html",
+		"/Users/jie/Sites/dumpling/protected/views/searchEngine/userState.php",
+		"/Users/jie/Sites/dumpling/app/subTopic/draw.html",
+		"/Users/jie/Sites/dumpling/protected/views/searchEngine/index.php",
+		"/Users/jie/Sites/dumpling/app/subTopic/threejs.html",
+		"/Users/jie/Sites/dumpling/protected/controllers/SubtopicController.php",
+		"/Users/jie/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/jie/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/jie/Sites/dumpling/app/searchEngine/searchEngine.js",
+		"/Users/jie/Sites/dumpling/protected/controllers/SearchEngineController.php",
+		"/Users/jie/Sites/dumpling/protected/controllers/IndexController.php",
+		"/Users/jie/Sites/dumpling/app/searchEngine/preference.html",
+		"/Users/jie/Sites/dumpling/app/searchEngine/userInteraction.html"
+	],
+	"find":
+	{
+		"height": 39.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"makeTextSprite",
+			"word",
+			"searchEngine",
+			"dumpling",
+			"$rootScope.query",
+			"search",
+			"sprite",
+			"spri",
+			";\n",
+			"geometry.vertices",
+			"animate",
+			"fog",
+			"scene.fog",
+			"canvas",
+			"$('#canvas').height()",
+			"$( '#canvas' ).width()",
+			"	",
+			"				",
+			"\n				",
+			"				",
+			"draw",
+			"window.innerHeight",
+			"window.innerWidth",
+			"innerWidth",
+			"window.innerWidth",
+			"thre",
+			"userState",
+			"userstate",
+			"asset",
+			"delete",
+			"       \n",
+			"AppCtrl",
+			"searchEngine",
+			".fileUpload {\n    position: relative;\n    overflow: visible;\n    margin: 10px;\n}\n.fileUpload input.upload {\n    position: absolute;\n    overflow: visible;\n    top: 0;\n    right: 0;\n    margin: 0;\n    padding: 0;\n    font-size: 20px;\n    cursor: pointer;\n    opacity: 0;\n    filter: alpha(opacity=0);\n}"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/Users/jie/Desktop/dumpling.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 253.0,
+	"status_bar_visible": true
+}

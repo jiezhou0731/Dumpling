@@ -39,7 +39,8 @@
 		<div class="col-sm-12 dataTables_paginate paging_bootstrap">
 			<ul class="pagination">
 				<li ng-class="{'disabled':$root.page==1}" ng-click="clickPreviousPage();"><span>← Previous</span></li>
-				<li ng-class="{'disabled':$root.docs.length!=$root.resultPerPage}" ng-click="clickNextPage();"><span>Next →</span></li>
+				<li ng-class="{'disabled':$root.docs.length!=$root.resultPerPage}" ng-click="clickNextPage();">
+					<span>Next →</span></li>
 			</ul>
 		</div>
 	</div>

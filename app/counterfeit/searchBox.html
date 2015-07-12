@@ -1,5 +1,6 @@
 <div class="row search-box">
 	<div class="col-sm-12 padding-0">
-		<input type="text" placeholder="Search" ng-model="$root.outterControllerQuery" ng-change="$root.nextInNavi='search'"/>
+		<input type="text" placeholder="Search" ng-model="$root.outterControllerQuery" 
+		ng-keyup="$event.keyCode == 13 && $root.clickEnter()" ng-change="$root.nextInNavi='search'"/>
 	</div>
 </div>

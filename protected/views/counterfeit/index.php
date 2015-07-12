@@ -57,21 +57,19 @@
 
 	<div ng-include="'app/topNavi.html'"></div>
 
-	<!-- CONTAINER -->
-	<div class="container-fluid paper-wrap bevel tlbr" style="margin:0px;  height: 100vh;">
-		<div id="paper-top">
-			<div class="row">
-				<div class="col-sm-4 no-pad">
-					<a class="navbar-brand logo-text" href="#">DUMPLING/DIREWOLF  {{$root.nextInNavi}}</a>
-				</div>
-				<div class="col-sm-8 no-pad" style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
-					<div ng-click="clickSubmit();" style="margin:auto;height:50px;width:50px;border-radius: 50%;  margin-top: -13px;background-color:white; border:2px solid #45B6B0; outline: none;"></div>
-				</div>
-				<div class="col-sm-8 no-pad" style="text-align: center;" ng-controller="dynamicController" ng-show="$root.nextInNavi=='nextPage'">
-					<div ng-click="clickNextPage();" style="margin:auto;height:50px;width:50px;border-radius: 50%;  margin-top: -13px;background-color:white; border:2px solid #45B6B0; outline: none;"></div>
-				</div>
+	<div style="position:fixed;width:100vw;z-index:2001;margin-top:20px;">
+		<div style="margin-left:60vw;">
+			<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
+				<div ng-click="clickSubmit();" style="margin:auto;height:50px;width:50px;border-radius: 50%;  margin-top: -13px;background-color:#36D7B7; border:5px solid #45B6B0; outline: none;"></div>
+			</div>
+			<div style="text-align: center;" ng-controller="dynamicController" ng-show="$root.nextInNavi=='nextPage'">
+				<div ng-click="clickNextPage();" style="margin:auto;height:50px;width:50px;border-radius: 50%;  margin-top: -13px;background-color:#36D7B7; border:5px solid #45B6B0; outline: none;"></div>
 			</div>
 		</div>
+	</div>
+	<!-- CONTAINER -->
+	<div class="container-fluid paper-wrap bevel tlbr" style="margin:0px;  height: 100vh;">
+		
 		<!-- SIDE MENU -->
 		<div class="wrap-sidebar-content">
 			<div id="skin-select">
@@ -83,11 +81,11 @@
 			<!-- CONTENT -->
 			<div class="wrap-fluid" id="paper-bg" style="  padding-top: 6px;">
 				
-				<div class="row" style="height:80vh;overflow:hidden;">
+				<div class="row" style="height:90vh;overflow:hidden;">
 					<div class="col-sm-4">
-						<div id="canvas" style="height:80vh;width: 95%;"></div>
+						<div id="canvas" style="height:90vh;width: 95%;"></div>
 					</div>
-					<div class="col-sm-8" style="height:80vh;overflow-x:hidden; overflow-u:scroll;">
+					<div class="col-sm-8" style="height:90vh;overflow-x:hidden; overflow-u:scroll;">
 						<div class="row">
 							<div class="col-sm-12 user-state-box-show-hide padding-bottom-0" ng-show="$root.preference.userStatePanelDisplay">
 								

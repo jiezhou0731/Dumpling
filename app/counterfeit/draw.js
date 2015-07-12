@@ -28,7 +28,7 @@ var resetCavas=function(topics){
 		geometry.vertices.push( topicVertex );
 		topics[i].vertex=topicVertex;
 		
-		labelExploration = makeTextSprite(topics[i].text, 
+		labelExploration = makeTextSprite("Account", 
 				{ fontsize: 50, borderColor: {r:46, g:204, b:113, a:1}, backgroundColor: {r:46, g:204, b:113, a:1}} );
 		labelExploration.position.set(topicVertex.x,topicVertex.y+20,topicVertex.z);
 		labelExploration.scale.set(150,150,1.0);
@@ -42,7 +42,7 @@ var resetCavas=function(topics){
 			geometry.vertices.push( subtopicVertex );
 			topics[i].subtopics[j].vertex=subtopicVertex;
 			
-			labelExploration = makeTextSprite("Exploration", 
+			labelExploration = makeTextSprite(topics[i].subtopics[j].text, 
 					{ fontsize: 50, borderColor: {r:46, g:204, b:113, a:1}, backgroundColor: {r:46, g:204, b:113, a:1}} );
 			labelExploration.position.set(subtopicVertex.x,subtopicVertex.y+20,subtopicVertex.z);
 			scene.add(labelExploration);
