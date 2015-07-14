@@ -3,6 +3,8 @@ if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var container, stats;
 var camera, scene, renderer, particles, geometry, material, i, h, color, sprite, size;
 var mouseX = 0, mouseY = 0;
+var raycaster, renderer;
+var mouse = new THREE.Vector2(), INTERSECTED;
 
 var windowX = $( '#canvas' ).width();
 var windowY = $('#canvas').height();
@@ -24,14 +26,15 @@ var resetCavas=function(topics){
 		var topicVertex = new THREE.Vector3();
 		topicVertex.x = 0;
 		topicVertex.y = 0.2*windowY;
-		topicVertex.z = 200 * Math.random() - 100;
+		topicVertex.z = 200 * Math.random();
 		geometry.vertices.push( topicVertex );
 		topics[i].vertex=topicVertex;
 		
+		var yOffset=-80;
 		labelExploration = makeTextSprite("Account", 
-				{ fontsize: 50, borderColor: {r:46, g:204, b:113, a:1}, backgroundColor: {r:46, g:204, b:113, a:1}} );
-		labelExploration.position.set(topicVertex.x,topicVertex.y+20,topicVertex.z);
-		labelExploration.scale.set(150,150,1.0);
+				{ fontsize: 20, borderColor: {r:46, g:204, b:113, a:1}, backgroundColor: {r:46, g:204, b:113, a:1}} );
+		labelExploration.position.set(topicVertex.x,topicVertex.y+yOffset,topicVertex.z);
+		labelExploration.typeForIntersection="label";
 		scene.add(labelExploration);
 		
 		for (var j=0; j<topics[i].subtopics.length; j++) {
@@ -43,8 +46,8 @@ var resetCavas=function(topics){
 			topics[i].subtopics[j].vertex=subtopicVertex;
 			
 			labelExploration = makeTextSprite(topics[i].subtopics[j].text, 
-					{ fontsize: 50, borderColor: {r:46, g:204, b:113, a:1}, backgroundColor: {r:46, g:204, b:113, a:1}} );
-			labelExploration.position.set(subtopicVertex.x,subtopicVertex.y+20,subtopicVertex.z);
+					{ fontsize: 20, borderColor: {r:46, g:204, b:113, a:1}, backgroundColor: {r:46, g:204, b:113, a:1}} );
+			labelExploration.position.set(subtopicVertex.x,subtopicVertex.y+yOffset,subtopicVertex.z);
 			scene.add(labelExploration);
 			
 			var line = {};
@@ -54,7 +57,7 @@ var resetCavas=function(topics){
 		}	
 	}
 	material = new THREE.PointCloudMaterial( { size: 35, sizeAttenuation: false, map: sprite, alphaTest: 0.5, transparent: true } );
-	material.color.setHSL( 0.661, 0.643, 0.278 );
+	material.color=new THREE.Color( 0x36D7B7 );
 
 	particles = new THREE.PointCloud( geometry, material );
 	scene.add( particles );
@@ -64,7 +67,7 @@ var resetCavas=function(topics){
 			[lines[i].startPoint
 			,lines[i].endPoint]);
 		var material2 = new THREE.LineBasicMaterial({
-		    color: 0x45B6B0,
+		    color: 0x36D7B7,
 		});
 
 		var geometry = new THREE.Geometry();
@@ -75,6 +78,7 @@ var resetCavas=function(topics){
 		}
 
 		var line = new THREE.Line(geometry, material2);
+		line.typeForIntersection="line";
 		scene.add(line);
 	}
 }
@@ -128,6 +132,7 @@ function init() {
 
 	window.addEventListener( 'resize', onWindowResize, false );
 
+	raycaster = new THREE.Raycaster();
 }
 
 function onWindowResize() {
@@ -147,6 +152,8 @@ function onDocumentMouseMove( event ) {
 	mouseX = event.clientX - windowHalfX;
 	mouseY = event.clientY - windowHalfY;
 
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
 
 function onDocumentTouchStart( event ) {
@@ -174,7 +181,6 @@ function onDocumentTouchMove( event ) {
 
 }
 
-//
 
 function animate() {
 
@@ -182,6 +188,38 @@ function animate() {
 
 	render();
 	stats.update();
+	update();
+}
+var flag=false;
+function update(){
+	// find intersections
+
+	raycaster.setFromCamera( mouse, camera );
+
+	var intersects = raycaster.intersectObjects( scene.children );
+
+	for (var i=0; i<intersects.length; i++){
+		console.log(intersects[i].object.typeForIntersection);
+	}
+
+	if ( intersects.length > 0 ) {
+		if ( INTERSECTED != intersects[ 0 ].object ) {
+/*
+			if ( INTERSECTED ) 
+				INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+			INTERSECTED = intersects[ 0 ].object;
+			INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+			INTERSECTED.material.emissive.setHex( 0xff0000 );
+*/
+		}
+
+	} else {
+
+		//if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+
+		INTERSECTED = null;
+
+	}
 
 }
 
@@ -209,7 +247,11 @@ function makeTextSprite( message, parameters )
 		parameters["fontface"] : "Arial";
 	
 	var fontsize = parameters.hasOwnProperty("fontsize") ? 
-		parameters["fontsize"] : 18;
+		parameters["fontsize"] : 20;
+	
+	for (var i=0; i<(36-message.length)*1.5; i++){
+		message=" "+message;
+	}
 	
 	var borderThickness = parameters.hasOwnProperty("borderThickness") ? 
 		parameters["borderThickness"] : 4;
@@ -218,7 +260,7 @@ function makeTextSprite( message, parameters )
 		parameters["borderColor"] : { r:0, g:0, b:0, a:1.0 };
 	
 	var backgroundColor = parameters.hasOwnProperty("backgroundColor") ?
-		parameters["backgroundColor"] : { r:255, g:255, b:255, a:1.0 };
+		parameters["backgroundColor"] : { r:0, g:0, b:0, a:1.0 };
 
 	
 		
@@ -234,15 +276,14 @@ function makeTextSprite( message, parameters )
 	context.fillStyle   = "rgba(" + backgroundColor.r + "," + backgroundColor.g + ","
 								  + backgroundColor.b + "," + backgroundColor.a + ")";
 	// border color
-	context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + ","
-								  + borderColor.b + "," + borderColor.a + ")";
+	context.strokeStyle = new THREE.Color( 0x36D7B7 );
 
 	context.lineWidth = borderThickness;
 	
 	// 1.4 is extra height factor for text below baseline: g,j,p,q.
 	
 	// text color
-	context.fillStyle = "rgba(0, 0, 0, 1.0)";
+	context.fillStyle = new THREE.Color( 0x36D7B7 );
 
 	context.fillText( message, borderThickness, fontsize + borderThickness);
 	
@@ -251,8 +292,8 @@ function makeTextSprite( message, parameters )
 	texture.needsUpdate = true;
 
 	var spriteMaterial = new THREE.SpriteMaterial( 
-		{ map: texture, useScreenCoordinates: false});
+		{ map: texture, useScreenCoordinates: true});
 	var sprite = new THREE.Sprite( spriteMaterial );
-	sprite.scale.set(100,50,1.0);
+	sprite.scale.set(300,300,1.0);
 	return sprite;	
 }

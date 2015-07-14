@@ -1,7 +1,6 @@
 <?php 
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-
 ?>
 <?php
 
@@ -21,7 +20,7 @@ class CounterfeitController extends Controller
 	
 	public function actionSubtopicTest(){
 		echo '
-				{"topics": [{"text": "Facebook Accounts", "subtopics": [{"text": "Sellers"}, {"text": "Prices"}, {"text": "Mode of Payments"}]}, {"text": "Twitter Accounts", "subtopics": [{"text": "buyes"}, {"text": "individuals selling/offering/trading"}, {"text": "pros and cons of buying"}, {"text": "Business selling/offering"}]}]}
+				{"topics": [{"text": "Facebook Accounts", "subtopics": [{"text": "Selleraas"}, {"text": "Prices"}, {"text": "Mode of Payments"}]}, {"text": "Twitter Accounts", "subtopics": [{"text": "buyes"}, {"text": "individuals selling/offering/trading"}, {"text": "pros and cons of buying"}, {"text": "Business selling/offering"}]}]}
 				';
 	}
 	

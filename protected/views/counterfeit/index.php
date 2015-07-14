@@ -22,14 +22,28 @@
 <link rel="stylesheet" type="text/css" href="js/vegas/jquery.vegas.css" />
 <link rel="stylesheet" type="text/css"
 	href="js/number-progress-bar/number-pb.css">
+<link rel="stylesheet" href="js/tree/jquery.treeview.css" />
+<link rel="stylesheet" href="js/tree/treetable/stylesheets/jquery.treetable.css" />
+<link rel="stylesheet" href="js/tree/treetable/stylesheets/jquery.treetable.theme.default.css" />
+<link href="js/stackable/stacktable.css" rel="stylesheet" />
+<link href="js/stackable/responsive-table.css" rel="stylesheet" />
+
+<link href="js/tree/tabelizer/tabelizer.min.css" media="all" rel="stylesheet" type="text/css" />
+
 <link rel="stylesheet" href="css/dumpling.css">
 <!-- js loader -->
-<script src="js/pace/pace.js"></script>
-<link href="js/pace/themes/orange/pace-theme-flash.css" rel="stylesheet" />
+
 <script type='text/javascript' src="js/jquery.js"></script>
 <script type='text/javascript' src='js/bootstrap.js'></script>
 <script src="js/flot/jquery.flot.min.js" type="text/javascript"></script>
 <script src="js/flot/jquery.flot.time.min.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="js/tree/lib/jquery.cookie.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/tree/jquery.treeview.js" type="text/javascript"></script>
+
+
+<script type="text/javascript" src="js/tree/tabelizer/jquery-ui-1.10.4.custom.min.js"></script>
+<script type="text/javascript" src="js/tree/tabelizer/jquery.tabelizer.js"></script>
 
 <script type="text/javascript" src="js/skycons/skycons.js"></script>
 
@@ -46,24 +60,46 @@
 	
 <script src="assets/angularjs/angular.country-select.js"></script>
 
+<script src="js/pace/pace.js"></script>
+<link href="js/pace/themes/orange/pace-theme-flash.css" rel="stylesheet" />
 </head>
 
 <body ng-app="dumplingApp" style="overflow: hidden; height:100vh;padding:0px;">
 <div  style="overflow: hidden; height:100vh;  padding: 0px;">
+	<!--
 <div id="preloader">
 		<div id="status">&nbsp;</div>
-</div>
+</div>!-->
 	<div ng-include="'app/counterfeit/overlay.html'"></div> 
 
 	<div ng-include="'app/topNavi.html'"></div>
-
+<style>
+.index-submit-button{
+margin:auto;
+height:50px;
+width:50px;
+border-radius: 50%;  
+margin-top: -13px;
+background-color:#45B6B0; 
+border:5px solid #45B6B0;
+outline: none;
+background-image: url('img/paw.png');
+background-size: contain;
+background-repeat: no-repeat;
+cursor: pointer;
+}
+.index-submit-button:hover{
+    background-color:#36D7B7;
+    border:5px solid #36D7B7;
+}
+</style>
 	<div style="position:fixed;width:100vw;z-index:2001;margin-top:20px;">
-		<div style="margin-left:60vw;">
+		<div style="margin-left:33.33vw;">
 			<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
-				<div ng-click="clickSubmit();" style="margin:auto;height:50px;width:50px;border-radius: 50%;  margin-top: -13px;background-color:#36D7B7; border:5px solid #45B6B0; outline: none;"></div>
+				<div ng-click="clickSubmit();" class="index-submit-button" ></div>
 			</div>
 			<div style="text-align: center;" ng-controller="dynamicController" ng-show="$root.nextInNavi=='nextPage'">
-				<div ng-click="clickNextPage();" style="margin:auto;height:50px;width:50px;border-radius: 50%;  margin-top: -13px;background-color:#36D7B7; border:5px solid #45B6B0; outline: none;"></div>
+				<div ng-click="clickNextPage();"  class="index-submit-button"></div>
 			</div>
 		</div>
 	</div>
@@ -79,13 +115,17 @@
 			</div>
 		
 			<!-- CONTENT -->
-			<div class="wrap-fluid" id="paper-bg" style="  padding-top: 6px;">
+			<div class="wrap-fluid" id="paper-bg" style="padding-top: 6px;">
 				
-				<div class="row" style="height:90vh;overflow:hidden;">
+				<div class="row" style="height:85vh;overflow:hidden; padding-top:15px;">
 					<div class="col-sm-4">
-						<div id="canvas" style="height:90vh;width: 95%;"></div>
+						<div class="container1" style="height:85vh;">
+    						<div class="container2">
+								<div ng-include="'app/counterfeit/topics.html'"></div>
+							</div>
+						</div>
 					</div>
-					<div class="col-sm-8" style="height:90vh;overflow-x:hidden; overflow-u:scroll;">
+					<div class="col-sm-8" style="height:85vh;overflow-x:hidden; overflow-u:scroll;">
 						<div class="row">
 							<div class="col-sm-12 user-state-box-show-hide padding-bottom-0" ng-show="$root.preference.userStatePanelDisplay">
 								
@@ -120,33 +160,34 @@
 <div class="row" style="width:100vw;left:0px;position:fixed;;bottom:0vh; padding-left:10px; z-index: 2000; overflow:hidden;">
 	<div ng-include="'app/counterfeit/userState.html'"></div>
 </div>
-			<script type='text/javascript' src='js/date.js'></script>
-			<script type='text/javascript'
-				src='js/slimscroll/jquery.slimscroll.js'></script>
-			<script type='text/javascript' src='js/jquery.nicescroll.min.js'></script>
-			<script type='text/javascript' src='js/sliding-menu.js'></script>
-			<script type='text/javascript'
-				src='js/scriptbreaker-multiple-accordion-1.js'></script>
-			<script type='text/javascript' src='js/tip/jquery.tooltipster.min.js'></script>
-			<script type='text/javascript' src='js/vegas/jquery.vegas.js'></script>
-			<script type='text/javascript' src='js/image-background.js'></script>
-			<script type="text/javascript" src="js/jquery.tabSlideOut.v1.3.js"></script>
-			<script type="text/javascript" src="js/bg-changer.js"></script>
-			<script type='text/javascript' src="js/button/ladda/spin.min.js"></script>
-			<script type='text/javascript' src="js/button/ladda/ladda.min.js"></script>
-			<script type='text/javascript'
-				src='js/button/progressbutton.jquery.js'></script>
-			<script type='text/javascript'
-				src="js/number-progress-bar/jquery.velocity.min.js"></script>
-			<script type='text/javascript'
-				src="js/number-progress-bar/number-pb.js"></script>
-			<script src="js/loader/loader.js" type="text/javascript"></script>
-			<script src="js/loader/demo.js" type="text/javascript"></script>
-			<script type="text/javascript" src="js/skycons/skycons.js"></script>
-			<script type='text/javascript' src='assets/foggy/jquery.foggy.min.js'></script>
-			
-			<script src="app/counterfeit/draw.js"></script>
-			<script src="app/counterfeit/counterfeit.js"></script>
-	
+<script type='text/javascript' src='js/date.js'></script>
+<script type='text/javascript'
+src='js/slimscroll/jquery.slimscroll.js'></script>
+<script type='text/javascript' src='js/jquery.nicescroll.min.js'></script>
+<script type='text/javascript' src='js/sliding-menu.js'></script>
+<script type='text/javascript'
+src='js/scriptbreaker-multiple-accordion-1.js'></script>
+<script type='text/javascript' src='js/tip/jquery.tooltipster.min.js'></script>
+<script type='text/javascript' src='js/vegas/jquery.vegas.js'></script>
+<script type='text/javascript' src='js/image-background.js'></script>
+<script type="text/javascript" src="js/jquery.tabSlideOut.v1.3.js"></script>
+<script type="text/javascript" src="js/bg-changer.js"></script>
+<script type='text/javascript' src="js/button/ladda/spin.min.js"></script>
+<script type='text/javascript' src="js/button/ladda/ladda.min.js"></script>
+<script type='text/javascript'
+src='js/button/progressbutton.jquery.js'></script>
+<script type='text/javascript'
+src="js/number-progress-bar/jquery.velocity.min.js"></script>
+<script type='text/javascript'
+src="js/number-progress-bar/number-pb.js"></script>
+<script src="js/loader/loader.js" type="text/javascript"></script>
+<script src="js/loader/demo.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/skycons/skycons.js"></script>
+<script type='text/javascript' src='assets/foggy/jquery.foggy.min.js'></script>
+<script type="text/javascript" src="js/tree/treetable/vendor/jquery-ui.js"></script>
+<script type="text/javascript" src="js/tree/treetable/javascripts/src/jquery.treetable.js"></script>
+<script type="text/javascript" src="js/stackable/stacktable.js"></script>
+<script src="app/counterfeit/counterfeit.js"></script>
+
 </body>
 </html>

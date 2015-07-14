@@ -1,3 +1,23 @@
+
+*:focus {
+    outline: none;
+}
+
+.container1 {
+    height: 90vh;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.container2 {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: -20px;
+    overflow: auto;
+}
+
 .md-button{
 	width:100%;
 }
@@ -156,6 +176,10 @@
 	word-wrap: break-word;
 	font-size: small;
 	font-family: arial, sans-serif;
+	cursor: pointer;
+}
+.box-body .content :hover{
+	background-color:red;
 }
 
 .box-body .highlight {
@@ -314,6 +338,7 @@
 	height:30px;
 	clear:both;
 	margin: 5px 0px 0px 0px;
+	cursor: pointer;
 }
 .click-relevant:hover {
 	background-image:url('../img/up_red.png');
@@ -331,6 +356,7 @@
 	height:30px;
 	clear:both;
 	margin: 15px 0px 0px 0px;
+	cursor: pointer;
 }
 .click-off-topic:hover {
 	background-image:url('../img/down_red.png');

@@ -62,14 +62,16 @@ dumplingApp.service('getSubtopicService',function($http,$sce, $q,$rootScope){
 		             data:args})
 		            .success(function(response) {
 		            	console.log(response);
-		            	var topics= response.topics;
-		            	resetCavas(topics);
+		            	$rootScope.topics = response.topics;
+		            	console.log($rootScope.topics);
+		            	//resetCavas(topics);
 		              	defer.resolve();
 		            }).error(function() {
 		            	defer.reject('Can not connect to server');
 		 });
 		 return defer.promise;;
 	}
+	this.getSubtopic();
 });
 
 dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
@@ -313,12 +315,24 @@ dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $
 	
 });
 
+// topics result controller
+dumplingApp.controller('topicsController', function(getSubtopicService, rootCookie,$scope, $rootScope, $sce, solrService) {
+	
+	// Click doc content
+	$scope.clickContent=function(doc){
+		$rootScope.readDocEvents.push({id:doc.id,url:doc.escapedUlr, content:"", startTime:Date.now()});
+		$rootScope.$broadcast('overlayDisplay',{title:doc.title, url:doc.url, content:doc.content});
+	};
+});
+
 // Dynamic result controller
 dumplingApp.controller('dynamicController', function(getSubtopicService, rootCookie,$scope, $rootScope, $sce, solrService) {
 	// Click doc content
 	$scope.clickContent=function(doc){
 		$rootScope.readDocEvents.push({id:doc.id,url:doc.escapedUlr, content:"", startTime:Date.now()});
-		$rootScope.$broadcast('overlayDisplay',{title:doc.title, url:doc.url, content:doc.content});
+		var popupWindow = window.open('app/counterfeit/popupWindow.html');
+  		popupWindow.mySharedData = doc;
+		//$rootScope.$broadcast('overlayDisplay',{title:doc.title, url:doc.url, content:doc.content});
 	};
 
 	// Click up vote button
