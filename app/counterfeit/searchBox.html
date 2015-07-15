@@ -1,6 +1,37 @@
 <div class="row search-box">
-	<div class="col-sm-12 padding-0">
+	<div class="col-sm-10 padding-0">
 		<input type="text" placeholder="Search" ng-model="$root.outterControllerQuery" 
 		ng-keyup="$event.keyCode == 13 && $root.clickEnter()" ng-change="$root.nextInNavi='search'"/>
 	</div>
+    <div ng-controller="searchBoxController">
+    	<form class="col-sm-2" action="http://141.161.20.98/python_cgi/fileParsecd.cgi" method="post" enctype="multipart/form-data" style="padding-bottom:0px;padding-top:0px;" id="batchQueryUploadForm">
+    		<div class="fileUpload btn btn-primary">
+    			<span>Batch Query Upload</span>
+                <input type="file" class="upload" id="batchQueryUploadForm"
+                 name="batchQuery"  onchange="angular.element(this).scope().batchQueryFileChosen(this)" />
+    		</div>
+    	</form>
+    </div>
 </div>
+
+
+<style>
+.fileUpload {
+    position: relative;
+    overflow: visible;
+    margin: 0px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    overflow: visible;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    height:40px;
+    filter: alpha(opacity=0);
+}
+</style>

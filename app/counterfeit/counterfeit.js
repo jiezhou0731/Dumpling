@@ -1,8 +1,9 @@
 var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies', 'ngMaterial','countrySelect']);
 var solrQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/winwin';
 var solrSelectQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/select';
-var subtopicUrl = 'http://141.161.20.98/direwolf/index.php?r=counterfeit/subtopicTest';
-//var subtopicUrl = 'http://141.161.20.98/topicTree/topicTree.cgi';
+//var topicTreeUrl = 'http://141.161.20.98/direwolf/index.php?r=counterfeit/subtopicTest';
+var topicTreeUrl = "http://141.161.20.98/python_cgi/topicTree.cgi";
+var subtopicUrl = "http://141.161.20.98/topicTree/subtopic.cgi";
 
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
@@ -52,26 +53,54 @@ dumplingApp.service('phpService',function($http,$sce, $q,$rootScope){
 	}
 });
 
-dumplingApp.service('getSubtopicService',function($http,$sce, $q,$rootScope){
-	this.getSubtopic = function (args){
+dumplingApp.service('topicService',function($http,$sce, $q,$rootScope){
+	this.getTopicTree = function (args){
 		 var defer = $q.defer();
-		 $http(
-		            {
-		             method: 'post',
-		             url: subtopicUrl,
-		             data:args})
-		            .success(function(response) {
-		            	console.log(response);
-		            	$rootScope.topics = response.topics;
-		            	console.log($rootScope.topics);
-		            	//resetCavas(topics);
-		              	defer.resolve();
-		            }).error(function() {
-		            	defer.reject('Can not connect to server');
+		 console.log(args);
+		 $.ajax({
+		 	method: 'post',
+		 	url: topicTreeUrl,
+		 	data:
+		 		{
+		 		data: args
+		 		},
+		 	success: function(response){
+		 		console.log(response);
+		 		response=angular.fromJson(response);
+		 		$rootScope.$broadcast('gotTopicTree',response.topics);
+            	//resetCavas(topics);
+              	defer.resolve();
+		 	},
+		 	error: function(){
+		 		defer.reject('Can not connect to server');
+		 	}
 		 });
 		 return defer.promise;;
 	}
-	this.getSubtopic();
+
+	this.getSubtopicDocs = function (args){
+		 var defer = $q.defer();
+		 console.log(args);
+		 $.ajax({
+		 	method: 'post',
+		 	url: subtopicUrl,
+		 	data:
+		 		{
+		 		data: args
+		 		},
+		 	success: function(response){
+		 		console.log(response);
+		 		response=angular.fromJson(response);
+		 		$rootScope.$broadcast('gotSubtopicDocs',response);
+            	//resetCavas(topics);
+              	defer.resolve();
+		 	},
+		 	error: function(){
+		 		defer.reject('Can not connect to server');
+		 	}
+		 });
+		 return defer.promise;;
+	}
 });
 
 dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
@@ -235,6 +264,14 @@ dumplingApp.service('rootCookie',function($rootScope,$cookies){
 
 // Search controller
 dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $cookies, $scope, $sce, solrService) {
+	$scope.batchQueryFileChosen = function(){
+		$("#batchQueryUploadForm").submit();
+	}
+
+		$("#batchQueryUploadForm").bind('ajax:complete', function(response) {
+			console.log("OK");
+			console.log(response);
+	   });
 
 	$scope.searchboxMenu = {
 		        topDirections: ['left', 'up'],
@@ -316,17 +353,25 @@ dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $
 });
 
 // topics result controller
-dumplingApp.controller('topicsController', function(getSubtopicService, rootCookie,$scope, $rootScope, $sce, solrService) {
-	
-	// Click doc content
-	$scope.clickContent=function(doc){
-		$rootScope.readDocEvents.push({id:doc.id,url:doc.escapedUlr, content:"", startTime:Date.now()});
-		$rootScope.$broadcast('overlayDisplay',{title:doc.title, url:doc.url, content:doc.content});
-	};
+dumplingApp.controller('topicController', function(topicService, rootCookie,$scope, $rootScope, $sce, solrService) {
+
+	$scope.$on('gotTopicTree',function(event, args){
+		$scope.topics = args;
+		$scope.$apply();
+	});
+	$scope.$on('gotSubtopicDocs',function(event, args){
+		$scope.subtopicDocs = args;
+		$scope.$apply();
+	});
+	$scope.clickSubtopic = function(subtopic_id){
+		var args={};
+		args.subtopic_id=subtopic_id;
+		topicService.getSubtopicDocs(angular.toJson(args));
+	}
 });
 
 // Dynamic result controller
-dumplingApp.controller('dynamicController', function(getSubtopicService, rootCookie,$scope, $rootScope, $sce, solrService) {
+dumplingApp.controller('dynamicController', function(topicService, rootCookie,$scope, $rootScope, $sce, solrService) {
 	// Click doc content
 	$scope.clickContent=function(doc){
 		$rootScope.readDocEvents.push({id:doc.id,url:doc.escapedUlr, content:"", startTime:Date.now()});
@@ -371,7 +416,7 @@ dumplingApp.controller('dynamicController', function(getSubtopicService, rootCoo
 				subtopicPostJson.docno.push(data.docs[i].id);
 			}
 			
-			getSubtopicService.getSubtopic(angular.toJson(subtopicPostJson));
+			topicService.getTopicTree(angular.toJson(subtopicPostJson));
 			
 			$rootScope.numFound = data.numFound;
 			var transition;
@@ -417,7 +462,7 @@ dumplingApp.controller('dynamicController', function(getSubtopicService, rootCoo
 			for (var i=0; i<data.docs.length; i++){
 				subtopicPostJson.docno.push(data.docs[i].id);
 			}
-			getSubtopicService.getSubtopic(angular.toJson(subtopicPostJson));
+			topicService.getTopicTree(angular.toJson(subtopicPostJson));
 		});
 	});
 	
@@ -625,7 +670,7 @@ dumplingApp.controller('overlayController', function($scope, $rootScope,$sce , p
 });
 
 //Highlight all the keywords in target string.
-var highlight_colors = ["#D35400","#663399", "#DB0A5B", "#1F3A93","#96281B","#D2527F","#674172"];
+var highlight_colors = [ "#D35400","#F22613","#DB0A5B", "#1F3A93","#96281B","#D2527F","#674172"];
 function highlight(target, keyword){
 	if (target==undefined){
 		return "";
@@ -644,7 +689,7 @@ function highlight(target, keyword){
 			continue;
 		}
 		reg = new RegExp(keyword, 'gi');
-		target = target.replace(reg, '<span class="highlight" style="color:'+highlight_colors[i%highlight_colors.length]+'">'+keyword+'</span>');
+		target = target.replace(reg, '<span class="highlight" style="background-color:'+highlight_colors[i%highlight_colors.length]+'">'+keyword+'</span>');
 	}
 	
 	return target;

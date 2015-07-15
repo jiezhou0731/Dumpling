@@ -93,7 +93,7 @@ cursor: pointer;
     border:5px solid #36D7B7;
 }
 </style>
-	<div style="position:fixed;width:100vw;z-index:2001;margin-top:20px;">
+	<div style="position:fixed;width:100vw;z-index:2001;margin-top:30px;">
 		<div style="margin-left:33.33vw;">
 			<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
 				<div ng-click="clickSubmit();" class="index-submit-button" ></div>
@@ -125,7 +125,7 @@ cursor: pointer;
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-8" style="height:85vh;overflow-x:hidden; overflow-u:scroll;">
+					<div class="col-sm-8" style="height:85vh;overflow:hidden; overflow-y:scroll; margin-top:70px;">
 						<div class="row">
 							<div class="col-sm-12 user-state-box-show-hide padding-bottom-0" ng-show="$root.preference.userStatePanelDisplay">
 								

@@ -185,6 +185,8 @@
 .box-body .highlight {
 	font-weight: 700;
 	display: inline;
+	color:white;
+	padding:3px;
 }
 
 .current-feedback-box{
