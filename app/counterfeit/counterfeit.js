@@ -1,13 +1,15 @@
 var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies', 'ngMaterial','countrySelect']);
 var solrQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/winwin';
 var solrSelectQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/select';
-//var topicTreeUrl = "http://141.161.20.98/python_cgi/topicTree.cgi";
-//var subtopicUrl = "http://141.161.20.98/topicTree/subtopic.cgi";
 
+var topicTreeUrl = "http://141.161.20.98/python_cgi/topicTree.cgi";
+var subtopicUrl = "http://141.161.20.98/python_cgi/subtopic.cgi";
+var parseBatchQueryUrl = "http://141.161.20.98/python_cgi/fileParse.cgi";
+/*
 var topicTreeUrl = "http://69.243.108.43/~jie/direwolf/pythonCgi/topicTree.cgi";
 var subtopicUrl = "http://69.243.108.43/~jie/direwolf/pythonCgi/subtopic.cgi";
 var parseBatchQueryUrl = "http://69.243.108.43/~jie/direwolf/pythonCgi/fileParse.cgi";
-
+*/
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
 var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
@@ -587,6 +589,7 @@ dumplingApp.controller('dynamicController', function(topicService, rootCookie,$s
 			$rootScope.$broadcast('changePage',{query:$rootScope.lastQuery, start:($rootScope.page-1)*$rootScope.resultPerPage});
 			$rootScope.$broadcast('interactionEmit',{title:"Change page", detail:"Query: "+$rootScope.lastQuery+", Page:"+$rootScope.page});
 		}*/
+		$rootScope.hackDoubleQuery="queryMore"+$rootScope.queryMoreStart;
 		$rootScope.queryMoreStart++;
 		solrService.queryMore("*", $rootScope.queryMoreStart, "oldQuery").then(function (data){
 			$rootScope.docs = data.docs;
@@ -605,7 +608,7 @@ dumplingApp.controller('dynamicController', function(topicService, rootCookie,$s
 });
 
 // User state track controller
-dumplingApp.controller('userStateController', function(rootCookie,$scope, $rootScope) {
+dumplingApp.controller('userStateController', function(solrService,topicService,rootCookie,$scope, $rootScope) {
 	$rootScope.stateHistory=[];//rootCookie.get("stateHistory");
 	
 	// Scroll down to button
@@ -614,6 +617,20 @@ dumplingApp.controller('userStateController', function(rootCookie,$scope, $rootS
 	},true);
 
 	$scope.clickPreviousQuery= function(clickedQuery){
+		if (clickedQuery=="Paw"){
+			$rootScope.queryMoreStart++;
+			solrService.queryMore("*", $rootScope.queryMoreStart, "oldQuery").then(function (data){
+			$rootScope.docs = data.docs;
+			var subtopicPostJson={};
+			subtopicPostJson.docno=new Array();
+			for (var i=0; i<data.docs.length; i++){
+				subtopicPostJson.docno.push(data.docs[i].id);
+			}
+			topicService.getTopicTree(angular.toJson(subtopicPostJson));
+	        rootCookie.put("stateHistory",$rootScope.stateHistory);
+		});
+	        return;
+		}
 		$rootScope.outterControllerQuery=clickedQuery;
 		$rootScope.doNotAddToUserStates = true;
 		$rootScope.$broadcast('outterControllerClickSubmit');
