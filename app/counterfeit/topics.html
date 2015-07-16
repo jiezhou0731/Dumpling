@@ -31,7 +31,7 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<div class="box" style="padding-top:0px;padding-bottom:0px;">
+			<div class="box" style="padding-top:0px;padding-bottom:0px;min-height:60vh;">
 				<div class="box-header">
 					<h3 class="box-title">
 						<span>Documents in Topic</span>
@@ -43,7 +43,7 @@
 						<div class="container1" style="height:40vh;">
 							<div class="container2">
 								<table class="table table-hover">
-									<tr ng-repeat="subtopicDoc in subtopicDocs">
+									<tr ng-repeat="subtopicDoc in subtopicDocs" ng-click="clickSubtopicDoc();">
 										<td>{{subtopicDoc.title}}</td>
 									</tr>
 								</table>

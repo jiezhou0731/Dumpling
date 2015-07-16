@@ -8,14 +8,21 @@
   margin-bottom: 5px;
   float: left;
 }
+.docListItem{
+	cursor:pointer;
+}
+.docListItem div{
+	cursor:pointer;
+}
 </style>
+
 <div class="docs-box" ng-controller="dynamicController">
 	<div class="row">
 		<div class="col-sm-12" ng-repeat="doc in $root.docs">
-			<div class="box">
+			<div class="box docListItem" ng-click="clickContent(doc);" >
 				<div class="box-body">
 					<div class="row" style="height:110px;; overflow:hidden;">
-						<div class="col-sm-12">
+						<div class="col-sm-12" >
 							<div class="vote-panel" ng-click="$event.stopPropagation();" class="float-left">
 								<div class='doc-rank'># {{$index+1}}</div>
 								<div class='click-relevant' ng-class="{'up-green':doc.upVote}" ng-click="clickUpVote($event, doc);"></div>
@@ -25,7 +32,7 @@
 								<div class="title" style="height:25px;; overflow:hidden;">
 									{{doc.title}}
 								</div>
-								<div class="content" ng-bind-html="doc.highlighting" ng-click="clickContent(doc);">
+								<div class="content" ng-bind-html="doc.highlighting">
 									{{doc.highlighting}}
 								</div>
 							</div>

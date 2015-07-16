@@ -4,10 +4,11 @@
 		ng-keyup="$event.keyCode == 13 && $root.clickEnter()" ng-change="$root.nextInNavi='search'"/>
 	</div>
     <div ng-controller="searchBoxController">
-    	<form class="col-sm-2" action="http://141.161.20.98/python_cgi/fileParsecd.cgi" method="post" enctype="multipart/form-data" style="padding-bottom:0px;padding-top:0px;" id="batchQueryUploadForm">
+    	<form class="col-sm-2" method="post" action="http://localhost/~jie/direwolf/pythonCgi/fileParse.cgi" enctype="multipart/form-data" style="padding-bottom:0px;padding-top:0px;" id="batchQueryUploadForm">
     		<div class="fileUpload btn btn-primary">
-    			<span>Batch Query Upload</span>
-                <input type="file" class="upload" id="batchQueryUploadForm"
+    			<span>Batch Query</span>
+
+                <input type="file" class="upload" id="batchQueryFile"
                  name="batchQuery"  onchange="angular.element(this).scope().batchQueryFileChosen(this)" />
     		</div>
     	</form>

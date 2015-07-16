@@ -1,0 +1,14 @@
+<div ng-controller="docDetailController" class="box" style="margin-bottom:20px;padding-top:0px;padding-bottom:0px; min-height:80vh;">
+    <div class="box-header">
+        <h3 class="box-title">
+            <span>{{doc.title}}</span>
+        </h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="padding-top:5px;padding-bottom:0px;font-family: arial, sans-serif;">
+        <pre class="content ng-binding" style="background-color:white;padding:0px;border:none;">
+         {{doc.content.trim()}}
+        </pre>
+    </div>
+
+</div>

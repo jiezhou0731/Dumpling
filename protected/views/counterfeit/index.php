@@ -57,7 +57,7 @@
 <script src="assets/threejs/three.min.js"></script>
 <script src="assets/threejs/Detector.js"></script>
 <script src="assets/threejs/stats.min.js"></script>
-	
+	<script src="http://malsup.github.com/jquery.form.js"></script> 
 <script src="assets/angularjs/angular.country-select.js"></script>
 
 <script src="js/pace/pace.js"></script>
@@ -75,7 +75,8 @@
 	<div ng-include="'app/topNavi.html'"></div>
 <style>
 .index-submit-button{
-margin:auto;
+float:right;
+margin-right: 30px;
 height:50px;
 width:50px;
 border-radius: 50%;  
@@ -93,16 +94,16 @@ cursor: pointer;
     border:5px solid #36D7B7;
 }
 </style>
-	<div style="position:fixed;width:100vw;z-index:2001;margin-top:30px;">
-		<div style="margin-left:33.33vw;">
-			<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
-				<div ng-click="clickSubmit();" class="index-submit-button" ></div>
-			</div>
-			<div style="text-align: center;" ng-controller="dynamicController" ng-show="$root.nextInNavi=='nextPage'">
-				<div ng-click="clickNextPage();"  class="index-submit-button"></div>
-			</div>
-		</div>
+
+<div ng-include="'app/counterfeit/cubeTestImage.html'" style="position:absolute;margin-left:5vw;margin-top:40vh;"></div>
+<div style="position:fixed;right:0;z-index: 100;top: 30px;">
+	<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
+		<div ng-click="clickSubmit();" class="index-submit-button" ></div>
 	</div>
+	<div style="text-align: center;" ng-controller="dynamicController" ng-show="$root.nextInNavi=='nextPage'">
+		<div ng-click="clickNextPage();"  class="index-submit-button"></div>
+	</div>
+</div>
 	<!-- CONTAINER -->
 	<div class="container-fluid paper-wrap bevel tlbr" style="margin:0px;  height: 100vh;">
 		
@@ -117,31 +118,30 @@ cursor: pointer;
 			<!-- CONTENT -->
 			<div class="wrap-fluid" id="paper-bg" style="padding-top: 6px;">
 				
-				<div class="row" style="height:85vh;overflow:hidden; padding-top:15px;">
-					<div class="col-sm-4">
-						<div class="container1" style="height:85vh;">
+				<div class="row" style="height:82vh;overflow:hidden; padding-top:15px;">
+					<div class="col-sm-3" style="padding: 3px;">
+						<div class="container1" style="height:82vh;">
     						<div class="container2">
 								<div ng-include="'app/counterfeit/topics.html'"></div>
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-8" style="height:85vh;overflow:hidden; overflow-y:scroll; margin-top:70px;">
+					<div class="col-sm-4" style="height:82vh;overflow:hidden;padding: 3px;">
 						<div class="row">
-							<div class="col-sm-12 user-state-box-show-hide padding-bottom-0" ng-show="$root.preference.userStatePanelDisplay">
-								
-							</div>
 							<div class="col-sm-12 padding-0 padding-right-5 dynamic-box-show-hide" ng-class="{'col-sm-10':$root.preference.userInteractionPanelDisplay}">
-								<div ng-include="'app/counterfeit/dynamic.html'"></div>
-							</div>
-							<div class="col-sm-2 user-interaction-box-show-hide" ng-show="$root.preference.userInteractionPanelDisplay" >
-								<div class="row">
-									<div class="col-sm-12 padding-0">
-										<div ng-include="'app/counterfeit/userInteraction.html'"></div>
+								<div class="container1" style="height:82vh; ">
+    								<div class="container2">
+										<div ng-include="'app/counterfeit/dynamic.html'"></div>
 									</div>
 								</div>
-
-								<div class="row">
-									<div class="col-sm-12"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-5" style="height:82vh;overflow:hidden;padding: 3px;">
+						<div class="row">
+							<div class="container1" style="height:82vh; ">
+    							<div class="container2">
+									<div ng-include="'app/counterfeit/docDetail.html'"></div>
 								</div>
 							</div>
 						</div>
