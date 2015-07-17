@@ -19,6 +19,24 @@ class SearchEngineController extends Controller
 		$this->render('userState');
 	}
 	
+	public function actionPythonSearchTest(){
+		echo '{
+  "responseHeader":{
+    "status":0,
+    "QTime":0,
+    "params":{
+      "q":"id:\"aa\"",
+      "indent":"true",
+      "wt":"json"}},
+  "response":{"numFound":1,"start":0,"docs":[
+      {
+        "content":"aasdfasdfasdfasdfasdfasdfasdfasdf",
+        "id":"dd",
+        "title":"aa",
+        "_version_":1506695786755260416}]
+  }}';
+	}
+
 	public function actionDownloadFullPage($url="http://localhost/direwolf/index.php?r=crawler"){
 		$url=stripslashes($url);
 		$base_folder = "/var/www/direwolf/components/download-temperary-webpage";

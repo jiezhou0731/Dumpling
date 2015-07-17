@@ -1,14 +1,43 @@
-<div ng-controller="docDetailController" class="box" style="margin-bottom:20px;padding-top:0px;padding-bottom:0px; min-height:80vh;">
-    <div class="box-header">
-        <h3 class="box-title">
-            <span>{{doc.title}}</span>
-        </h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body" style="padding-top:5px;padding-bottom:0px;font-family: arial, sans-serif;">
-        <pre class="content ng-binding" style="background-color:white;padding:0px;border:none;">
-         {{doc.content.trim()}}
-        </pre>
+
+<div ng-controller="docDetailController" style="height:80vh;overflow:hidden;" >
+    <div class="box" style="z-index:1;position:absolute;margin-bottom:20px;padding-top:0px;padding-bottom:0px; max-height:65vh;" ng-mouseup="getSelectionText($event)" id="docDetailController">
+        <div class="box-header">
+            <h3 class="box-title">
+                <span>{{doc.title}}</span>
+            </h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body" style="height:65vh;padding-top:5px;padding-bottom:0px;font-family: arial, sans-serif;">
+            <pre class="content ng-binding" style="background-color:white;padding:0px;border:none;max-height:55vh;  max-height: 55vh;margin: 0px;">
+             {{doc.content.trim()}}
+            </pre>
+        </div>
     </div>
 
+    <div style="z-index:1000;position:absolute;" ng-mouseenter="indicateDropPlace(true);"  ng-mouseleave="indicateDropPlace(false);">
+        <div class="btn btn-primary" class="ui-widget-content" ui-draggable="true" drag=selectedText 
+                  ng-style="{left: selectedTextPosition.left, top: selectedTextPosition.top}" style="position: absolute;background-color: #45B6B0;border:none;" ng-show="selectedText.length!=0">
+          <p style="color:white;margin:0px;">{{selectedText}}</p>
+        </div>
+    </div>
+<style>
+</style>
+    <div style="margin-top:68vh;" ui-on-Drop="onDrop($event,$data)" >
+        <div style="z-index:2;position:absolute; opacity: 0.5;height: 13vh;width:100%; background-color:#D2527F;text-align:center;font-size:6vh;padding-top:2vh;" ng-show="dropCover">
+            <div style="margin:auto; color:white;">
+            
+            </div>
+        </div>
+        <div style="z-index:2;position:absolute; height: 13vh;width:100%;text-align:center;font-size:6vh;padding-top:2vh;" ng-show="dropCover">
+            <div style="margin:auto; color:white;">
+            Drop here
+            </div>
+        </div>
+        <div id="dropTextBox" class="box ui-widget-header"  style="z-index:1;position:absolute;padding:0 20px;overflow-x:hidden;overflow-y:scroll;  min-height: 13vh; max-height: 13vh;" >
+          <div class="btn btn-primary" ui-draggable="true" ng-click="clickDroppedText(text);" style="margin:3px;background-color: #45B6B0;border:none;"
+                    on-drop-success="dropSuccessHandler($event,$index)"
+                    ng-repeat="text in droppedTextArray track by $index"> {{text}}
+          </div>
+        </div>
+    </div>
 </div>

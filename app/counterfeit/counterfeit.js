@@ -1,15 +1,15 @@
-var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies', 'ngMaterial','countrySelect']);
+var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies', 'ngMaterial', 'ngDragDrop','countrySelect']);
 var solrQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/winwin';
 var solrSelectQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/select';
-
+/*
 var topicTreeUrl = "http://141.161.20.98/python_cgi/topicTree.cgi";
 var subtopicUrl = "http://141.161.20.98/python_cgi/subtopic.cgi";
 var parseBatchQueryUrl = "http://141.161.20.98/python_cgi/fileParse.cgi";
-/*
-var topicTreeUrl = "http://69.243.108.43/~jie/direwolf/pythonCgi/topicTree.cgi";
-var subtopicUrl = "http://69.243.108.43/~jie/direwolf/pythonCgi/subtopic.cgi";
 var parseBatchQueryUrl = "http://69.243.108.43/~jie/direwolf/pythonCgi/fileParse.cgi";
 */
+var topicTreeUrl = "http://localhost/~jie/direwolf/pythonCgi/topicTree.cgi";
+var subtopicUrl = "http://localhost/~jie/direwolf/pythonCgi/subtopic.cgi";
+var pythonSearch = 'index.php?r=searchEngine/pythonSearchTest';
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
 var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
@@ -53,6 +53,66 @@ dumplingApp.service('phpService',function($http,$sce, $q,$rootScope){
 		              	defer.resolve(data);
 		            }).error(function() {
 		            	defer.reject('Can not connect to PHP server');
+		 });
+		 return defer.promise;;
+	}
+});
+
+dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
+	this.queryData = function (args){
+		 var defer = $q.defer();
+		 console.log(args);
+		 $.ajax({
+		 	method: 'post',
+		 	url: pythonSearch,
+		 	data:
+		 		{
+		 		data: args
+		 		},
+		 	success: function(response){
+		 		response=angular.fromJson(response);
+
+		 		docs= response.response.docs;
+		 		for (var prop in  response.highlighting) {
+		 			for (var doc in docs){
+		 				if (docs[doc].id==prop){
+		 					try {
+		 						docs[doc].highlighting=docs[doc].content;
+		 					} catch (err){
+		 						docs[doc].highlighting="";
+		 					}
+		 				}
+		 			}
+		 		}
+		 		for (var i in docs) {
+		      				// Convert NULL title to "No Title"
+		      				if (docs[i].title==null ||docs[i].title=="") {
+		      					docs[i].title="No Title";
+		      				}
+
+		      				// Unescape highlights' HTML 
+		      				try{
+		      					docs[i].highlighting=$sce.trustAsHtml(docs[i].highlighting.trim());
+		      				} catch (err){
+		      				}
+
+		      		
+		      				docs[i].content=docs[i].content;
+		      				docs[i].escapedUlr=docs[i].url;
+		      				docs[i].url=unescape(docs[i].url);
+		      				$sce.trustAsResourceUrl(docs[i].url);
+		      				docs[i].upVote=null;
+		      				docs[i].downVote=null;
+		      			}
+		      			data = {docs:docs, numFound:response.response.numFound};
+
+		 		//$rootScope.$broadcast('gotTopicTree',response.topics);
+            	//resetCavas(topics);
+              	defer.resolve(data);
+		 	},
+		 	error: function(){
+		 		defer.reject('Can not connect to server');
+		 	}
 		 });
 		 return defer.promise;;
 	}
@@ -459,13 +519,69 @@ dumplingApp.controller('topicController', function(topicService, rootCookie,$sco
 });
 
 //doc detail
-dumplingApp.controller('docDetailController', function($scope, $rootScope) {
+dumplingApp.controller('docDetailController', function(rootCookie,topicService, pythonService,$scope, $rootScope) {
 	$scope.$on('displayNewDocOnDocDetailPanel',function(event, args){
 		$("#docDetailPanel").scrollTop();
 		$scope.doc=args;
 	});
+
+  	$scope.selectedText = "";
+  	$scope.selectedTextPosition={};
+
+  	$scope.droppedTextList = {};
+
+	$scope.getSelectionText = function(event) {
+		$scope.selectedTextPosition.left=event.offsetX;
+		$scope.selectedTextPosition.top=event.offsetY+10;
+		snapSelectionToWord();
+        var text = "";
+        if (window.getSelection) {
+            text = window.getSelection().toString();
+        } else if (document.selection && document.selection.type != "Control") {
+            text = document.selection.createRange().text;
+        }	
+        $scope.selectedText=text.trim();
+        return text;
+	};
+
+	$scope.indicateDropPlace = function(turnOn){
+		if (turnOn==true){
+			$scope.dropCover=true;
+			//$scope.coverBackgroundColor="red";
+		} else {
+			$scope.dropCover=false;
+			//$scope.coverBackgroundColor="transparent";
+		}
+	}
+
+	$scope.selectedText="";
+    $scope.droppedTextArray=[];
+    $scope.onDrop = function($event,$data){
+    	$scope.indicateDropPlace(false);
+    	$scope.selectedText = "";
+        $scope.droppedTextArray.push($data);
+        $('#dropTextBox').animate({scrollTop:$('#dropTextBox')[0].scrollHeight}, '600');
+      };
+
+    $scope.clickDroppedText=function(text){
+    	pythonService.queryData(text).then(function (data){
+			$rootScope.docs = data.docs;
+			var subtopicPostJson={};
+			subtopicPostJson.docno=new Array();
+			for (var i=0; i<data.docs.length; i++){
+				subtopicPostJson.docno.push(data.docs[i].id);
+			}
+			topicService.getTopicTree(angular.toJson(subtopicPostJson));
+
+			$rootScope.stateHistory.push({query:"Paw", transition: "Relevant. Find out more."});
+	        //$rootScope.$apply();
+	        rootCookie.put("stateHistory",$rootScope.stateHistory);
+		});
+    }
 });
 
+dropText = function(event, ui) {
+  };
 // Dynamic result controller
 dumplingApp.controller('dynamicController', function(topicService, rootCookie,$scope, $rootScope, $sce, solrService) {
 	// Click doc content
@@ -611,7 +727,7 @@ dumplingApp.controller('dynamicController', function(topicService, rootCookie,$s
 dumplingApp.controller('userStateController', function(solrService,topicService,rootCookie,$scope, $rootScope) {
 	$rootScope.stateHistory=[];//rootCookie.get("stateHistory");
 	
-	// Scroll down to button
+	// Scroll down to bottom
 	$rootScope.$watch("stateHistory",function(){
 		$('#userStateController').animate({scrollTop:$('#userStateController')[0].scrollHeight}, '600');
 	},true);
@@ -893,4 +1009,51 @@ function isIgnoreOnes(ch){
      return true;
     }
     return false;
+}
+
+function snapSelectionToWord() {
+    var sel;
+
+    // Check for existence of window.getSelection() and that it has a
+    // modify() method. IE 9 has both selection APIs but no modify() method.
+    if (window.getSelection && (sel = window.getSelection()).modify) {
+        sel = window.getSelection();
+        if (!sel.isCollapsed) {
+
+            // Detect if selection is backwards
+            var range = document.createRange();
+            range.setStart(sel.anchorNode, sel.anchorOffset);
+            range.setEnd(sel.focusNode, sel.focusOffset);
+            var backwards = range.collapsed;
+            range.detach();
+
+            // modify() works on the focus of the selection
+            var endNode = sel.focusNode, endOffset = sel.focusOffset;
+            sel.collapse(sel.anchorNode, sel.anchorOffset);
+            
+            var direction = [];
+            if (backwards) {
+                direction = ['backward', 'forward'];
+            } else {
+                direction = ['forward', 'backward'];
+            }
+
+            sel.modify("move", direction[0], "character");
+            sel.modify("move", direction[1], "word");
+            sel.extend(endNode, endOffset);
+            sel.modify("extend", direction[1], "character");
+            sel.modify("extend", direction[0], "word");
+        }
+    } else if ( (sel = document.selection) && sel.type != "Control") {
+        var textRange = sel.createRange();
+        if (textRange.text) {
+            textRange.expand("word");
+            // Move the end back to not include the word's trailing space(s),
+            // if necessary
+            while (/\s$/.test(textRange.text)) {
+                textRange.moveEnd("character", -1);
+            }
+            textRange.select();
+        }
+    }
 }
