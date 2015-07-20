@@ -1,4 +1,6 @@
 var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCookies', 'ngMaterial', 'ngDragDrop','countrySelect']);
+
+
 var solrQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/winwin';
 var solrSelectQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/select';
 /*
@@ -9,7 +11,8 @@ var parseBatchQueryUrl = "http://69.243.108.43/~jie/direwolf/pythonCgi/fileParse
 */
 var topicTreeUrl = "http://localhost/~jie/direwolf/pythonCgi/topicTree.cgi";
 var subtopicUrl = "http://localhost/~jie/direwolf/pythonCgi/subtopic.cgi";
-var pythonSearch = 'index.php?r=searchEngine/pythonSearchTest';
+var parseBatchQueryUrl = "http://localhost/~jie/direwolf/pythonCgi/fileParse.cgi";
+var pythonSearch = 'http://localhost/~jie/direwolf/pythonCgi/pattern_handler.cgi';
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
 var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
@@ -67,23 +70,12 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 	url: pythonSearch,
 		 	data:
 		 		{
-		 		data: args
+		 		drop_str: args
 		 		},
 		 	success: function(response){
 		 		response=angular.fromJson(response);
 
 		 		docs= response.response.docs;
-		 		for (var prop in  response.highlighting) {
-		 			for (var doc in docs){
-		 				if (docs[doc].id==prop){
-		 					try {
-		 						docs[doc].highlighting=docs[doc].content;
-		 					} catch (err){
-		 						docs[doc].highlighting="";
-		 					}
-		 				}
-		 			}
-		 		}
 		 		for (var i in docs) {
 		      				// Convert NULL title to "No Title"
 		      				if (docs[i].title==null ||docs[i].title=="") {
@@ -92,12 +84,12 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 
 		      				// Unescape highlights' HTML 
 		      				try{
-		      					docs[i].highlighting=$sce.trustAsHtml(docs[i].highlighting.trim());
+		      					docs[i].highlighting=getSnippet(docs[i].content, args);
 		      				} catch (err){
 		      				}
 
 		      		
-		      				docs[i].content=docs[i].content;
+		      				docs[i].content=$sce.trustAsHtml(highlight(docs[i].content,args));
 		      				docs[i].escapedUlr=docs[i].url;
 		      				docs[i].url=unescape(docs[i].url);
 		      				$sce.trustAsResourceUrl(docs[i].url);
@@ -241,6 +233,7 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 		      				} catch (err){
 		      				}
 		      				docs[i].content=unescape(docs[i].content);
+		      				docs[i].content=$sce.trustAsHtml(docs[i].content);
 		      				docs[i].escapedUlr=docs[i].url;
 		      				docs[i].url=unescape(docs[i].url);
 		      				$sce.trustAsResourceUrl(docs[i].url);
@@ -341,6 +334,7 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 		      				} catch (err){
 		      				}
 		      				docs[i].content=unescape(docs[i].content);
+		      				docs[i].content=$sce.trustAsHtml(highlight(docs[i].content,query));
 		      				docs[i].escapedUlr=docs[i].url;
 		      				docs[i].url=unescape(docs[i].url);
 		      				$sce.trustAsResourceUrl(docs[i].url);
@@ -532,7 +526,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 
 	$scope.getSelectionText = function(event) {
 		$scope.selectedTextPosition.left=event.offsetX;
-		$scope.selectedTextPosition.top=event.offsetY+10;
+		$scope.selectedTextPosition.top=event.offsetY+30;
 		snapSelectionToWord();
         var text = "";
         if (window.getSelection) {
@@ -573,7 +567,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 			}
 			topicService.getTopicTree(angular.toJson(subtopicPostJson));
 
-			$rootScope.stateHistory.push({query:"Paw", transition: "Relevant. Find out more."});
+			$rootScope.stateHistory.push({query:text, transition: "Relevant. Find out more."});
 	        //$rootScope.$apply();
 	        rootCookie.put("stateHistory",$rootScope.stateHistory);
 		});
@@ -1009,6 +1003,42 @@ function isIgnoreOnes(ch){
      return true;
     }
     return false;
+}
+
+function checkAphabet(text){
+	if ( /^[a-z]+$/i.test (text ) ) {
+    	return true;
+	}
+	return false;
+}
+function getSnippet(content, keyword){
+	var query=keyword;
+	keyword=keyword.replace(/\W/g, ' ');
+	keyword=keyword.trim().replace(/\s\s+/g, ' ');
+	if (content instanceof Array){
+		content=content[0];
+	}
+	var keywords=keyword.split(" ");
+
+	var charCounter=0;
+	var start = content.indexOf(keywords[0]);
+	var end = start+keywords[0].length;
+	while (start!=0) {
+		if (charCounter>200 && (checkAphabet(content.charAt(start-1))==false)) break;
+		start--;
+		charCounter++;
+	}
+
+	charCounter=0;
+	while (end<content.length) {
+		if ((charCounter>200)&& (checkAphabet(content.charAt(end))==false)) break;
+		end++;
+		charCounter++;
+	}
+
+	var snippit = content.substring(start, end);
+	
+	return highlight(snippit,query);
 }
 
 function snapSelectionToWord() {

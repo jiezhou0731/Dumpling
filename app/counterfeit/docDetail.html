@@ -8,8 +8,8 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body" style="height:65vh;padding-top:5px;padding-bottom:0px;font-family: arial, sans-serif;">
-            <pre class="content ng-binding" style="background-color:white;padding:0px;border:none;max-height:55vh;  max-height: 55vh;margin: 0px;">
-             {{doc.content.trim()}}
+            <pre class="content ng-binding" style="background-color:white;padding:0px;border:none;max-height:55vh;  max-height: 55vh;margin: 0px;" ng-bind-html="doc.content">
+             {{doc.content}}
             </pre>
         </div>
     </div>
@@ -23,7 +23,7 @@
 <style>
 </style>
     <div style="margin-top:68vh;" ui-on-Drop="onDrop($event,$data)" >
-        <div style="z-index:2;position:absolute; opacity: 0.5;height: 13vh;width:100%; background-color:#D2527F;text-align:center;font-size:6vh;padding-top:2vh;" ng-show="dropCover">
+        <div style="z-index:2;position:absolute; opacity: 0.5;height: 13vh;width:100%; background-color:#45B6B0;text-align:center;font-size:6vh;padding-top:2vh;" ng-show="dropCover">
             <div style="margin:auto; color:white;">
             
             </div>
