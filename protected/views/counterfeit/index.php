@@ -140,7 +140,7 @@ cursor: pointer;
 							<div class="col-sm-12 padding-0 padding-right-5 dynamic-box-show-hide" ng-class="{'col-sm-10':$root.preference.userInteractionPanelDisplay}">
 								<div class="container1" style="height:82vh; ">
     								<div class="container2">
-									`	<div ng-include="'app/counterfeit/dynamic.html'"></div>
+									<div ng-include="'app/counterfeit/dynamic.html'" style="margin-top: -20px;"></div>
 									</div>
 								</div>
 							</div>
@@ -172,7 +172,7 @@ cursor: pointer;
 	</div>
 	<!-- END OF CONTAINER -->
 </div>
-<div style="width:50vw;position:fixed;bottom:55px;margin-left:70px;float:left;">
+<div style="width:50vw;position:fixed;bottom:55px;margin-left:70px;float:left;z-index:1000;">
 		<div ng-include="'app/counterfeit/searchBox.html'"></div>
 </div>
 <div class="row" style="width:100vw;left:0px;position:fixed;;bottom:0vh; padding-left:10px; z-index: 2000; overflow:hidden;">
