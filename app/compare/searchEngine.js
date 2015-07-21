@@ -93,6 +93,7 @@ dumplingApp.service('solrService',function($http,$sce, $q){
 		                    }
 		            })
 		            .success(function(response) {
+		            	console.log(response);
 		            	userState = response.state;
 		            	docs= response.response.docs;
 		              	for (var prop in  response.highlighting) {
@@ -426,6 +427,7 @@ dumplingApp.controller('overlayController', function($scope, $rootScope,$sce , p
 		$scope.doc={};
 		$scope.doc.url = args.url;
 		$scope.doc.title = args.title;
+		$scope.doc.content = args.content;
 		var maxTitleLength=200;
 		if ($scope.doc.title.length>maxTitleLength){
 			$scope.doc.title=$scope.doc.title.substring(0, maxTitleLength)+"...";

@@ -459,6 +459,7 @@ dumplingApp.controller('overlayController', function($scope, $rootScope,$sce , p
 		$scope.doc={};
 		$scope.doc.url = args.url;
 		$scope.doc.title = args.title;
+		$scope.doc.content = args.content;
 		var maxTitleLength=200;
 		if ($scope.doc.title.length>maxTitleLength){
 			$scope.doc.title=$scope.doc.title.substring(0, maxTitleLength)+"...";
