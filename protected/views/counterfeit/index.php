@@ -97,7 +97,7 @@ cursor: pointer;
 </style>
 
 <div ng-include="'app/counterfeit/cubeTestImage.html'" style="position:absolute;margin-left:68vw;margin-top:50vh;"></div>
-<div style="position:fixed;right:0;z-index: 100;top: 30px;">
+<div style="position:fixed;right:25vw;;z-index: 100;top: 50px;">
 	<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
 		<div ng-click="clickSubmit();" class="index-submit-button" ></div>
 	</div>

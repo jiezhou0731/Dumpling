@@ -3,17 +3,18 @@ var dumplingApp = angular.module('dumplingApp',['ngAnimate','ngSanitize','ngCook
 
 var solrQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/winwin';
 var solrSelectQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/select';
-/*
-var topicTreeUrl = "http://141.161.20.98/python_cgi/topicTree.cgi";
-var subtopicUrl = "http://141.161.20.98/python_cgi/subtopic.cgi";
-var parseBatchQueryUrl = "http://141.161.20.98/python_cgi/fileParse.cgi";
-var parseBatchQueryUrl = "http://69.243.108.43/~jie/direwolf/pythonCgi/fileParse.cgi";
-*/
+
 var topicTreeUrl = "http://141.161.20.98/direwolf/pythonCgi/topicTree.cgi";
 var subtopicUrl = "http://141.161.20.98/direwolf/pythonCgi/subtopic.cgi";
 var parseBatchQueryUrl = "http://141.161.20.98/direwolf/pythonCgi/fileParse.cgi";
 var pythonSearch = 'http://141.161.20.98/direwolf/pythonCgi/pattern_handler.cgi';
 
+/*
+var topicTreeUrl = "http://localhost/~jie/direwolf/pythonCgi/topicTree.cgi";
+var subtopicUrl = "http://localhost/~jie/direwolf/pythonCgi/subtopic.cgi";
+var parseBatchQueryUrl = "http://localhost/~jie/direwolf/pythonCgi/fileParse.cgi";
+var pythonSearch = 'http://localhost/~jie/direwolf/pythonCgi/pattern_handler.cgi';
+*/
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
 var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
