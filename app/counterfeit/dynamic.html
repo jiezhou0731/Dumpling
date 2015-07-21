@@ -17,10 +17,19 @@
 </style>
 
 <div class="docs-box" ng-controller="dynamicController">
+<div class="box" style="height:80vh;" ng-if="$root.docs==undefined || $root.docs.length==0">
+		<div class="box-header" >
+
+			<h3 class="box-title">
+				<span>  Snippet Panel</span>
+			</h3>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-sm-12" ng-repeat="doc in $root.docs">
 			<div class="box docListItem" ng-click="clickContent(doc);" >
 				<div class="box-body">
+
 					<div class="row" style="height:110px;; overflow:hidden;">
 						<div class="col-sm-12" >
 							<div class="vote-panel" ng-click="$event.stopPropagation();" class="float-left">

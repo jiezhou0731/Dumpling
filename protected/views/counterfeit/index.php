@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1" name="viewport">
 <link href="ico/favicon.ico" rel="shortcut icon">
-<title>Dumpling Search Engine</title>
+<title>Minerva</title>
 <!-- css loader -->
 <link rel='stylesheet prefetch' href='http://cdn.rawgit.com/angular/bower-material/v0.10.0/angular-material.css'>
 <link rel="stylesheet" href="css/bootstrap.css">
@@ -96,7 +96,7 @@ cursor: pointer;
 }
 </style>
 
-<div ng-include="'app/counterfeit/cubeTestImage.html'" style="position:absolute;margin-left:5vw;margin-top:50vh;"></div>
+<div ng-include="'app/counterfeit/cubeTestImage.html'" style="position:absolute;margin-left:68vw;margin-top:50vh;"></div>
 <div style="position:fixed;right:0;z-index: 100;top: 30px;">
 	<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
 		<div ng-click="clickSubmit();" class="index-submit-button" ></div>
@@ -106,7 +106,7 @@ cursor: pointer;
 	</div>
 </div>
 	<!-- CONTAINER -->
-	<div class="container-fluid paper-wrap bevel tlbr" style="margin:0px;  height: 100vh;">
+	<div class="container-fluid paper-wrap bevel tlbr" style="margin:0psx;  height: 100vh;">
 		
 		<!-- SIDE MENU -->
 		<div class="wrap-sidebar-content">
@@ -120,13 +120,6 @@ cursor: pointer;
 			<div class="wrap-fluid" id="paper-bg" style="padding-top: 6px;">
 				
 				<div class="row" style="height:90vh;overflow:hidden; padding-top:15px;">
-					<div class="col-sm-3" style="padding: 3px;">
-						<div class="container1" style="height:90vh;">
-    						<div class="container2">
-								<div ng-include="'app/counterfeit/topics.html'"></div>
-							</div>
-						</div>
-					</div>
 					<div class="col-sm-4" style="height:82vh;overflow:hidden;padding: 3px;">
 						<div class="row">
 							<div class="col-sm-12 padding-0 padding-right-5 dynamic-box-show-hide" ng-class="{'col-sm-10':$root.preference.userInteractionPanelDisplay}">
@@ -147,16 +140,25 @@ cursor: pointer;
 							</div>
 						</div>
 					</div>
+					<div class="col-sm-3" style="padding: 3px;">
+						<div class="container1" style="height:90vh;">
+    						<div class="container2">
+								<div ng-include="'app/counterfeit/topics.html'"></div>
+							</div>
+						</div>
+					</div>
+					
 				</div>
-				<div style="width:50vw;position:fixed;right:0px;bottom:55px;margin-right:29px;">
-					<div ng-include="'app/counterfeit/searchBox.html'"></div>
-				</div>
+				
 			</div>
 		</div>
 		<!-- END OF SIDE MENU -->
 		
 	</div>
 	<!-- END OF CONTAINER -->
+</div>
+<div style="width:50vw;position:fixed;bottom:55px;margin-left:70px;float:left;">
+		<div ng-include="'app/counterfeit/searchBox.html'"></div>
 </div>
 <div class="row" style="width:100vw;left:0px;position:fixed;;bottom:0vh; padding-left:10px; z-index: 2000; overflow:hidden;">
 	<div ng-include="'app/counterfeit/userState.html'"></div>

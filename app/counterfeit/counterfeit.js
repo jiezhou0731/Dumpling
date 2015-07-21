@@ -9,10 +9,11 @@ var subtopicUrl = "http://141.161.20.98/python_cgi/subtopic.cgi";
 var parseBatchQueryUrl = "http://141.161.20.98/python_cgi/fileParse.cgi";
 var parseBatchQueryUrl = "http://69.243.108.43/~jie/direwolf/pythonCgi/fileParse.cgi";
 */
-var topicTreeUrl = "http://localhost/~jie/direwolf/pythonCgi/topicTree.cgi";
-var subtopicUrl = "http://localhost/~jie/direwolf/pythonCgi/subtopic.cgi";
-var parseBatchQueryUrl = "http://localhost/~jie/direwolf/pythonCgi/fileParse.cgi";
-var pythonSearch = 'http://localhost/~jie/direwolf/pythonCgi/pattern_handler.cgi';
+var topicTreeUrl = "http://141.161.20.98/direwolf/pythonCgi/topicTree.cgi";
+var subtopicUrl = "http://141.161.20.98/direwolf/pythonCgi/subtopic.cgi";
+var parseBatchQueryUrl = "http://141.161.20.98/direwolf/pythonCgi/fileParse.cgi";
+var pythonSearch = 'http://141.161.20.98/direwolf/pythonCgi/pattern_handler.cgi';
+
 
 var phpUploadInteractionUrl='index.php?r=index/postEvent';
 var phpGetFullPageUrl='index.php?r=searchEngine/downloadFullPage';
@@ -500,6 +501,14 @@ dumplingApp.controller('topicController', function(topicService, rootCookie,$sco
 		$scope.subtopicDocs = args;
 		$scope.$apply();
 	});
+
+	$scope.$watch('topics', function() {
+   	  if ($scope.topics!=undefined && $scope.topics[0]!=undefined
+   	  	 && $scope.topics[0].subtopics!=undefined && $scope.topics[0].subtopics[0]!=undefined ) {
+	  	 $scope.clickSubtopic( $scope.topics[0].subtopics[0].subtopic_id);
+	  }
+   });
+
 	$scope.clickSubtopic = function(subtopic_id){
 		var args={};
 		args.subtopic_id=subtopic_id;
@@ -578,6 +587,11 @@ dropText = function(event, ui) {
   };
 // Dynamic result controller
 dumplingApp.controller('dynamicController', function(topicService, rootCookie,$scope, $rootScope, $sce, solrService) {
+	$rootScope.$watch('docs', function() {
+   	  if ($rootScope.docs!=undefined && $rootScope.docs.length!=0) {
+	  	$rootScope.$broadcast('displayNewDocOnDocDetailPanel',$rootScope.docs[0]);
+	  }
+   });
 	// Click doc content
 	$scope.clickContent=function(doc){
 		$rootScope.readDocEvents.push({id:doc.id,url:doc.escapedUlr, content:"", startTime:Date.now()});
