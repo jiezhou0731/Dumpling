@@ -118,8 +118,23 @@ cursor: pointer;
 		
 			<!-- CONTENT -->
 			<div class="wrap-fluid" id="paper-bg" style="padding-top: 6px;">
-				
-				<div class="row" style="height:90vh;overflow:hidden; padding-top:15px;">
+				<!-- initial cover -->
+				<div class="row" style="position:absolute;width:96vw;z-index:50;top:0px;height:83vh;opacity:0.5;margin-left:-25px;" ng-if="$root.docs==undefined || $root.docs.length==0">
+						<div class="col-sm-4 box-header"  style="position:relative;background-color:#45B6B0;float:left;height:83vh;">
+							<h3 class="box-title" style="position:absolute;width:100%;text-align:left;font-size:40px;margin-left:15px;">
+				                <span style="color:white;">Results</span>
+				            </h3>
+							<div style="width:100%;text-align:center; clear:both;opacity: 0.5;">
+								<img src="img/minerva.png" style="width:80%;margin:auto;margin-top:9vh;"/>
+							</div>
+						</div>
+						<div class="col-sm-5 box-header"  style="position:relative;background-color:#45B6B0;float:left;margin-left:3px;height:83vh;">
+							<h3 class="box-title" style="position:absolute;width:100%;text-align:center;font-size:40px;margin-top:25vh;">
+				                <span style="color:white;">Document View</span>
+				            </h3>
+						</div>
+				</div>		
+				<div class="row" style="position:absolute;width:95vw;height:90vh;overflow:hidden; padding-top:15px;">
 					<div class="col-sm-4" style="height:82vh;overflow:hidden;padding: 3px;padding-right:15px;">
 						<div class="row">
 							<div class="col-sm-12 padding-0 padding-right-5 dynamic-box-show-hide" ng-class="{'col-sm-10':$root.preference.userInteractionPanelDisplay}">
@@ -164,22 +179,7 @@ cursor: pointer;
 	<div ng-include="'app/counterfeit/userState.html'"></div>
 </div>
 
-<!-- initial cover -->
-<div style="position:fixed;top:10px; margin-left:50px;width:75vw;z-index:111;height:83vh;opacity:0.5" ng-if="$root.docs==undefined || $root.docs.length==0">
-		<div class="box-header"  style="position:relative;background-color:#45B6B0;float:left;width:32vw;height:83vh;">
-			<h3 class="box-title" style="position:absolute;width:100%;text-align:left;font-size:40px;margin-left:15px;">
-                <span style="color:white;">Results</span>
-            </h3>
-			<div style="width:100%;text-align:center; clear:both;opacity: 0.5;">
-				<img src="img/minerva.png" style="width:80%;margin:auto;margin-top:9vh;"/>
-			</div>
-		</div>
-		<div class="box-header"  style="position:relative;background-color:#45B6B0;float:left;width:39.5vw;margin-left:3px;height:83vh;">
-			<h3 class="box-title" style="position:absolute;width:100%;text-align:center;font-size:40px;margin-top:25vh;">
-                <span style="color:white;">Document View</span>
-            </h3>
-		</div>
-</div>
+
 
 <script type='text/javascript' src='js/date.js'></script>
 <script type='text/javascript'
