@@ -6,7 +6,6 @@ import json
 import sys
 
 def main():
-    log_handler = open('batchQuery.log','w')
     #log_handler.write(sys.stdin.read())
     #response = ''
     
@@ -14,7 +13,6 @@ def main():
     fileitem = form['batchQuery']
     response = []
     for line in fileitem.file:
-	log_handler.write(line)
 	response.append(line.strip('\n'))
     
     print('Content-Type: text/plain\r\n')
