@@ -24,17 +24,17 @@
     </div>
 
     <div style="margin-top:66vh;" ui-on-Drop="onDrop($event,$data)" >
-        <div style="z-index:2;position:absolute; opacity: 0.5;height: 13vh;width:100%; background-color:#45B6B0;text-align:center;font-size:6vh;padding-top:2vh;" ng-show="dropCover">
+        <div style="z-index:2;position:absolute; opacity: 0.5;height: 14.5vh;width:100%; background-color:#45B6B0;text-align:center;font-size:6vh;padding-top:2vh;" ng-show="dropCover">
             <div style="margin:auto; color:white;">
             
             </div>
         </div>
-        <div style="z-index:2;position:absolute; height: 13vh;width:100%;text-align:center;font-size:6vh;padding-top:2vh;" ng-show="dropCover">
+        <div style="z-index:2;position:absolute; height: 14.5vh;width:100%;text-align:center;font-size:6vh;padding-top:2vh;" ng-show="dropCover">
             <div style="margin:auto; color:white;">
             Drop here
             </div>
         </div>
-        <div id="dropTextBox" class="box ui-widget-header"  style="z-index:1;position:absolute;padding:0 20px;overflow-x:hidden;overflow-y:scroll;  min-height: 13vh; max-height: 13vh;" >
+        <div id="dropTextBox" class="box ui-widget-header"  style="z-index:1;position:absolute;padding:0 20px;overflow-x:hidden;overflow-y:scroll;  min-height: 14.5vh; max-height: 14.5vh;" >
           <div class="btn btn-primary" ui-draggable="true" ng-click="clickDroppedText(text);" style="margin:3px;background-color: #45B6B0;border:none;"
                     on-drop-success="dropSuccessHandler($event,$index)"
                     ng-repeat="text in droppedTextArray track by $index"> {{text}}
