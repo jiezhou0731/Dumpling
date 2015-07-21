@@ -89,11 +89,12 @@
 								</div>
 							</div>
 							<div class="col-sm-6 padding-0 padding-right-5 compare-box-show-hide" ng-class="{'col-sm-5':$root.preference.userInteractionPanelDisplay}">
-								<div ng-include="'app/compare/dynamic.html'"></div>
-							</div>
-							<div class="col-sm-6 padding-0 padding-right-5 compare-box-show-hide" ng-class="{'col-sm-5':$root.preference.userInteractionPanelDisplay}">
 								<div ng-include="'app/compare/static.html'"></div>
 							</div>
+							<div class="col-sm-6 padding-0 padding-right-5 compare-box-show-hide" ng-class="{'col-sm-5':$root.preference.userInteractionPanelDisplay}">
+								<div ng-include="'app/compare/dynamic.html'"></div>
+							</div>
+							
 							<div class="col-sm-2 user-interaction-box-show-hide" ng-show="$root.preference.userInteractionPanelDisplay" >
 								<div class="row">
 									<div class="col-sm-12 padding-0">

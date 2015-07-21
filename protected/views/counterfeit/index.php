@@ -96,8 +96,8 @@ cursor: pointer;
 }
 </style>
 
-<div ng-include="'app/counterfeit/cubeTestImage.html'" style="position:absolute;margin-left:68vw;margin-top:50vh;"></div>
-<div style="position:fixed;right:25vw;;z-index: 100;top: 50px;">
+<div ng-include="'app/counterfeit/cubeTestImage.html'" style="position:absolute;margin-left:77vw;margin-top:50vh;"></div>
+<div style="position:fixed;right:25vw;;z-index: 1000;top: 50px;">
 	<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
 		<div ng-click="clickSubmit();" class="index-submit-button" ></div>
 	</div>
@@ -120,12 +120,12 @@ cursor: pointer;
 			<div class="wrap-fluid" id="paper-bg" style="padding-top: 6px;">
 				
 				<div class="row" style="height:90vh;overflow:hidden; padding-top:15px;">
-					<div class="col-sm-4" style="height:82vh;overflow:hidden;padding: 3px;">
+					<div class="col-sm-4" style="height:82vh;overflow:hidden;padding: 3px;padding-right:15px;">
 						<div class="row">
 							<div class="col-sm-12 padding-0 padding-right-5 dynamic-box-show-hide" ng-class="{'col-sm-10':$root.preference.userInteractionPanelDisplay}">
 								<div class="container1" style="height:82vh; ">
     								<div class="container2">
-										<div ng-include="'app/counterfeit/dynamic.html'"></div>
+									`	<div ng-include="'app/counterfeit/dynamic.html'"></div>
 									</div>
 								</div>
 							</div>
@@ -163,6 +163,24 @@ cursor: pointer;
 <div class="row" style="width:100vw;left:0px;position:fixed;;bottom:0vh; padding-left:10px; z-index: 2000; overflow:hidden;">
 	<div ng-include="'app/counterfeit/userState.html'"></div>
 </div>
+
+<!-- initial cover -->
+<div style="position:fixed;top:10px; margin-left:50px;width:75vw;z-index:111;height:83vh;opacity:0.5" ng-if="$root.docs==undefined || $root.docs.length==0">
+		<div class="box-header"  style="position:relative;background-color:#45B6B0;float:left;width:32vw;height:83vh;">
+			<h3 class="box-title" style="position:absolute;width:100%;text-align:center;font-size:40px;margin-top:25vh;">
+                <span style="color:white;">Results</span>
+            </h3>
+			<div style="width:100%;text-align:center; clear:both;opacity: 0.2;">
+				<img src="img/minerva.png" style="width:80%;margin:auto;margin-top:7vh;"/>
+			</div>
+		</div>
+		<div class="box-header"  style="position:relative;background-color:#45B6B0;float:left;width:39.5vw;margin-left:3px;height:83vh;">
+			<h3 class="box-title" style="position:absolute;width:100%;text-align:center;font-size:40px;margin-top:25vh;">
+                <span style="color:white;">Document View</span>
+            </h3>
+		</div>
+</div>
+
 <script type='text/javascript' src='js/date.js'></script>
 <script type='text/javascript'
 src='js/slimscroll/jquery.slimscroll.js'></script>

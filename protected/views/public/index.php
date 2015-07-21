@@ -88,11 +88,12 @@
 									<div ng-include="'app/public/userState.html'"></div>
 								</div>
 							</div>
-							<div class="col-sm-6 padding-0 padding-right-5 public-box-show-hide" ng-class="{'col-sm-5':$root.preference.userInteractionPanelDisplay}">
-								<div ng-include="'app/public/dynamic.html'"></div>
-							</div>
+							
 							<div class="col-sm-6 padding-0 padding-right-5 public-box-show-hide" ng-class="{'col-sm-5':$root.preference.userInteractionPanelDisplay}">
 								<div ng-include="'app/public/static.html'"></div>
+							</div>
+							<div class="col-sm-6 padding-0 padding-right-5 public-box-show-hide" ng-class="{'col-sm-5':$root.preference.userInteractionPanelDisplay}">
+								<div ng-include="'app/public/dynamic.html'"></div>
 							</div>
 							<div class="col-sm-2 user-interaction-box-show-hide" ng-show="$root.preference.userInteractionPanelDisplay" >
 								<div class="row">
