@@ -167,11 +167,11 @@ cursor: pointer;
 <!-- initial cover -->
 <div style="position:fixed;top:10px; margin-left:50px;width:75vw;z-index:111;height:83vh;opacity:0.5" ng-if="$root.docs==undefined || $root.docs.length==0">
 		<div class="box-header"  style="position:relative;background-color:#45B6B0;float:left;width:32vw;height:83vh;">
-			<h3 class="box-title" style="position:absolute;width:100%;text-align:center;font-size:40px;margin-top:25vh;">
+			<h3 class="box-title" style="position:absolute;width:100%;text-align:left;font-size:40px;margin-left:15px;">
                 <span style="color:white;">Results</span>
             </h3>
-			<div style="width:100%;text-align:center; clear:both;opacity: 0.2;">
-				<img src="img/minerva.png" style="width:80%;margin:auto;margin-top:7vh;"/>
+			<div style="width:100%;text-align:center; clear:both;opacity: 0.5;">
+				<img src="img/minerva.png" style="width:80%;margin:auto;margin-top:9vh;"/>
 			</div>
 		</div>
 		<div class="box-header"  style="position:relative;background-color:#45B6B0;float:left;width:39.5vw;margin-left:3px;height:83vh;">
