@@ -1,6 +1,6 @@
 <div class="row search-box" ng-controller="searchBoxController">
 	<div class="col-sm-8 padding-0">
-		<input type="text" placeholder="Search" ng-model="query" />
+		<input type="text" placeholder="Search" ng-model="query"   ng-keyup="$event.keyCode == 13 && clickSubmit()"/>
 	</div>
 	<div class="col-sm-4">
 		<button type="submit" class="btn btn-primary"
