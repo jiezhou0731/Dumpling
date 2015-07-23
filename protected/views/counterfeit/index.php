@@ -172,7 +172,7 @@ cursor: pointer;
 	</div>
 	<!-- END OF CONTAINER -->
 </div>
-<div style="width:50vw;position:fixed;bottom:55px;margin-left:70px;float:left;z-index:1000;">
+<div style="width:70vw;position:fixed;bottom:55px;margin-left:70px;float:left;z-index:1000;">
 		<div ng-include="'app/counterfeit/searchBox.html'"></div>
 </div>
 <div class="row" style="width:100vw;left:0px;position:fixed;;bottom:0vh; padding-left:10px; z-index: 2000; overflow:hidden;">

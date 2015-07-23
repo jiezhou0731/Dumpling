@@ -1,10 +1,10 @@
 <div class="row search-box">
-	<div class="col-sm-10 padding-0">
+	<div class="col-sm-6 padding-0">
 		<input type="text" placeholder="Search" ng-model="$root.outterControllerQuery" 
 		ng-keyup="$event.keyCode == 13 && $root.clickEnter()" ng-change="$root.nextInNavi='search'"/>
 	</div>
     <div ng-controller="searchBoxController">
-    	<form class="col-sm-2" method="post" action="http://localhost/~jie/direwolf/pythonCgi/fileParse.cgi" enctype="multipart/form-data" style="padding-bottom:0px;padding-top:0px;" id="batchQueryUploadForm">
+    	<form class="col-sm-6" method="post" action="http://localhost/~jie/direwolf/pythonCgi/fileParse.cgi" enctype="multipart/form-data" style="padding-bottom:0px;padding-top:0px;float:left;width: 10vw;" id="batchQueryUploadForm">
     		<div class="fileUpload btn btn-primary">
     			<span>Batch Query</span>
 
@@ -12,6 +12,7 @@
                  name="batchQuery"  onchange="angular.element(this).scope().batchQueryFileChosen(this)" />
     		</div>
     	</form>
+        <a class="btn btn-primary" href="/direwolf/graph/index.html" target="_blank">Show Graph</a>
     </div>
 </div>
 

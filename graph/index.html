@@ -31,6 +31,7 @@
     var camera;
     var scene;
     var objectContainer;
+    var trackballControls;
 
     function init() {
         clock = new THREE.Clock();
@@ -46,7 +47,8 @@
         camera.position.z = 100;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-        var trackballControls = new THREE.TrackballControls(camera);
+        trackballControls = new THREE.TrackballControls(camera);
+
         trackballControls.rotateSpeed = 0.5;
         trackballControls.zoomSpeed = 1.0;
         trackballControls.panSpeed = 1.0;
@@ -251,25 +253,23 @@
 
 
     var projector = new THREE.Projector();
-        var tube;
-
-        function onDocumentMouseDown(event) {
-
-            var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
-            vector = vector.unproject(camera);
-
-            var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-
-            var intersects = raycaster.intersectObjects(objectContainer.clickableList);
-
-            if (intersects.length > 0) {
-                intersects[0].object.clicked();
-                /*
-                intersects[0].object.material.transparent = true;
-                intersects[0].object.material.opacity = 0.1;
-                */
-            }
-        }
+    var lastClickTime=0;
+    function onDocumentMouseDown(event) {
+        var currentClickTime = Date.now();
+        if (currentClickTime-lastClickTime<300){
+            trackballControls.reset();
+        } 
+        lastClickTime=currentClickTime;
+        /*
+        // Click disappear 
+        var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
+        vector = vector.unproject(camera);
+        var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+        var intersects = raycaster.intersectObjects(objectContainer.clickableList);
+        if (intersects.length > 0) {
+            intersects[0].object.clicked();
+        }*/
+    }
 </script>
 
 

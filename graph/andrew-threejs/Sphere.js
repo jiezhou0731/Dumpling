@@ -40,7 +40,7 @@ andrewThree.Sphere=function(arg){
         ctx.fillRect(canvas.width/2, 0, canvas.width, canvas.height);
 
         ctx.fillStyle="black";
-        ctx.font=sphere.fontSize+"px Georgia";
+        ctx.font=sphere.fontSize+"px sans-serif";
         ctx.fillText(sphere.text,40,110);
         var canvasMap = new THREE.Texture(canvas);
         var mat = new THREE.MeshBasicMaterial();
