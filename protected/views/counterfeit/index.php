@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1" name="viewport">
 <link href="ico/favicon.ico" rel="shortcut icon">
-<title>Minerva</title>
+<title>Minerva 2</title>
 <!-- css loader -->
 <link rel='stylesheet prefetch' href='http://cdn.rawgit.com/angular/bower-material/v0.10.0/angular-material.css'>
 <link rel="stylesheet" href="css/bootstrap.css">

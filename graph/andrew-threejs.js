@@ -46,7 +46,6 @@ var andrewThree={
             mat.map = canvasMap;
             sphere.sprite = new THREE.Mesh(geom, mat);
             sphere.sprite.material.map.needsUpdate = true;
-            
         }
 
         sphere.addTo=function(scene){
@@ -78,10 +77,13 @@ var andrewThree={
             }
             */
             
-            sphere.sprite.rotation.z =0;//Math.PI/4;;
+            //sphere.sprite.rotation.z =0;//Math.PI/4;;
             //var a=(camera.position.x-sphere.sprite.position.x)
             //console.log(camera.position);
             //
+
+            
+            //sphere.sprite.lookAt(camera.position);
         }
 
         sphere.createSprite();
@@ -105,7 +107,7 @@ var andrewThree={
         surroundedSphere.sortedChildren=[];
         for (var property in surroundedSphere.data) {
             if (surroundedSphere.data.hasOwnProperty(property)) {
-                if (property=="fatherNodeName") continue;
+                if (property=="fatherNodeName"||property=="id") continue;
                 surroundedSphere.numberOfChildren++;
                 if( typeof surroundedSphere.data[property]=="string" ) {
                     surroundedSphere.sortedChildren.push({property:property,length:1});    
@@ -160,7 +162,7 @@ var andrewThree={
         }
         for (var i=0; i<surroundedSphere.sortedChildren.length; i++) {
             var property=surroundedSphere.sortedChildren[i].property;
-            if (property=="fatherNodeName") continue;
+            if (property=="fatherNodeName"||property=="id") continue;
             var newChildren={};
             newChildren.sphereArr=[];
 
@@ -242,7 +244,7 @@ var andrewThree={
     },
 
     /*
-    test= andrewThree.Link();
+    test= andrewThree.Link(1,3);
     test.addTo(scene);
     */
     Link: function(arg){
@@ -251,21 +253,31 @@ var andrewThree={
         if (arg==undefined) {
             arg={};
         }
-        console.log(objectsContainer.searchByDataId(1));
-        link.source=arg.source || new THREE.Vector3(0, 0, 0);
-        link.target=arg.target || new THREE.Vector3(0, 50, 0);
+        link.sourceId=arg.sourceId;
+        link.targetId=arg.targetId;
+        console.log("link:");
+        console.log(objectsContainer.searchByDataId(link.sourceId).center);
+        console.log(objectsContainer.searchByDataId(link.targetId).center);
 
-        var direction = new THREE.Vector3().sub(link.target, link.source);
-        var arrow = new THREE.ArrowHelper(
-            direction.clone().normalize(), 
-            link.source, 
-            direction.length(), 
-            0x5f9ab8,
-            2,
-            2
+        link.radiusTop = arg.radiusTop || 0.5;
+        link.radiusBottom = arg.radiusTop || 0.5;
+        link.height = arg.height || 10; 
+        link.radialSegments = arg.radialSegments || 10;
+        link.heightSegments = arg.heightSegments || 10;
+        link.openEnded = arg.openEnded || false;
+        
+        var geom = new THREE.CylinderGeometry(
+            link.radiusTop, 
+            link.radiusBottom, 
+            link.height, 
+            link.radialSegments, 
+            link.heightSegments, 
+            link.openEnded
         );
+        var meshMaterial = new THREE.MeshBasicMaterial({color:0x6ca2b8});
+        var cylinder = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
 
-        link.sprite=arrow;
+        link.sprite=cylinder;
 
         link.addTo = function(scene){
             scene.add(link.sprite);
@@ -278,6 +290,42 @@ var andrewThree={
         return link;
     },
 
+    /*
+    test= andrewThree.arrow();
+    test.addTo(scene);
+    */
+    Arrow: function(arg){
+        var arrow={};
+
+        if (arg==undefined) {
+            arg={};
+        }
+        console.log(objectsContainer.searchByDataId(1));
+        arrow.source=arg.source || new THREE.Vector3(0, 0, 0);
+        arrow.target=arg.target || new THREE.Vector3(0, 50, 0);
+
+        var direction = new THREE.Vector3().sub(arrow.target, arrow.source);
+        var arrow = new THREE.ArrowHelper(
+            direction.clone().normalize(), 
+            arrow.source, 
+            direction.length(), 
+            0x5f9ab8,
+            2,
+            2
+        );
+
+        arrow.sprite=arrow;
+
+        arrow.addTo = function(scene){
+            scene.add(arrow.sprite);
+        }
+
+        arrow.render = function(){
+            
+        }      
+        
+        return arrow;
+    },
     /*
     test= andrewThree.objectsContainer();
     test.addTo(scene);
@@ -305,7 +353,7 @@ var andrewThree={
 
         objectsContainer.searchByDataId = function(id){
             for (var i=0; i<objectsContainer.list.length; i++) {
-                if (objectsContainer.list[i].data[id]==id) {
+                if (objectsContainer.list[i].data['id']==id) {
                     return objectsContainer.list[i];
                 }
             } 

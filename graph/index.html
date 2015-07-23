@@ -18,14 +18,19 @@
 <div id="graph">
 </div>
 
-<script type="text/javascript" src="andrew-threejs.js"></script>
+<script type="text/javascript" src="andrew-threejs/Link.js"></script>
+<script type="text/javascript" src="andrew-threejs/ObjectContainer.js"></script>
+<script type="text/javascript" src="andrew-threejs/Sphere.js"></script>
+<script type="text/javascript" src="andrew-threejs/SurroundedSphere.js"></script>
+<script type="text/javascript" src="libs/Projector.js"></script>
 <script type="text/javascript" src="main.js"></script>
+
 <script type="text/javascript">
     var test;
     var clock;
     var camera;
     var scene;
-    var objectsContainer=[];
+    var objectContainer;
 
     function init() {
         clock = new THREE.Clock();
@@ -60,7 +65,7 @@
 "telephone": ["852-24724062", "0086 755 83686419", "86-755-93664839"],
 "qq": ["1765060718"],
 "employee": [],
-"bank": {"bankname": "Bank of China (HK) Limited", "account#": "01287792056316","bankaddress": "108 Cheung Sha Wan Road, Kowloon, HK", "swfitcode":""},
+"bank": ["Bank of China (HK) Limited", "01287792056316","108 Cheung Sha Wan Road, Kowloon, HK"],
 "type": "Chinese Seller"
 }  ,
 {
@@ -72,7 +77,7 @@
 "telephone": ["86-731-82751003", "15802536432", "86-755-83676710", "86-731-82751003","15802536432","86-755-83676710","86-731-83880775","86-156-16179698","86-156-16179698"],
 "qq": [],
 "employee": [],
-"bank": {"bankname": "HSBC", "account#": "848-079000-838", "bankaddress":  "Head office 1 Queen's Road Central HongKong","swiftcode": "HSBCHKHHHKH"},
+"bank": ["HSBC", "848-079000-838", "Head office 1 Queen's Road Central HongKong","HSBCHKHHHKH"],
 "type": "Chinese Seller"
 } ,
 
@@ -92,11 +97,9 @@
 "qq": [],
 "employee": [
 "Greg Potter",
-"Rob Bauer", 
-"Mike Smith",
-"Allen Rothey",
-"Charlotte Carter" ,"Dorothy"],
-"bank": {"bankname": "Bank of America", "account#": "848-079000-838", "bankaddress":  "FL, 34617","swiftcode": ""},
+"Charlotte Carter" ,
+"Dorothy"],
+"bank": ["Bank of America", "848-079000-838","FL, 34617"],
 "type": "US Seller"
 } ,
 
@@ -115,12 +118,10 @@
 "telephone": ["(352) 796-0060",  "352-796-0790", "352-796-0401"],
 "qq": [],
 "employee": [
-"Greg Potter",
 "Rob Bauer", 
 "Mike Smith",
-"Allen Rothey",
-"Charlotte Carter" ,"Dorothy"],
-"bank": {"bankname": "Bank of America", "account#": "848-079000-838", "bankaddress":  "FL, 34617","swiftcode": ""},
+"Allen Rothey"],
+"bank": ["Bank of America","848-079000-838", "FL, 34617"],
 "type": "US Seller"
 }
 ]
@@ -218,18 +219,21 @@
         console.log(json);
         console.log(json["links"]);
 
-        objectsContainer=andrewThree.objectsContainer();        
+        objectContainer=andrewThree.ObjectContainer();        
 
         var createObjects=function (){
-            createCompanies(json["companies"],objectsContainer);
-            createProducts(json["products"],objectsContainer);
-            createLinks(json["links"],objectsContainer);
+            createCompanies(json["companies"],objectContainer);
+            createProducts(json["products"],objectContainer);
+            createLinks(json["links"],objectContainer);
         }
         $.when(createObjects()).then(function(){
-            objectsContainer.addTo(scene);
+            objectContainer.addTo(scene);
         });
 
         document.getElementById("graph").appendChild(webGLRenderer.domElement);
+
+        var projector = new THREE.Projector();
+        document.addEventListener('mousedown', onDocumentMouseDown, false);
 
         render();
 
@@ -240,10 +244,32 @@
             var delta = clock.getDelta();
             trackballControls.update(delta);
 
-            //test.render();
+            objectContainer.render();
         }
     }
     window.onload = init;
+
+
+    var projector = new THREE.Projector();
+        var tube;
+
+        function onDocumentMouseDown(event) {
+
+            var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
+            vector = vector.unproject(camera);
+
+            var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+
+            var intersects = raycaster.intersectObjects(objectContainer.clickableList);
+
+            if (intersects.length > 0) {
+                intersects[0].object.clicked();
+                /*
+                intersects[0].object.material.transparent = true;
+                intersects[0].object.material.opacity = 0.1;
+                */
+            }
+        }
 </script>
 
 

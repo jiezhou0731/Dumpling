@@ -39,7 +39,11 @@ var createProducts = function(list,objectContainer){
 }
 
 var createLinks = function(list,objectContainer){
-    var newObject= andrewThree.Link();
-    //objectContainer.push(newObject);
-     //   scene.add(arrow);
+	for (var i=0; i<list.length; i++){
+    	var newObject= andrewThree.Link({
+    		sourceId : list[i]['sourceid'],
+    		targetId : list[i]['destid']
+    	});
+    	objectContainer.push(newObject);
+    }
 }
