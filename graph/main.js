@@ -44,6 +44,6 @@ var createLinks = function(list,objectContainer){
     		sourceId : list[i]['sourceid'],
     		targetId : list[i]['destid']
     	});
-    	objectContainer.push(newObject);
+    	//objectContainer.push(newObject);
     }
 }
