@@ -40,11 +40,26 @@ andrewThree.Link=function(arg){
 
     link.sprite=cylinder;
 
-    link.sprite.rotation.x = Math.acos(dy/Math.sqrt(dy2+dz2));
-    link.sprite.rotation.z = Math.acos((dy2+dz2)/(Math.sqrt(dy2+dz2)*Math.sqrt(dx2+dy2+dz2)));
     link.sprite.position.x=(s.x+t.x)/2;
     link.sprite.position.y=(s.y+t.y)/2;
     link.sprite.position.z=(s.z+t.z)/2;
+
+    if (((s.x<t.x)&&(s.y<t.y)&&(s.z>t.z))||((s.x<t.x)&&(s.y>t.y)&&(s.z>t.z))){
+        link.sprite.rotation.x = Math.acos(dy/Math.sqrt(dy2+dz2));
+        link.sprite.rotation.z = Math.acos((dy2+dz2)/(Math.sqrt(dy2+dz2)*Math.sqrt(dx2+dy2+dz2)));         
+    } 
+    if (((s.x<t.x)&&(s.y<t.y)&&(s.z<t.z))||((s.x<t.x)&&(s.y>t.y)&&(s.z<t.z))){
+        link.sprite.rotation.x = 2*Math.PI-Math.acos(dy/Math.sqrt(dy2+dz2));
+        link.sprite.rotation.z = Math.acos((dy2+dz2)/(Math.sqrt(dy2+dz2)*Math.sqrt(dx2+dy2+dz2)));
+    } 
+    if (((s.x>t.x)&&(s.y<t.y)&&(s.z>t.z))||((s.x>t.x)&&(s.y>t.y)&&(s.z>t.z))){
+        link.sprite.rotation.x = Math.acos(dy/Math.sqrt(dy2+dz2));
+        link.sprite.rotation.z = 2*Math.PI-Math.acos((dy2+dz2)/(Math.sqrt(dy2+dz2)*Math.sqrt(dx2+dy2+dz2)));
+    } 
+    if (((s.x>t.x)&&(s.y<t.y)&&(s.z<t.z))||((s.x>t.x)&&(s.y>t.y)&&(s.z<t.z))){
+        link.sprite.rotation.x = 2*Math.PI-Math.acos(dy/Math.sqrt(dy2+dz2));
+        link.sprite.rotation.z = 2*Math.PI-Math.acos((dy2+dz2)/(Math.sqrt(dy2+dz2)*Math.sqrt(dx2+dy2+dz2)));
+    } 
 
     link.addTo = function(scene){
         scene.add(link.sprite);

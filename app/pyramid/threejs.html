@@ -1,0 +1,135 @@
+<div id="ThreeJS"  class="col-sm-8 user-state-box" ></div>
+<script>
+
+// standard global variables
+var container, scene, camera, renderer, controls, stats;
+var keyboard = new THREEx.KeyboardState();
+var clock = new THREE.Clock();
+var delta;
+
+var floors = [];
+
+// custom global variables
+var movingBall;
+var moveBallToDirection=0; // stay, up, down
+
+var labelExploration,labelExploitation;
+
+var words=[], wordSprites=[];
+var particleGroup, particleAttributes, radiusRange = 300;;
+
+var projector, mouse = { x: 0, y: 0 }, INTERSECTED;
+var sprite1;
+var canvas1, context1, texture1;
+
+init();
+animate();
+
+// FUNCTIONS 		
+function init() 
+{
+	createBackground();	
+	
+	createBall();
+
+	words=["xxxx","xxxx","xxxx","xxxx","xxxx","xxxx"];
+
+	particleGroup = new THREE.Object3D();
+	particleAttributes = { startSize: [], startPosition: [], randomness: [10] };
+
+	
+}
+
+function changeWords(toWords){
+	words = toWords;
+
+	// Remove the old particle group.
+	scene.remove( particleGroup );
+	wordSprites=[];
+
+	// Create new word sprites.
+	for (var i=0; i<words.length; i++){
+		var sprite = makeTextSprite( words[i], 
+				{ fontsize: 100, borderColor: {r:82, g:179, b:217, a:1.0}, backgroundColor: {r:82, g:179, b:217, a:0.8} } );
+		sprite.position.set(-500,55+i*10,100);
+		wordSprites.push(sprite);
+	}
+
+	// Add to the new particle group.
+	particleGroup = new THREE.Object3D();
+	
+	for( var i = 0; i < words.length; i++ ) 
+	{
+		var sprite = wordSprites[i];
+		sprite.angle=Math.random()*Math.PI*2;
+		sprite.radiusRange = Math.random()*radiusRange+300;
+		if (sprite.radiusRange>400) {
+			sprite.speed=Math.random()*0.5+0.1;
+		} else {
+			sprite.speed=Math.random()+0.2;
+		}
+		sprite.position.x = sprite.radiusRange*Math.cos(sprite.angle);
+		sprite.position.y = Math.random()*60;
+		sprite.position.z = 100*Math.sin(sprite.angle);
+		
+		particleGroup.add( sprite );
+	}
+
+	particleGroup.position.y = movingBall.position.y;
+
+	scene.add( particleGroup );
+}
+
+
+</script>
+
+<div  ng-controller="feedbackController">
+<div class="col-sm-2">
+	<div class="box">
+		<!-- /.box-header -->
+		<div class="box-body" style="padding: 10px 20px;">
+			<div class="news-widget" style="padding: 0px;">
+				<h2>
+					<span class="bg-blue">Explicit Feedback</span>
+				</h2>
+				<div class="current-feedback-box">
+					<div ng-repeat="item in $root.docs | filter:isRelevant">
+						Doc {{item.id}} is relevant.
+					</div>
+					<div ng-repeat="item in $root.docs | filter:isOffTopic">
+						Doc {{item.id}} is off-topic.
+					</div>
+					<div ng-show="noExplicitFeedback()">
+				        N/A
+				    </div>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+		<!-- /.box-body -->
+	</div>
+</div>
+<div class="col-sm-2">
+	<div class="box">
+		<!-- /.box-header -->
+		<div class="box-body" style="padding: 10px 20px;">
+			<div class="news-widget" style="padding: 0px;">
+				<h2>
+					<span class="bg-blue">Implicit Feedback</span>
+				</h2>
+				<div class="current-feedback-box">
+					<div ng-repeat="item in $root.readDocEvents">
+						Doc {{item.id}} is read for {{item.duration}} seconds.
+					</div>
+					<div ng-show="noImplicitFeedback()">
+				        N/A
+				    </div>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+		<!-- /.box-body -->
+	</div>
+</div>
+</div>
+

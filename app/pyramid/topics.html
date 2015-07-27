@@ -1,0 +1,83 @@
+<div ng-controller="topicController">
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="box" >
+				<div class="box-header">
+					<h3 class="box-title">
+						<span>Topics Being Searched</span>
+					</h3>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body" style="padding-top:5px;padding-bottom:0px;">
+					<div class="row">
+						<div class="col-sm-12">
+							<ul id="browser" class="treeview">
+								<li>
+									<span class="entypo-folder">{{topics[0].text}}</span>
+									<ul>
+										<li ng-repeat="subtopic in topics[0].subtopics" ng-click="clickSubtopic(subtopic.subtopic_id);">
+											<span class="entypo-newspaper"></span>{{subtopic.text}}
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="box" style="padding-top:0px;padding-bottom:0px;min-height:80vh;">
+				<div class="box-header">
+					<h3 class="box-title">
+						<span>Documents in Topic</span>
+					</h3>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body" style="padding-top:5px;padding-bottom:0px;">
+					<div class="box-body table-responsive no-padding">
+						<div class="container1" style="height:60vh;">
+							<div class="container2">
+								<table class="table table-hover">
+									<tr ng-repeat="subtopicDoc in subtopicDocs" ng-click="clickSubtopicDoc();">
+										<td>{{subtopicDoc.title}}</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- /.box-body -->
+				</div>
+
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+	</div>
+</div>
+<script type="text/javascript">
+	(function($) {
+		"use strict";
+		$("#browser")
+		.treeview(
+		{
+			animated : "fast",
+			collapsed : true,
+			unique : true,
+			persist : "cookie",
+			toggle : function() {
+				window.console
+				&& console
+				.log(
+					"%o was toggled",
+					this);
+			}
+		});
+	})(jQuery);
+
+
+</script>

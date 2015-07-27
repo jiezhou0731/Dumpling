@@ -47,15 +47,4 @@ var createLinks = function(list,objectContainer){
     	});
     	objectContainer.push(newObject);
     }
-
-    /* Find good links
-    for (var i=1; i<=4; i++){
-    	for (var j=5;j<=10;j++){
-    		var newObject= andrewThree.Link({
-    		sourceId : j,
-    		targetId : i
-	    	});
-	    	objectContainer.push(newObject);	
-    	}
-    }*/
 }

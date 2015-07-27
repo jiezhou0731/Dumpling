@@ -1,0 +1,13 @@
+<style>
+  #draggable { z-index:200000;  width: 20vw; height:auto; padding: 0px; border:gray solid 1px;}
+  </style>
+ <script>
+  $(function() {
+    $( "#draggable" ).draggable();
+    console.log("a");
+  });
+  </script>
+
+<div id="draggable" class="ui-widget-content" ng-controller="cubeTestImageController">
+  <img src="img/cubeTestImages/memex_step_{{$root.cubeTestImageNumber}}.png" style="width:100%;">
+</div>
