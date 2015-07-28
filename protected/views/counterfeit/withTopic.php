@@ -96,9 +96,7 @@ cursor: pointer;
 }
 </style>
 
-<!--
 <div ng-include="'app/counterfeit/cubeTestImage.html'" style="position:absolute;margin-left:77vw;margin-top:50vh;"></div>
--->
 <div style="position:fixed;right:25vw;;z-index: 1000;top: 50px;">
 	<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
 		<div ng-click="clickSubmit();" class="index-submit-button" ></div>
@@ -127,10 +125,10 @@ cursor: pointer;
 				                <span style="color:white;">Results</span>
 				            </h3>
 							<div style="width:100%;text-align:center; clear:both;opacity: 0.5;">
-								<img src="img/minerva.png" style="width:60%;margin:auto;margin-top:9vh;"/>
+								<img src="img/minerva.png" style="width:80%;margin:auto;margin-top:9vh;"/>
 							</div>
 						</div>
-						<div class="col-sm-8 box-header"  style="position:relative;background-color:#45B6B0;float:left;margin-left:0px;height:83vh;">
+						<div class="col-sm-5 box-header"  style="position:relative;background-color:#45B6B0;float:left;margin-left:3px;height:83vh;">
 							<h3 class="box-title" style="position:absolute;width:100%;text-align:center;font-size:40px;margin-top:25vh;">
 				                <span style="color:white;">Document View</span>
 				            </h3>
@@ -148,7 +146,7 @@ cursor: pointer;
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-8" style="height:82vh;overflow:hidden;padding: 3px;z-index:12">
+					<div class="col-sm-5" style="height:82vh;overflow:hidden;padding: 3px;z-index:12">
 						<div class="row">
 							<div class="container1" style="height:82vh; ">
     							<div class="container2" style="overflow: hidden;">
@@ -157,7 +155,6 @@ cursor: pointer;
 							</div>
 						</div>
 					</div>
-					<!--
 					<div class="col-sm-3" style="padding: 3px;">
 						<div class="container1" style="height:90vh;">
     						<div class="container2">
@@ -165,7 +162,7 @@ cursor: pointer;
 							</div>
 						</div>
 					</div>
-					-->
+					
 				</div>
 				
 			</div>

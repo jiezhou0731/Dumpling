@@ -565,11 +565,21 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 	$scope.selectedText="";
     $scope.droppedTextArray=[];
     $scope.onDrop = function($event,$data){
+    	for (var i=0; i<$scope.droppedTextArray.length; i++){
+    		if ($scope.droppedTextArray[i].text==$data) return;
+    	}
     	$scope.indicateDropPlace(false);
     	$scope.selectedText = "";
-    	$droppedText={};
-    	$droppedText.text=$data;
-        $scope.droppedTextArray.push($droppedText);
+    	var droppedText={};
+    	droppedText.text=$data;
+    	droppedText.index=$scope.droppedTextArray.length;
+        $scope.droppedTextArray.push(droppedText);
+        $('#dropTextBox').animate({scrollTop:$('#dropTextBox')[0].scrollHeight}, '600');
+      };
+
+    $scope.onDropToDelete = function($event,$data){
+    	if ($data.index==undefined) return;
+    	$scope.droppedTextArray.splice($data.index,1);
         $('#dropTextBox').animate({scrollTop:$('#dropTextBox')[0].scrollHeight}, '600');
       };
 
