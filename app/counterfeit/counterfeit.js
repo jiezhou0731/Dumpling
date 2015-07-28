@@ -525,6 +525,9 @@ dumplingApp.controller('topicController', function(topicService, rootCookie,$sco
 //doc detail
 dumplingApp.controller('docDetailController', function(rootCookie,topicService, pythonService,$scope, $rootScope) {
 	$scope.$on('displayNewDocOnDocDetailPanel',function(event, args){
+		$scope.selectedText = "";
+  		$scope.selectedTextPosition={};
+  		
 		$("#docDetailPanel").scrollTop();
 		$scope.doc=args;
 	});
@@ -563,7 +566,9 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     $scope.onDrop = function($event,$data){
     	$scope.indicateDropPlace(false);
     	$scope.selectedText = "";
-        $scope.droppedTextArray.push($data);
+    	$droppedText={};
+    	$droppedText.text=$data;
+        $scope.droppedTextArray.push($droppedText);
         $('#dropTextBox').animate({scrollTop:$('#dropTextBox')[0].scrollHeight}, '600');
       };
 
@@ -581,6 +586,21 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 	        //$rootScope.$apply();
 	        rootCookie.put("stateHistory",$rootScope.stateHistory);
 		});
+    }
+
+    $scope.typeList=["Link", "Address", "Part #", "Email", "Name"];
+    $scope.rightClickDroppedText=function(droppedText){
+    	droppedText.showTypeSelectPanel=true;
+    }
+    $scope.clickType=function(droppedText,type){
+    	droppedText.showTypeSelectPanel=false;
+    	droppedText.type=type;
+    }
+
+    $scope.clickDropTextBox = function(){
+    	for (var i=0; i<$scope.droppedTextArray.length; i++){
+    		$scope.droppedTextArray[i].showTypeSelectPanel=false;
+    	}
     }
 });
 
@@ -1102,3 +1122,15 @@ function snapSelectionToWord() {
         }
     }
 }
+
+dumplingApp.directive('ngRightClick', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+});
