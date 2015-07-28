@@ -538,6 +538,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
   	$scope.droppedTextList = {};
 
 	$scope.getSelectionText = function(event) {
+		$rootScope.$broadcast('clearHoverPannels');
 		$scope.selectedTextPosition.left=event.offsetX;
 		$scope.selectedTextPosition.top=event.offsetY+30;
 		snapSelectionToWord();
@@ -589,17 +590,40 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     }
 
     $scope.typeList=["Link", "Address", "Part #", "Email", "Name"];
-    $scope.rightClickDroppedText=function(droppedText){
-    	droppedText.showTypeSelectPanel=true;
+    $scope.rightClickDroppedText=function(droppedText,$event){
+    	$scope.clearPanels();
+    	droppedText.showMenu=true;
+    	$event.stopPropagation();
     }
-    $scope.clickType=function(droppedText,type){
-    	droppedText.showTypeSelectPanel=false;
+    $scope.clickMenu=function(droppedText,choice, $event){
+    	$scope.clearPanels();
+    	if (choice=="tag") {
+    		droppedText.showTypeSelectPanel=true;
+    	} else if (choice=="find more"){
+    		$scope.clickDroppedText(droppedText.text);
+    	}
+    	$event.stopPropagation();
+    }
+
+    $scope.clickType=function(droppedText,type, $event){
+    	$scope.clearPanels();
     	droppedText.type=type;
+    	$event.stopPropagation();
     }
 
     $scope.clickDropTextBox = function(){
+    	$scope.clearPanels();
+    }
+
+    $scope.$on('clearHoverPannels',function(event, args){
+		$scope.clearPanels();
+	});
+
+
+    $scope.clearPanels = function (){
     	for (var i=0; i<$scope.droppedTextArray.length; i++){
     		$scope.droppedTextArray[i].showTypeSelectPanel=false;
+    		$scope.droppedTextArray[i].showMenu=false;
     	}
     }
 });
@@ -620,6 +644,7 @@ dumplingApp.controller('dynamicController', function(topicService, rootCookie,$s
   		//popupWindow.mySharedData = doc;
 		//$rootScope.$broadcast('overlayDisplay',{title:doc.title, url:doc.url, content:doc.content});
 		$rootScope.$broadcast('displayNewDocOnDocDetailPanel',doc);
+		$rootScope.$broadcast('clearHoverPannels');
 	};
 
 	// Click up vote button
@@ -694,7 +719,6 @@ dumplingApp.controller('dynamicController', function(topicService, rootCookie,$s
 	
 	// When user send a new query.
 	$scope.$on('changePage',function(event, args){
-		console.log("11111111111");
 		$rootScope.readDocEvents=[];
 		solrService.queryData(args.query, args.start, "oldQuery").then(function (data){
 			$rootScope.docs = data.docs;

@@ -1,4 +1,23 @@
-
+<style>
+.dropped-text-types{
+    float:left; 
+    min-width:80px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-right:solid,white,1px;
+    margin-left:1px;
+    margin-top:1px;
+    text-align: center; 
+    border-right: solid 1px white;
+    color:white;
+    cursor: pointer;
+    background-color:#3c8dbc;
+    border-radius: 5px;
+}
+.dropped-text-types:hover{
+    background-color: #357ebd;
+}
+</style>
 <div ng-controller="docDetailController" style="height:80vh;overflow:hidden;" >
 
     <div class="box" style="z-index:1;position:absolute;margin-bottom:20px;padding-top:0px;padding-bottom:0px; max-height:65vh;" ng-mouseup="getSelectionText($event)" id="docDetailController">
@@ -37,11 +56,19 @@
         <div id="dropTextBox" ng-click="clickDropTextBox()" class="box ui-widget-header"  style="z-index:1;position:absolute;padding:0 20px;overflow-x:hidden;overflow-y:scroll;  min-height: 14.5vh; max-height: 14.5vh;" >
             <div  ng-repeat="droppedText in droppedTextArray track by $index" style="float:left;">
                 <div class="btn btn-primary" ui-draggable="true" ng-click="clickDroppedText(droppedText.text);" style="margin:3px;background-color: #45B6B0;border:none;"
-                     ng-right-click="rightClickDroppedText(droppedText)"        on-drop-success="dropSuccessHandler($event,$index)"> {{droppedText.text}} 
+                     ng-right-click="rightClickDroppedText(droppedText,$event)"        on-drop-success="dropSuccessHandler($event,$index)"> {{droppedText.text}} 
                      <span ng-show="droppedText.type!=undefined" >({{droppedText.type}})</span>
                 </div>
-                <div style="position:absolute; top:25px;width:60px;">
-                    <div ng-repeat="type in typeList" ng-show="droppedText.showTypeSelectPanel" style="display:block;padding: 0px;margin-left:6px;margin-top:1px;" class="btn btn-primary" ng-click="clickType(droppedText,type)">
+                 <div style="position:absolute; top:25px;border-radius: 3px;overflow:hidden;margin-top:1px;">
+                    <div  ng-show="droppedText.showMenu" class="dropped-text-types" ng-click="clickMenu(droppedText,'tag',$event)">
+                        tag
+                    </div>
+                    <div ng-show="droppedText.showMenu" class="dropped-text-types" style="width:120;" ng-click="clickMenu(droppedText,'find more',$event)">
+                        find more
+                    </div>
+                </div>
+                <div style="position:absolute; top:25px;overflow:hidden;margin-top:1px;" ng-show="droppedText.showTypeSelectPanel">
+                    <div ng-repeat="type in typeList" class="dropped-text-types" ng-click="clickType(droppedText,type,$event)">
                         {{type}}
                     </div>
                 </div>
