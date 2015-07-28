@@ -8,6 +8,7 @@ var topicTreeUrl = "http://141.161.20.98/direwolf/pythonCgi/topicTree.cgi";
 var subtopicUrl = "http://141.161.20.98/direwolf/pythonCgi/subtopic.cgi";
 var parseBatchQueryUrl = "http://141.161.20.98/direwolf/pythonCgi/fileParse.cgi";
 var pythonSearch = 'http://141.161.20.98/direwolf/pythonCgi/pattern_handler.cgi';
+var pythonGetPossiblePairs = 'http://141.161.20.98/direwolf/pythonCgi/getPossiblePairs.cgi';
 
 /*
 var topicTreeUrl = "http://localhost/~jie/direwolf/pythonCgi/topicTree.cgi";
@@ -102,6 +103,28 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 
 		 		//$rootScope.$broadcast('gotTopicTree',response.topics);
             	//resetCavas(topics);
+              	defer.resolve(data);
+		 	},
+		 	error: function(){
+		 		defer.reject('Can not connect to server');
+		 	}
+		 });
+		 return defer.promise;;
+	}
+
+	this.getPossiblePairs = function (args){
+		 var defer = $q.defer();
+		 console.log(args);
+		 $.ajax({
+		 	method: 'post',
+		 	url: pythonGetPossiblePairs,
+		 	data:
+		 		{
+		 		text: args
+		 		},
+		 	success: function(response){
+		 		response=angular.fromJson(response);
+		 		console.log(response);
               	defer.resolve(data);
 		 	},
 		 	error: function(){
@@ -566,7 +589,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     $scope.droppedTextArray=[];
     $scope.onDrop = function($event,$data){
     	for (var i=0; i<$scope.droppedTextArray.length; i++){
-    		if ($scope.droppedTextArray[i].text==$data) return;
+    		if ($scope.droppedTextArray[i].text==$data) return;	
     	}
     	$scope.indicateDropPlace(false);
     	$scope.selectedText = "";
@@ -620,6 +643,12 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	droppedText.type=type;
     	$event.stopPropagation();
     }
+
+    $scope.getPossiblePairs = function (){
+		pythonService.getPossiblePairs("The XC2064-70PC68C is a Logic Cell Array. It is a high density CMOS integrated circuit. Its user-programmable array architecture is made up of three types of configurable elements: Input/Output Blocks, logic blocks and Interconnect.");
+
+	}
+	$scope.getPossiblePairs();
 
     $scope.clickDropTextBox = function(){
     	$scope.clearPanels();
