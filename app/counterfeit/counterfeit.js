@@ -125,7 +125,7 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 	success: function(response){
 		 		response=angular.fromJson(response);
 		 		console.log(response);
-              	defer.resolve(data);
+              	defer.resolve(response);
 		 	},
 		 	error: function(){
 		 		defer.reject('Can not connect to server');
@@ -644,9 +644,12 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	$event.stopPropagation();
     }
 
+    $scope.possiblePairArray=[];
     $scope.getPossiblePairs = function (){
-		pythonService.getPossiblePairs("The XC2064-70PC68C is a Logic Cell Array. It is a high density CMOS integrated circuit. Its user-programmable array architecture is made up of three types of configurable elements: Input/Output Blocks, logic blocks and Interconnect.");
-
+		pythonService.getPossiblePairs("The XC2064-70PC68C is a Logic Cell Array. It is a high density CMOS integrated circuit. Its user-programmable array architecture is made up of three types of configurable elements: Input/Output Blocks, logic blocks and Interconnect.")
+			.then(function(data){
+			$scope.possiblePairArray=data;
+		});
 	}
 	$scope.getPossiblePairs();
 

@@ -74,7 +74,10 @@
             </div>
         </div>
     </div>
-    <div style="bottom:200px; position:fixed; background-color:red; width:100px;height:auto;z-index:2000">
-        sa
+    <div style="bottom:200px; position:fixed; background-color:red; width:100px;height:auto;z-index:2000" >
+        <div ng-repeat="pair in possiblePairArray">
+            {{pair[0]}} & 
+            {{pair[1]}}
+        </div>
     </div>
 </div>
