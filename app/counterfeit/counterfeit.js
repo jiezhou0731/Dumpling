@@ -10,7 +10,7 @@ var parseBatchQueryUrl = "http://141.161.20.98/direwolf/pythonCgi/fileParse.cgi"
 var pythonSearch = 'http://141.161.20.98/direwolf/pythonCgi/pattern_handler.cgi';
 var pythonGetPossiblePairs = 'http://141.161.20.98/direwolf/pythonCgi/getPossiblePairs.cgi';
 var pythonGetMoreTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoreTags.cgi';
-var pythonGetMoreSpecificTypeOfTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoreTags.cgi';
+var pythonGetMoreSpecificTypeOfTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoreSpecificTypeOfTags.cgi';
 var pythonGetGraphStructure = 'http://141.161.20.98/direwolf/pythonCgi/getGraphStructure.cgi';
 
 /*
