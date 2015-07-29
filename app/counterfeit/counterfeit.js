@@ -10,6 +10,7 @@ var parseBatchQueryUrl = "http://141.161.20.98/direwolf/pythonCgi/fileParse.cgi"
 var pythonSearch = 'http://141.161.20.98/direwolf/pythonCgi/pattern_handler.cgi';
 var pythonGetPossiblePairs = 'http://141.161.20.98/direwolf/pythonCgi/getPossiblePairs.cgi';
 var pythonGetMoreTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoreTags.cgi';
+var pythonGetMoreSpecificTypeOfTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoreTags.cgi';
 var pythonGetGraphStructure = 'http://141.161.20.98/direwolf/pythonCgi/getGraphStructure.cgi';
 
 /*
@@ -143,6 +144,28 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 $.ajax({
 		 	method: 'post',
 		 	url: pythonGetMoreTags,
+		 	data:
+		 		{
+		 		text: args
+		 		},
+		 	success: function(response){
+		 		response=angular.fromJson(response);
+		 		console.log(response);
+              	defer.resolve(response);
+		 	},
+		 	error: function(){
+		 		defer.reject('Can not connect to server');
+		 	}
+		 });
+		 return defer.promise;;
+	}
+
+	this.getMoreSpecificTypeOfTags = function (args){
+		 var defer = $q.defer();
+		 console.log(args);
+		 $.ajax({
+		 	method: 'post',
+		 	url: pythonGetMoreSpecificTypeOfTags,
 		 	data:
 		 		{
 		 		text: args
@@ -716,9 +739,11 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	$scope.clearPanels();
     	$scope.lastClickedDroppedText=droppedText;
     	var evidenceCollection="";
+    	evidenceCollection = droppedText.text;
+    	/*
     	for (var i=0; i<$scope.droppedTextArray.length; i++){
     		evidenceCollection+=$scope.droppedTextArray[i].text+" ,";
-    	}
+    	}*/
     	if (type=="Link"){
     		$scope.getPossiblePairs(evidenceCollection);
     	} else {
@@ -730,6 +755,27 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 
 	$scope.getMoreTags = function (text){
 		pythonService.getMoreTags(text)
+			.then(function(data){
+				for (var i=0; i<data.length; i++){
+					var isNewText=true;
+					for (var j=0; j<$scope.droppedTextArray.length; j++){
+			    		if ($scope.droppedTextArray[j].text==data[i].text) {
+			    			isNewText=false;
+			    			break;	
+			    		}
+			    	}
+			    	if (isNewText==false) continue;
+					var droppedText = {};
+					droppedText.text=data[i].text;
+			    	$scope.indexCounter++;
+			    	droppedText.index=$scope.indexCounter;
+			        $scope.droppedTextArray.push(droppedText);
+				}
+		});
+	}
+
+	$scope.getMoreSpecificTypeOfTags = function (text){
+		pythonService.getMoreSpecificTypeOfTags(text)
 			.then(function(data){
 				for (var i=0; i<data.length; i++){
 					var isNewText=true;
