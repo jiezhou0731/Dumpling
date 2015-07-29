@@ -691,6 +691,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     		$scope.droppedTextArray[i].showTypeSelectPanel=false;
     		$scope.droppedTextArray[i].showMenu=false;
     	}
+    	$scope.showPossiblePairsPanel=false;
     }
 });
 
