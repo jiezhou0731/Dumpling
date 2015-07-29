@@ -9,6 +9,7 @@ var subtopicUrl = "http://141.161.20.98/direwolf/pythonCgi/subtopic.cgi";
 var parseBatchQueryUrl = "http://141.161.20.98/direwolf/pythonCgi/fileParse.cgi";
 var pythonSearch = 'http://141.161.20.98/direwolf/pythonCgi/pattern_handler.cgi';
 var pythonGetPossiblePairs = 'http://141.161.20.98/direwolf/pythonCgi/getPossiblePairs.cgi';
+var pythonGetMoreTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoretags.cgi';
 
 /*
 var topicTreeUrl = "http://localhost/~jie/direwolf/pythonCgi/topicTree.cgi";
@@ -91,7 +92,7 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		      				} catch (err){
 		      				}
 
-		      		
+		      				docs[i].content+="&nbsp; THE END."
 		      				docs[i].content=$sce.trustAsHtml(highlight(docs[i].content,args));
 		      				docs[i].escapedUlr=docs[i].url;
 		      				docs[i].url=unescape(docs[i].url);
@@ -131,6 +132,30 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 		defer.reject('Can not connect to server');
 		 	}
 		 });
+		 return defer.promise;;
+	}
+
+	this.getMoreTags = function (args){
+		 var defer = $q.defer();
+		 console.log(args);
+		 /*
+		 $.ajax({
+		 	method: 'post',
+		 	url: pythonGetMoreTags,
+		 	data:
+		 		{
+		 		text: args
+		 		},
+		 	success: function(response){
+		 		response=angular.fromJson(response);
+		 		console.log(response);
+              	defer.resolve(response);
+		 	},
+		 	error: function(){
+		 		defer.reject('Can not connect to server');
+		 	}
+		 });*/
+		 defer.resolve([{"text":"hahaha1"},{"text":"hahaha2"}]);
 		 return defer.promise;;
 	}
 });
@@ -257,6 +282,7 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 		      					docs[i].highlighting=$sce.trustAsHtml(docs[i].highlighting.trim());
 		      				} catch (err){
 		      				}
+		      				docs[i].content+="&nbsp; THE END."
 		      				docs[i].content=unescape(docs[i].content);
 		      				docs[i].content=$sce.trustAsHtml(docs[i].content);
 		      				docs[i].escapedUlr=docs[i].url;
@@ -358,6 +384,7 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 		      					docs[i].highlighting=$sce.trustAsHtml(docs[i].highlighting.trim());
 		      				} catch (err){
 		      				}
+		      				docs[i].content+="&nbsp; THE END."
 		      				docs[i].content=unescape(docs[i].content);
 		      				docs[i].content=$sce.trustAsHtml(highlight(docs[i].content,query));
 		      				docs[i].escapedUlr=docs[i].url;
@@ -641,7 +668,8 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	if (choice=="tag") {
     		droppedText.showTypeSelectPanel=true;
     	} else if (choice=="find more"){
-    		$scope.clickDroppedText(droppedText.text);
+    		$scope.getMoreTags($scope.doc);
+    		//$scope.clickDroppedText(droppedText.text);
     	}
     	$event.stopPropagation();
     }
@@ -661,6 +689,27 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 
     	$event.stopPropagation();
     }
+
+	$scope.getMoreTags = function (text){
+		pythonService.getMoreTags(text)
+			.then(function(data){
+				for (var i=0; i<data.length; i++){
+					var isNewText=true;
+					for (var j=0; j<$scope.droppedTextArray.length; j++){
+			    		if ($scope.droppedTextArray[j].text==data[i].text) {
+			    			isNewText=false;
+			    			break;	
+			    		}
+			    	}
+			    	if (isNewText==false) continue;
+					var droppedText = {};
+					droppedText.text=data[i].text;
+			    	$scope.indexCounter++;
+			    	droppedText.index=$scope.indexCounter;
+			        $scope.droppedTextArray.push(droppedText);
+				}
+		});
+	}
 
     $scope.showPossiblePairsPanel=false;
     $scope.possiblePairArray=[];
