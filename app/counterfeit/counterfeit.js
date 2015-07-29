@@ -742,7 +742,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	evidenceCollection = droppedText.text;
     	/*
     	for (var i=0; i<$scope.droppedTextArray.length; i++){
-    		evidenceCollection+=$scope.droppedTextArray[i].text+" ,";
+    		evidenceCollection+=$scope.droppedTextArray[i].text+" ,";a
     	}*/
     	if (type=="Link"){
     		$scope.getPossiblePairs(evidenceCollection);
@@ -770,6 +770,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 					if (data[i].key!=undefined){
 						droppedText.type=data[i].key;
 					}
+					droppedText.backgroundColor="#AEB645";
 			    	$scope.indexCounter++;
 			    	droppedText.index=$scope.indexCounter;
 			        $scope.droppedTextArray.push(droppedText);
