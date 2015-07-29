@@ -666,9 +666,11 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     $scope.possiblePairArray=[];
     $scope.getPossiblePairs = function (text){
     	console.log(text);
+    	$scope.isLoading=true;
         $scope.showPossiblePairsPanel=true;
 		pythonService.getPossiblePairs(text)
 			.then(function(data){
+			$scope.isLoading=false;
 			$scope.possiblePairArray=data;
 		});
 	}

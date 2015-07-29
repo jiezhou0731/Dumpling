@@ -85,10 +85,31 @@
             </div>
         </div>
     </div>
-    <div style="left:50vw;bottom:110px; position:fixed; background-color:red; width:30vw; min-height:20vh;max-height:60vh;z-index:2000; overflow:hidden; background-color:white;border:1px solid gray; overflow-y:scroll; " ng-show="showPossiblePairsPanel">
-        <div ng-repeat="pair in possiblePairArray" class="pair" ng-click="clickPair(pair)">
+    <div style="left:50vw;bottom:110px; position:fixed; background-color:red; width:auto; max-height:60vh;z-index:2000; overflow:hidden; background-color:white;border:1px solid gray; overflow-y:scroll; " ng-show="showPossiblePairsPanel">
+        <div ng-show="isLoading">
+            <canvas height="60" width="60" id="loadingAnimation" ></canvas>
+        </div>
+        </div>
+        <div ng-repeat="pair in possiblePairArray" class="pair" ng-click="clickPair(pair)" ng-hide="isLoading">
             {{pair[0]}} & 
             {{pair[1]}}
         </div>
     </div>
 </div>
+
+ <script type="text/javascript">
+    (function($) {
+        "use strict";
+        var icons = new Skycons({
+                "windColor": "LightSteelBlue"
+            }),
+            list = [
+                "wind"
+            ],
+            i;
+
+        for (i = list.length; i--;) 
+            icons.set("loadingAnimation", "wind");
+        icons.play();
+    })(jQuery);
+</script>
