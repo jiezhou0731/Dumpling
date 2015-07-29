@@ -9,7 +9,7 @@ var subtopicUrl = "http://141.161.20.98/direwolf/pythonCgi/subtopic.cgi";
 var parseBatchQueryUrl = "http://141.161.20.98/direwolf/pythonCgi/fileParse.cgi";
 var pythonSearch = 'http://141.161.20.98/direwolf/pythonCgi/pattern_handler.cgi';
 var pythonGetPossiblePairs = 'http://141.161.20.98/direwolf/pythonCgi/getPossiblePairs.cgi';
-var pythonGetMoreTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoretags.cgi';
+var pythonGetMoreTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoreTags.cgi';
 
 /*
 var topicTreeUrl = "http://localhost/~jie/direwolf/pythonCgi/topicTree.cgi";
@@ -92,6 +92,7 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		      				} catch (err){
 		      				}
 
+		      				docs[i].plainContent=docs[i].content;
 		      				docs[i].content+="&nbsp; THE END."
 		      				docs[i].content=$sce.trustAsHtml(highlight(docs[i].content,args));
 		      				docs[i].escapedUlr=docs[i].url;
@@ -138,7 +139,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 	this.getMoreTags = function (args){
 		 var defer = $q.defer();
 		 console.log(args);
-		 /*
 		 $.ajax({
 		 	method: 'post',
 		 	url: pythonGetMoreTags,
@@ -154,8 +154,7 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 	error: function(){
 		 		defer.reject('Can not connect to server');
 		 	}
-		 });*/
-		 defer.resolve([{"text":"hahaha1"},{"text":"hahaha2"}]);
+		 });
 		 return defer.promise;;
 	}
 });
@@ -282,6 +281,8 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 		      					docs[i].highlighting=$sce.trustAsHtml(docs[i].highlighting.trim());
 		      				} catch (err){
 		      				}
+
+		      				docs[i].plainContent=docs[i].content;
 		      				docs[i].content+="&nbsp; THE END."
 		      				docs[i].content=unescape(docs[i].content);
 		      				docs[i].content=$sce.trustAsHtml(docs[i].content);
@@ -384,6 +385,8 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 		      					docs[i].highlighting=$sce.trustAsHtml(docs[i].highlighting.trim());
 		      				} catch (err){
 		      				}
+
+		      				docs[i].plainContent=docs[i].content;
 		      				docs[i].content+="&nbsp; THE END."
 		      				docs[i].content=unescape(docs[i].content);
 		      				docs[i].content=$sce.trustAsHtml(highlight(docs[i].content,query));
@@ -668,7 +671,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	if (choice=="tag") {
     		droppedText.showTypeSelectPanel=true;
     	} else if (choice=="find more"){
-    		$scope.getMoreTags($scope.doc);
+    		$scope.getMoreTags($scope.doc.plainContent);
     		//$scope.clickDroppedText(droppedText.text);
     	}
     	$event.stopPropagation();
