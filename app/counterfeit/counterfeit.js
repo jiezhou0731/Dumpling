@@ -587,6 +587,8 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 
 	$scope.selectedText="";
     $scope.droppedTextArray=[];
+
+    $scope.indexCounter=0;
     $scope.onDrop = function($event,$data){
     	for (var i=0; i<$scope.droppedTextArray.length; i++){
     		if ($scope.droppedTextArray[i].text==$data) return;	
@@ -595,26 +597,23 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	$scope.selectedText = "";
     	var droppedText={};
     	droppedText.text=$data;
-    	droppedText.index=$scope.droppedTextArray.length;
+    	$scope.indexCounter++;
+    	droppedText.index=$scope.indexCounter;
         $scope.droppedTextArray.push(droppedText);
         $('#dropTextBox').animate({scrollTop:$('#dropTextBox')[0].scrollHeight}, '600');
       };
 
     $scope.onDropToDelete = function($event,$data){
     	if ($data.index==undefined) return;
-    	console.log($scope.droppedTextArray);
-    	console.log($data.index);
-    	$scope.droppedTextArray.splice($data.index,1);
     	for (var i=0; i<$scope.droppedTextArray.length; i++){
-    		$scope.droppedTextArray[i].index=i;
+    		if ($scope.droppedTextArray[i].index==$data.index) {
+    			$scope.droppedTextArray.splice(i,1);
+    			break;
+    		};
     	}
         $('#dropTextBox').animate({scrollTop:$('#dropTextBox')[0].scrollHeight}, '600');
       };
-      $scope.counter=0;
-      $scope.dropTest=function(){
-      	 $scope.counter++;
-      	console.log("he"+ $scope.counter);
-      }
+
     $scope.clickDroppedText=function(text){
     	pythonService.queryData(text).then(function (data){
 			$rootScope.docs = data.docs;
