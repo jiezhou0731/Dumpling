@@ -10,6 +10,7 @@ var parseBatchQueryUrl = "http://141.161.20.98/direwolf/pythonCgi/fileParse.cgi"
 var pythonSearch = 'http://141.161.20.98/direwolf/pythonCgi/pattern_handler.cgi';
 var pythonGetPossiblePairs = 'http://141.161.20.98/direwolf/pythonCgi/getPossiblePairs.cgi';
 var pythonGetMoreTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoreTags.cgi';
+var pythonGetGraphStructure = 'http://141.161.20.98/direwolf/pythonCgi/getGraphStructure.cgi';
 
 /*
 var topicTreeUrl = "http://localhost/~jie/direwolf/pythonCgi/topicTree.cgi";
@@ -155,6 +156,31 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 		defer.reject('Can not connect to server');
 		 	}
 		 });
+		 return defer.promise;;
+	}
+
+	this.getGraphStructure = function (args){
+		 var defer = $q.defer();
+		 console.log(args);
+		 /*
+		 $.ajax({
+		 	method: 'post',
+		 	url: pythonGetGraphStructure,
+		 	data:
+		 		{
+		 		text: args
+		 		},
+		 	success: function(response){
+		 		response=angular.fromJson(response);
+		 		console.log(response);
+              	defer.resolve(response);
+		 	},
+		 	error: function(){
+		 		defer.reject('Can not connect to server');
+		 	}
+		 });
+		*/
+		defer.resolve(json);
 		 return defer.promise;;
 	}
 });
@@ -440,7 +466,7 @@ dumplingApp.service('rootCookie',function($rootScope,$cookies){
 
 
 // Search controller
-dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $cookies, $scope, $sce, solrService) {
+dumplingApp.controller('searchBoxController', function(pythonService, rootCookie, $rootScope, $cookies, $scope, $sce, solrService) {
 	$scope.batchQueryFileChosen = function(){
         var fd = new FormData();
 		fd.append("batchQuery", $('#batchQueryFile').prop('files')[0]);
@@ -542,6 +568,15 @@ dumplingApp.controller('searchBoxController', function(rootCookie, $rootScope, $
 		$rootScope.$broadcast('interactionEmit',{title:"Clear history", detail:""});
 	}
 	
+	$scope.clickShowGraph = function(){
+		pythonService.getGraphStructure()
+			.then(function(data){
+				var popupWindow = window.open('graph/index.html');
+  				popupWindow.mySharedData = data;
+				console.log(data);
+
+		});
+	}
 });
 
 // topics result controller
@@ -660,7 +695,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 		});
     }
 
-    $scope.typeList=["Link", "Address", "Part #", "Email", "Name"];
+    $scope.typeList=["Link", "Address", "Part #", "Email", "Telephone", "Manufacturer", "Device Type", "Name", "Employee", "QQ", "Website"];
     $scope.rightClickDroppedText=function(droppedText,$event){
     	$scope.clearPanels();
     	droppedText.showMenu=true;
