@@ -759,14 +759,17 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 				for (var i=0; i<data.length; i++){
 					var isNewText=true;
 					for (var j=0; j<$scope.droppedTextArray.length; j++){
-			    		if ($scope.droppedTextArray[j].text==data[i].text) {
+			    		if ($scope.droppedTextArray[j].text==data[i].value) {
 			    			isNewText=false;
 			    			break;	
 			    		}
 			    	}
 			    	if (isNewText==false) continue;
 					var droppedText = {};
-					droppedText.text=data[i].text;
+					droppedText.text=data[i].value;
+					if (data[i].key!=undefined){
+						droppedText.type=data[i].key;
+					}
 			    	$scope.indexCounter++;
 			    	droppedText.index=$scope.indexCounter;
 			        $scope.droppedTextArray.push(droppedText);

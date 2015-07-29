@@ -65,7 +65,7 @@
         </div>
         <div id="dropTextBox" ng-click="clickDropTextBox()" class="box ui-widget-header"  style="z-index:1;position:absolute;padding:0 20px;overflow-x:hidden;overflow-y:scroll;  min-height: 24.5vh; max-height: 24.5vh;" >
             <div  ng-repeat="droppedText in droppedTextArray track by $index" style="float:left;">
-                <div class="btn btn-primary" drag=droppedText ui-draggable="true" ng-click="clickDroppedText(droppedText.text);" style="margin:3px;background-color: #45B6B0;border:none;"
+                <div class="btn btn-primary" drag=droppedText ui-draggable="true" ng-click="clickDroppedText(droppedText.text);"  ng-style="{'background-color':droppedText.backgroundColor}" style="margin:3px;background-color: #45B6B0;border:none;"
                      ng-right-click="rightClickDroppedText(droppedText,$event)" on-drop-success="dropTest()" > {{droppedText.text}} 
                      <span ng-show="droppedText.type!=undefined" >({{droppedText.type}})</span>
                 </div>
