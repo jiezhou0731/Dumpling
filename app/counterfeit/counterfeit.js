@@ -168,7 +168,8 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 	url: pythonGetMoreSpecificTypeOfTags,
 		 	data:
 		 		{
-		 		text: args
+		 		text: args.text,
+		 		type: args.type
 		 		},
 		 	success: function(response){
 		 		response=angular.fromJson(response);
@@ -728,7 +729,9 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	$scope.clearPanels();
     	if (choice=="tag") {
     		droppedText.showTypeSelectPanel=true;
-    	} else if (choice=="find more"){
+    	} else if (choice=="find this tag"){
+    		$scope.getMoreSpecificTypeOfTags($scope.doc.plainContent,droppedText.type);
+    	}else if (choice=="find more"){
     		$scope.getMoreTags($scope.doc.plainContent);
     		//$scope.clickDroppedText(droppedText.text);
     	}
@@ -742,7 +745,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	evidenceCollection = droppedText.text;
     	/*
     	for (var i=0; i<$scope.droppedTextArray.length; i++){
-    		evidenceCollection+=$scope.droppedTextArray[i].text+" ,";a
+    		evidenceCollection+=$scope.droppedTextArray[i].text+" ,";
     	}*/
     	if (type=="Link"){
     		$scope.getPossiblePairs(evidenceCollection);
@@ -778,20 +781,24 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 		});
 	}
 
-	$scope.getMoreSpecificTypeOfTags = function (text){
-		pythonService.getMoreSpecificTypeOfTags(text)
+	$scope.getMoreSpecificTypeOfTags = function (text,type){
+		pythonService.getMoreSpecificTypeOfTags({text:text,type:type})
 			.then(function(data){
 				for (var i=0; i<data.length; i++){
 					var isNewText=true;
 					for (var j=0; j<$scope.droppedTextArray.length; j++){
-			    		if ($scope.droppedTextArray[j].text==data[i].text) {
+			    		if ($scope.droppedTextArray[j].text==data[i].value) {
 			    			isNewText=false;
 			    			break;	
 			    		}
 			    	}
 			    	if (isNewText==false) continue;
 					var droppedText = {};
-					droppedText.text=data[i].text;
+					droppedText.text=data[i].value;
+					if (data[i].key!=undefined){
+						droppedText.type=data[i].key;
+					}
+					droppedText.backgroundColor="#AEB645";
 			    	$scope.indexCounter++;
 			    	droppedText.index=$scope.indexCounter;
 			        $scope.droppedTextArray.push(droppedText);
