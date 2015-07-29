@@ -33,6 +33,7 @@
 <link rel="stylesheet" href="css/dumpling.css">
 <!-- js loader -->
 
+<script type="text/javascript" src="graph/data.js"></script>
 <script type='text/javascript' src="js/jquery.js"></script>
 <script type='text/javascript' src='js/bootstrap.js'></script>
 <script src="js/flot/jquery.flot.min.js" type="text/javascript"></script>
@@ -99,7 +100,7 @@ cursor: pointer;
 <!--
 <div ng-include="'app/counterfeit/cubeTestImage.html'" style="position:absolute;margin-left:77vw;margin-top:50vh;"></div>
 -->
-<div style="position:fixed;right:25vw;;z-index: 1000;top: 50px;">
+<div style="position:fixed;right:1vw;;z-index: 1000;top: 50px;">
 	<div style="text-align: center;" ng-controller="searchBoxController" ng-show="$root.nextInNavi=='search'">
 		<div ng-click="clickSubmit();" class="index-submit-button" ></div>
 	</div>
@@ -181,6 +182,7 @@ cursor: pointer;
 <div class="row" style="width:100vw;left:0px;position:fixed;;bottom:0vh; padding-left:10px; z-index: 2000; overflow:hidden;">
 	<div ng-include="'app/counterfeit/userState.html'"></div>
 </div>
+
 
 
 

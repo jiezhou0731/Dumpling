@@ -10,6 +10,10 @@ class CounterfeitController extends Controller
 		$this->render('index');
 	}
 	
+	public function actionWithTopic(){
+		$this->render('withTopic');
+	}
+
 	public function actionTest(){
 		$this->render('indexTest');
 	}

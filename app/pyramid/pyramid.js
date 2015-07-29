@@ -525,6 +525,8 @@ dumplingApp.controller('topicController', function(topicService, rootCookie,$sco
 //doc detail
 dumplingApp.controller('docDetailController', function(rootCookie,topicService, pythonService,$scope, $rootScope) {
 	$scope.$on('displayNewDocOnDocDetailPanel',function(event, args){
+		$scope.selectedText = "";
+  		$scope.selectedTextPosition={};
 		$("#docDetailPanel").scrollTop();
 		$scope.doc=args;
 	});

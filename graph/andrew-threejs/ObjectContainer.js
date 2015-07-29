@@ -24,6 +24,14 @@ andrewThree.ObjectContainer=function(){
         }
     }
 
+    objectContainer.removeAll = function(scene){
+        while (scene.children.length!=0){
+            for (var i=0; i<scene.children.length; i++){
+                scene.remove(scene.children[i]);
+            }
+        }
+    }
+
     objectContainer.render = function(){
         for (var i=0; i<objectContainer.objectList.length; i++) {
             objectContainer.objectList[i].render();
