@@ -17,6 +17,15 @@
 .dropped-text-types:hover{
     background-color: #357ebd;
 }
+
+.pair{
+    padding:10px;
+    cursor: pointer
+}
+.pair:hover{
+    background-color:#36D7b7;
+    color:white;
+}
 </style>
 <div ng-controller="docDetailController" style="height:80vh;overflow:hidden;" >
     <div class="box" style="z-index:1;position:absolute;margin-bottom:20px;padding-top:0px;padding-bottom:0px; max-height:55vh;" ui-on-Drop="onDropToDelete($event,$data)"  ng-mouseup="getSelectionText($event)" id="docDetailController">
@@ -55,7 +64,7 @@
         <div id="dropTextBox" ng-click="clickDropTextBox()" class="box ui-widget-header"  style="z-index:1;position:absolute;padding:0 20px;overflow-x:hidden;overflow-y:scroll;  min-height: 24.5vh; max-height: 24.5vh;" >
             <div  ng-repeat="droppedText in droppedTextArray track by $index" style="float:left;">
                 <div class="btn btn-primary" drag=droppedText ui-draggable="true" ng-click="clickDroppedText(droppedText.text);" style="margin:3px;background-color: #45B6B0;border:none;"
-                     ng-right-click="rightClickDroppedText(droppedText,$event)"        on-drop-success="dropSuccessHandler($event,$index)"> {{droppedText.text}} 
+                     ng-right-click="rightClickDroppedText(droppedText,$event)" on-drop-success="dropTest()" > {{droppedText.text}} 
                      <span ng-show="droppedText.type!=undefined" >({{droppedText.type}})</span>
                 </div>
                  <div style="position:absolute; top:25px;border-radius: 3px;overflow:hidden;margin-top:1px;">
@@ -74,8 +83,8 @@
             </div>
         </div>
     </div>
-    <div style="bottom:200px; position:fixed; background-color:red; width:100px;height:auto;z-index:2000" >
-        <div ng-repeat="pair in possiblePairArray">
+    <div style="left:50vw;bottom:110px; position:fixed; background-color:red; width:30vw; min-height:40vh;max-height:60vh;z-index:2000; overflow:hidden; background-color:white;border:1px solid gray; overflow-y:scroll; " ng-show="showPossiblePairsPanel">
+        <div ng-repeat="pair in possiblePairArray" class="pair" ng-click="clickPair(pair)">
             {{pair[0]}} & 
             {{pair[1]}}
         </div>

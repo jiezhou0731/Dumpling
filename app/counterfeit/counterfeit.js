@@ -602,10 +602,19 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 
     $scope.onDropToDelete = function($event,$data){
     	if ($data.index==undefined) return;
+    	console.log($scope.droppedTextArray);
+    	console.log($data.index);
     	$scope.droppedTextArray.splice($data.index,1);
+    	for (var i=0; i<$scope.droppedTextArray.length; i++){
+    		$scope.droppedTextArray[i].index=i;
+    	}
         $('#dropTextBox').animate({scrollTop:$('#dropTextBox')[0].scrollHeight}, '600');
       };
-
+      $scope.counter=0;
+      $scope.dropTest=function(){
+      	 $scope.counter++;
+      	console.log("he"+ $scope.counter);
+      }
     $scope.clickDroppedText=function(text){
     	pythonService.queryData(text).then(function (data){
 			$rootScope.docs = data.docs;
@@ -640,18 +649,34 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 
     $scope.clickType=function(droppedText,type, $event){
     	$scope.clearPanels();
-    	droppedText.type=type;
+    	$scope.lastClickedDroppedText=droppedText;
+    	var evidenceCollection="";
+    	for (var i=0; i<$scope.droppedTextArray.length; i++){
+    		evidenceCollection+=$scope.droppedTextArray[i].text+" ,";
+    	}
+    	if (type=="Link"){
+    		$scope.getPossiblePairs(evidenceCollection);
+    	} else {
+    		droppedText.type=type;
+    	}
+
     	$event.stopPropagation();
     }
 
+    $scope.showPossiblePairsPanel=false;
     $scope.possiblePairArray=[];
-    $scope.getPossiblePairs = function (){
-		pythonService.getPossiblePairs("The XC2064-70PC68C is a Logic Cell Array. It is a high density CMOS integrated circuit. Its user-programmable array architecture is made up of three types of configurable elements: Input/Output Blocks, logic blocks and Interconnect.")
+    $scope.getPossiblePairs = function (text){
+    	console.log(text);
+        $scope.showPossiblePairsPanel=true;
+		pythonService.getPossiblePairs(text)
 			.then(function(data){
 			$scope.possiblePairArray=data;
 		});
 	}
-	$scope.getPossiblePairs();
+	$scope.clickPair = function(pair){
+		$scope.lastClickedDroppedText.type="Link: "+pair[0]+" & "+pair[1];
+		$scope.showPossiblePairsPanel=false;
+	}
 
     $scope.clickDropTextBox = function(){
     	$scope.clearPanels();
