@@ -85,10 +85,9 @@
             </div>
         </div>
     </div>
-    <div style="left:50vw;bottom:110px; position:fixed; background-color:red; width:auto; max-height:60vh;z-index:2000; overflow:hidden; background-color:white;border:1px solid gray; overflow-y:scroll; " ng-show="showPossiblePairsPanel">
-        <div ng-show="isLoading">
+    <div style="left:50vw;bottom:110px; position:fixed; background-color:red; width:30vw; min-height:20vh; max-height:60vh;z-index:2000; overflow:hidden; background-color:white;border:1px solid gray; overflow-y:scroll; " ng-show="showPossiblePairsPanel">
+        <div ng-show="isLoading" style="margin-left:10vw; margin-top:5vh;">
             <canvas height="60" width="60" id="loadingAnimation" ></canvas>
-        </div>
         </div>
         <div ng-repeat="pair in possiblePairArray" class="pair" ng-click="clickPair(pair)" ng-hide="isLoading">
             {{pair[0]}} & 
