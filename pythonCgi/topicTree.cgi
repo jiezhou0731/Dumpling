@@ -23,10 +23,12 @@ def main():
 	print('Content-Type: text/plain\r\n')
         print(json.dumps('{}'))
 	return
+    count = 0
     for index, docid in enumerate(docid_list['docno']):
 	cur.execute('SELECT subtopic_id, topic_id FROM passage WHERE docno=?',[docid]) 
 	results = cur.fetchall()
-	if index == 2: break
+	if results: count += 1
+	if count == 5: break
     #log_handler = open('log.txt','w')
     topic_map = {}
     for result in results:
