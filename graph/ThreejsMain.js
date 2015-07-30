@@ -1,9 +1,13 @@
 var createCompanies = function(list,objectContainer){
 	var centers=[
-		new THREE.Vector3(-12, 12, -5),
-		new THREE.Vector3(30, -12, 5),
-		new THREE.Vector3(-12, -12, -30),
-		new THREE.Vector3(12, 12, 45)
+		new THREE.Vector3(-12, 12, -60),
+		new THREE.Vector3(30, -12, -40),
+		new THREE.Vector3(-12, -12, -20),
+		new THREE.Vector3(12, 30, 0),
+        new THREE.Vector3(-20, -20, 10),
+        new THREE.Vector3(30, 0, 20),
+        new THREE.Vector3(-20, -12, 45),
+        new THREE.Vector3(-30, -12, 45),
 	];
 	for (var i=0; i<list.length; i++){
 		var arg={};
@@ -19,14 +23,21 @@ var createCompanies = function(list,objectContainer){
 
 var createProducts = function(list,objectContainer){
 	var centers=[
-		new THREE.Vector3(50, 20, -20),
-		new THREE.Vector3(50, -20, 20),
-		new THREE.Vector3(-50, -20, -20),
-		new THREE.Vector3(-50, 20, -10),
-		new THREE.Vector3(0, 40, -60),
-		new THREE.Vector3(0, -40, -20)
+		new THREE.Vector3(-40, 22, -37), //5
+		new THREE.Vector3(0, 22, -37),//6
+		new THREE.Vector3(0, -10, -50), //2
+		new THREE.Vector3(20, 10, -20), //8
+        new THREE.Vector3(50,0, -70),//3
+        new THREE.Vector3(20,0, -70),//10
+        new THREE.Vector3(-60, -10, 0),//21
+        new THREE.Vector3(21, -21, -11),//102
+        new THREE.Vector3(0,0, 0),
+        new THREE.Vector3(0,0, 0),
+        new THREE.Vector3(0,0, 0),
+        new THREE.Vector3(0,0, 0)
 	];
-	for (var i=0; i<list.length; i++){
+
+	for (var i=0; i<8; i++){//i<list.length; i++){
 		var arg={};
 	    arg.data = list[i];
 	    arg.data.fatherNodeName="Product";
@@ -39,13 +50,16 @@ var createProducts = function(list,objectContainer){
 }
 
 var createLinks = function(list,objectContainer){
-
 	for (var i=0; i<list.length; i++){
+        try {
     	var newObject= andrewThree.Link({
     		sourceId : list[i]['sourceid'],
     		targetId : list[i]['destid']
     	});
     	objectContainer.push(newObject);
+        } catch (exception) {
+
+        }
     }
 }
 

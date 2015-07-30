@@ -1,5 +1,4 @@
-var json=
-{"companies": 
+var json={"companies": 
 [
 {
 "id": "1", 
@@ -10,7 +9,7 @@ var json=
 "telephone": ["852-24724062", "0086 755 83686419", "86-755-93664839"],
 "qq": ["1765060718"],
 "employee": [],
-"bank": ["Bank of China (HK) Limited", "01287792056316","108 Cheung Sha Wan Road, Kowloon, HK"],
+"bank": {"bankname": "Bank of China (HK) Limited", "account#": "01287792056316","bankaddress": "108 Cheung Sha Wan Road, Kowloon, HK", "swfitcode":""},
 "type": "Chinese Seller"
 }  ,
 {
@@ -22,10 +21,9 @@ var json=
 "telephone": ["86-731-82751003", "15802536432", "86-755-83676710", "86-731-82751003","15802536432","86-755-83676710","86-731-83880775","86-156-16179698","86-156-16179698"],
 "qq": [],
 "employee": [],
-"bank": ["HSBC", "848-079000-838", "Head office 1 Queen's Road Central HongKong","HSBCHKHHHKH"],
+"bank": {"bankname": "HSBC", "account#": "848-079000-838", "bankaddress":  "Head office 1 Queen's Road Central HongKong","swiftcode": "HSBCHKHHHKH"},
 "type": "Chinese Seller"
-} ,
-
+},
 {
 "id": "3", 
 "name": ["V&C Technology"], 
@@ -42,9 +40,11 @@ var json=
 "qq": [],
 "employee": [
 "Greg Potter",
-"Charlotte Carter" ,
-"Dorothy"],
-"bank": ["Bank of America", "848-079000-838","FL, 34617"],
+"Rob Bauer", 
+"Mike Smith",
+"Allen Rothey",
+"Charlotte Carter" ,"Dorothy"],
+"bank": {"bankname": "Bank of America", "account#": "848-079000-838", "bankaddress":  "FL, 34617","swiftcode": ""},
 "type": "US Seller"
 } ,
 
@@ -63,15 +63,29 @@ var json=
 "telephone": ["(352) 796-0060",  "352-796-0790", "352-796-0401"],
 "qq": [],
 "employee": [
+"Greg Potter",
 "Rob Bauer", 
 "Mike Smith",
-"Allen Rothey"],
-"bank": ["Bank of America","848-079000-838", "FL, 34617"],
+"Allen Rothey",
+"Charlotte Carter" ,"Dorothy"],
+"bank": {"bankname": "Bank of America", "account#": "848-079000-838", "bankaddress":  "FL, 34617","swiftcode": ""},
 "type": "US Seller"
-}
+}, 
+{
+"id": "21", 
+"name": ["深圳市鹏盛达电子有限公司"], 
+"address": ["深圳市福田区中航路鼎诚国际北座1919室门","广州市越秀区惠福西路290号C1-C3档"], 
+"website": "",
+"email": ["jcdz_2015@hotmail.com"], 
+"telephone": ["0755-83252582", "13691991645", "13422219324"],
+"qq": ["2355605598"],
+"employee": ["陈锦洪"],
+"bank": {},
+"type": "Chinese seller"
+},
+{"id":"103","name":["杭州欧驰电子科技有限公司"],"address":["中国 浙江 杭州 拱墅区登云路 518 号 3 幢 911 室"],"email":[],"telephone":["86 0571 85777975-8002"],"qq":[],"employee":[],"bank":{}}
 ]
 ,
-
 "products": 
 [ 
 {"id": 5,
@@ -112,7 +126,15 @@ var json=
 "part #": "XC4VLX100-11FF1148I", 
 "device type": "FPGA", 
 "package": "Virtex 4 without PowerPC (LX = Logic)"
-}
+} ,
+{
+"id":23,
+"manufactor": "Cypress Semiconductor",
+"part #":"CY7C1470V33-167AXI",
+"device type":"Synchronous pipelined burst SRAM",
+"package":"QFP"
+},
+{"id":102,"manufacturer":"XILINX","partNumber":"XC6SLX25-2CSG324C","deviceType":"FBGA"}
 ]
 
 ,
@@ -120,39 +142,57 @@ var json=
 "links": 
 [ 
 {"linkid": 1001,
-"sourceid": "7",
-"destid": "3"
+"sourceid": "1",
+"destid": "5"
 } ,
 
 {"linkid": 1002,
-"sourceid": "8",
-"destid": "3"
+"sourceid": "1",
+"destid": "6"
+} ,
+
+{"id": 1003,
+"sourceid": "2",
+"destid": "7"
+} ,
+
+{"id": 1004,
+"sourceid": "2",
+"destid": "8"
+},
+{"id": 1005,
+"sourceid": "3",
+"destid": "5"
 } ,
 {"id": 1006,
+"sourceid": "3",
+"destid": "7"
+},
+{"id": 1007,
+"sourceid": "4",
+"destid": "8"
+},
+{"id": 1008,
 "sourceid": "4",
 "destid": "6"
 },
 {"id": 1009,
-"sourceid": "4",
-"destid": "5"
-},
-{"id": 1009,
-"sourceid": "1",
-"destid": "10"
-},
-{"id": 1009,
-"sourceid": "1",
-"destid": "9"
-}
-,
-{"id": 1009,
-"sourceid": "2",
-"destid": "5"
-},
-{"id": 1009,
 "sourceid": "3",
-"destid": "9"
-}
+"destid": "6"
+},
+{"linkid": 1011,
+"sourceid": 22,
+"destid": 23
+},
+{"linkid": 1010,
+"sourceid": 23,
+"destid": "21"
+},
+{"id":"202","sourceid":"200","destid":"201"},
+{"id":"104","sourceid":"102","destid":"103"},
+{"id":"105","sourceid":"102","destid":"21"},
+{"id":"105","sourceid":"102","destid":"3"}
 ]
 };
+console.log(json);
        
