@@ -724,7 +724,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     $scope.rightClickDroppedText=function(droppedText,$event){
     	$scope.clearPanels();
 
-    	$scope.menuPosition.left=$event.clientX;
+    	$scope.menuPosition.left=$event.clientX-45;
 		$scope.menuPosition.top=$event.clientY-10;
 		console.log($scope.menuPosition);
     	droppedText.showMenu=true;
