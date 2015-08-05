@@ -1010,11 +1010,11 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 
 	$scope.$on('clickShowGraph',function(event, args){
 		var msg=[];
-		msg.push($scope.doc.content);
+		msg.push($scope.doc.plainContent);
 		msg.push($scope.droppedTextArray);
 		pythonService.getGraphStructure(msg)
 			.then(function(data){
-				var popupWindow = window.open('graph/index.html');
+				var popupWindow = window.open('/direwolf/graph/index.html');
   				popupWindow.mySharedData = data;
 				console.log(data);
 

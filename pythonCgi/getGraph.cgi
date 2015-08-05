@@ -1,28 +1,27 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python
 
 import cgi
 import json
 import subprocess
 import os
+import codecs
 
-jarpath = '/var/www/direwolf/javaApi/TypeTagJsonGenerator.jar'
-tmpfile = 'tmpType.txt'
+jarpath = '/var/www/direwolf/javaApi/GraphJsonGenerator.jar'
+tmpfile = 'graph.txt'
 #resultpath = '/var/www/direwolf/javaApi/'
-
 def main():
     form = cgi.FieldStorage()
     text = form.getvalue('text', '')
-    typetext = form.getvalue('type', '')
     dh = open(tmpfile,'w')
-    dh.write(typetext+'\n')
     dh.write(text)
     dh.close()
     os.chmod(tmpfile, 0777)
     result_code = subprocess.call(['java', '-jar', jarpath, os.getcwd()+'/'+tmpfile])
-    fh = open('typeTagResult.txt','r')
+    fh = open('graphJason.txt','r')
     results = fh.read()
     fh.close()
-    #log_handler = open('typelog','w')
+    #log_handler = open('findmore_log.txt','w')
+    #log_handler = codecs.open('findmore_log.txt','w','utf-8')
     #log_handler.write(results)
     #log_handler.close()
     print 'Content-Type: text/plain\r\n'
