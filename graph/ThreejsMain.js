@@ -1,13 +1,13 @@
 var createCompanies = function(list,objectContainer){
 	var centers=[
-		new THREE.Vector3(-12, 12, -60),
-		new THREE.Vector3(30, -12, -40),
-		new THREE.Vector3(-12, -12, -20),
-		new THREE.Vector3(12, 30, 0),
-        new THREE.Vector3(-20, -20, 10),
-        new THREE.Vector3(30, 0, 20),
-        new THREE.Vector3(-20, -12, 45),
-        new THREE.Vector3(-30, -12, 45),
+		new THREE.Vector3(-11, 11, -61),
+		new THREE.Vector3(32, -12, -42),
+		new THREE.Vector3(-13, -13, -23),
+		new THREE.Vector3(14, 34, 4),
+        new THREE.Vector3(-25, -25, 15),
+        new THREE.Vector3(36, 6, 27),
+        new THREE.Vector3(-27, -18, 46),
+        new THREE.Vector3(-38, -19, 47),
 	];
 	for (var i=0; i<list.length; i++){
 		var arg={};
@@ -23,21 +23,21 @@ var createCompanies = function(list,objectContainer){
 
 var createProducts = function(list,objectContainer){
 	var centers=[
-		new THREE.Vector3(-40, 22, -37), //5
-		new THREE.Vector3(0, 22, -37),//6
-		new THREE.Vector3(0, -10, -50), //2
-		new THREE.Vector3(20, 10, -20), //8
-        new THREE.Vector3(50,0, -70),//3
-        new THREE.Vector3(20,0, -70),//10
-        new THREE.Vector3(-60, -10, 0),//21
-        new THREE.Vector3(21, -21, -11),//102
+		new THREE.Vector3(-41, 21, -30), //5
+		new THREE.Vector3(2, 22, -32),//6
+		new THREE.Vector3(3, -14, -53), //2
+		new THREE.Vector3(24, 14, -24), //8
+        new THREE.Vector3(55,5, -75),//3
+        new THREE.Vector3(26,6, -76),//10
+        new THREE.Vector3(-67, -17, 7),//21
+        new THREE.Vector3(28, -22, -18),//102
         new THREE.Vector3(0,0, 0),
         new THREE.Vector3(0,0, 0),
         new THREE.Vector3(0,0, 0),
         new THREE.Vector3(0,0, 0)
 	];
 
-	for (var i=0; i<8; i++){//i<list.length; i++){
+	for (var i=0; i<list.length; i++){//i<list.length; i++){
 		var arg={};
 	    arg.data = list[i];
 	    arg.data.fatherNodeName="Product";
@@ -173,9 +173,15 @@ var updateStructure = function(){
     objectContainer.removeAll(scene);
 
     var createObjects=function (){
+        /*
+        createCompanies(json["company"],objectContainer);
+        createProducts(json["product"],objectContainer);
+        createLinks(json["link"],objectContainer);
+        */
         createCompanies(json["companies"],objectContainer);
         createProducts(json["products"],objectContainer);
         createLinks(json["links"],objectContainer);
+        
     }
     $.when(createObjects()).then(function(){
         objectContainer.addTo(scene);

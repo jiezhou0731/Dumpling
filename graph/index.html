@@ -46,6 +46,7 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 var defer = $q.defer();
 		 console.log("to cgi:");
 		 console.log(args);
+		 /*
 		 $.ajax({
 		 	method: 'post',
 		 	url: pythonGetGraphStructure,
@@ -62,8 +63,8 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 	error: function(){
 		 		defer.reject('Can not connect to server');
 		 	}
-		 });
-		/*
+		 });*/
+
 		var json={"companies": 
 [
 {
@@ -149,7 +150,7 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 "bank": {},
 "type": "Chinese seller"
 },
-{"id":"103","name":["杭州欧驰电子科技有限公司"],"address":["中国 浙江 杭州 拱墅区登云路 518 号 3 幢 911 室"],"email":[],"telephone":["86 0571 85777975-8002"],"qq":[],"employee":[],"bank":{}}
+{"id":"103","type": "Chinese seller","name":["杭州欧驰电子科技有限公司"],"address":["中国 浙江 杭州 拱墅区登云路 518 号 3 幢 911 室"],"email":[],"telephone":["86 0571 85777975-8002"],"qq":[],"employee":[],"bank":{}}
 ]
 ,
 "products": 
@@ -260,7 +261,7 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 {"id":"105","sourceid":"102","destid":"3"}
 ]
 };
-		defer.resolve(json);*/
+		defer.resolve(json);
 		 return defer.promise;;
 	}
 });
@@ -271,8 +272,6 @@ dumplingApp.controller('popupWindowController', function(pythonService, $window,
     var msg = $window.mySharedData;
     pythonService.getGraphStructure(msg)
 			.then(function(data){
-				var popupWindow = window.open('/direwolf/graph/index.html');
-  				popupWindow.mySharedData = data;
 				console.log(data);
 				json =data;
 				updateStructure();
