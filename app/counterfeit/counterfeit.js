@@ -1012,6 +1012,10 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 		var msg=[];
 		msg.push($scope.doc.plainContent);
 		msg.push($scope.droppedTextArray);
+		var popupWindow = window.open('graph/index.html');
+  		popupWindow.mySharedData = msg;
+
+  		/*
 		pythonService.getGraphStructure(msg)
 			.then(function(data){
 				var popupWindow = window.open('/direwolf/graph/index.html');
@@ -1019,6 +1023,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 				console.log(data);
 
 		});
+		*/
 	});
 
     $scope.showPossiblePairsPanel=false;
