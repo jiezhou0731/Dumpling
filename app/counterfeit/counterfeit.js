@@ -911,8 +911,13 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     }
 
     $scope.typeList=["Link", "Address", "Part #", "Email", "Telephone", "Manufacturer", "Device Type", "Name", "Employee", "QQ", "Website"];
+    $scope.menuPosition={};
     $scope.rightClickDroppedText=function(droppedText,$event){
     	$scope.clearPanels();
+
+    	$scope.menuPosition.left=$event.clientX;
+		$scope.menuPosition.top=$event.clientY-10;
+		console.log($scope.menuPosition);
     	droppedText.showMenu=true;
     	$event.stopPropagation();
     }
@@ -920,7 +925,7 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     	$scope.clearPanels();
     	if (choice=="tag") {
     		droppedText.showTypeSelectPanel=true;
-    	} else if (choice=="find this tag"){
+    	} else if (choice=="find more this type"){
     		$scope.getMoreSpecificTypeOfTags($scope.doc.plainContent,droppedText.type);
     	}else if (choice=="find more"){
     		$scope.getMoreTags($scope.doc.plainContent);
