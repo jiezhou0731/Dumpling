@@ -1,3 +1,4 @@
+/*
 var json={"companies": 
 [
 {
@@ -195,4 +196,5 @@ var json={"companies":
 ]
 };
 console.log(json);
+*/
        
