@@ -4,5 +4,6 @@ protected/config/main_onserver.php
 protected/data/*.db
 themes/classic/views/
 components/download-temperary-webpage/*
-assets/*
+javaApi/*.txt
+pythonCgi/*.txt
 .DS_Store
