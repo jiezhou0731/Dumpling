@@ -47,18 +47,18 @@ andrewThree.ObjectContainer=function(){
         return undefined;
     }
 
-    objectContainer.allUnScatter = function(){
+    objectContainer.openAll = function(){
         for (var i=0; i<objectContainer.objectList.length; i++) {
-            if (objectContainer.objectList[i].isScattered==true) {
-                objectContainer.objectList[i].scatter();
+            if (objectContainer.objectList[i].isOpen==false) {
+                objectContainer.objectList[i].open();
             }
         } 
     }
 
-    objectContainer.allScatter = function(){
+    objectContainer.closeAll = function(){
         for (var i=0; i<objectContainer.objectList.length; i++) {
-            if (objectContainer.objectList[i].isScattered==false) {
-                objectContainer.objectList[i].unScatter();
+            if (objectContainer.objectList[i].isOpen==true) {
+                objectContainer.objectList[i].close();
             }
         } 
     }

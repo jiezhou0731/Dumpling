@@ -85,24 +85,20 @@ function init() {
     camera.position.z = 150;
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
+    document.getElementById("graph").appendChild(webGLRenderer.domElement);
+
     trackballControls = new THREE.TrackballControls(camera);
 
     trackballControls.rotateSpeed = 0.5;
     trackballControls.zoomSpeed = 1.0;
     trackballControls.panSpeed = 1.0;
     trackballControls.staticMoving = false;
-    //trackballControls.enabled = false;
-
     objectContainer=andrewThree.ObjectContainer();        
 
-   
-
-    document.getElementById("graph").appendChild(webGLRenderer.domElement);
-
     var projector = new THREE.Projector();
-    document.addEventListener('mousedown', onDocumentMouseDown, false);
-    document.addEventListener('touchstart', onDocumentTouchStart, false);
-    document.addEventListener('touchend', onDocumentTouchEnd, false);
+    webGLRenderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+    webGLRenderer.domElement.addEventListener('touchstart', onDocumentTouchStart, false);
+    webGLRenderer.domElement.addEventListener('touchend', onDocumentTouchEnd, false);
 
     render();
 
@@ -139,13 +135,6 @@ function onDocumentTouchEnd(event) {
 var lastClickTime=0;
 var scattered=true;
 function onDocumentMouseDown(event) {
-    if (scattered) {
-        objectContainer.allUnScatter();
-        scattered=false;
-    } else {
-        objectContainer.allScatter();
-        scattered=true;
-    }
     var mousePos = {};
     mousePos.x=event.pageX - $('#graph').offset().left;
     mousePos.y=event.pageY - $('#graph').offset().top;
@@ -161,10 +150,13 @@ function onDocumentMouseDown(event) {
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     var intersects = raycaster.intersectObjects(objectContainer.clickableList);
     if (intersects.length > 0) {
-
-    //angular.element(document.getElementById('graphCtrl')).scope().clickSphere(event);
-
-        intersects[0].object.clicked();
+        if(event.which == 3) // right click
+        {
+           angular.element(document.getElementById('graphCtrl')).scope().rightClickSphere(event,mousePos);
+        } else { //left click
+           angular.element(document.getElementById('graphCtrl')).scope().clickSphere(event);
+        }
+        //intersects[0].object.clicked();
     }
 }
 

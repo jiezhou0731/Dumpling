@@ -155,10 +155,10 @@ andrewThree.SurroundedSphere=function(arg){
         }
     }
 
-    surroundedSphere.isScattered=true;
+    surroundedSphere.isOpen=true;
 
     // Scatter surrounding spheres to all directions
-    surroundedSphere.scatter = function(){
+    surroundedSphere.close = function(){
         for (var i=0; i<surroundedSphere.children.length; i++) {
             surroundedSphere.children[i].sphereArr.forEach(function(animator){
                 var from = { 
@@ -171,15 +171,14 @@ andrewThree.SurroundedSphere=function(arg){
                 };
 
                 new TWEEN.Tween( from ).to( to, 500 ).easing(TWEEN.Easing.Circular.InOut).onUpdate( function() {
-                    console.log(animator.sprite.position);
                     animator.sprite.position.x = this.x;
                     animator.sprite.position.y = this.y;
                 } ).start();
             });
         }
-        surroundedSphere.isScattered=false;
+        surroundedSphere.isOpen=false;
     }
-    surroundedSphere.unScatter = function(){
+    surroundedSphere.open = function(){
         for (var i=0; i<surroundedSphere.children.length; i++) {
             surroundedSphere.children[i].sphereArr.forEach(function(animator){
                 var from = { 
@@ -192,23 +191,22 @@ andrewThree.SurroundedSphere=function(arg){
                 };
 
                 new TWEEN.Tween( from ).to( to, 500 ).easing(TWEEN.Easing.Circular.InOut).onUpdate( function() {
-                    console.log(animator.sprite.position);
                     animator.sprite.position.x = this.x;
                     animator.sprite.position.y = this.y;
                 } ).start();
             });
         }
-        surroundedSphere.isScattered=true;
+        surroundedSphere.isOpen=true;
     }
 
 
     surroundedSphere.getClickable = function(){
         // Set click handler
         surroundedSphere.father.sprite.clicked = function(){
-            if (surroundedSphere.isScattered) {
-                surroundedSphere.scatter();
+            if (surroundedSphere.isOpen) {
+                surroundedSphere.open();
             } else {
-                surroundedSphere.unScatter();
+                surroundedSphere.close();
             }
         }
         return surroundedSphere.father.sprite;

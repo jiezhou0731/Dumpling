@@ -11,7 +11,7 @@ var pythonSearch = 'http://141.161.20.98/direwolf/pythonCgi/pattern_handler.cgi'
 var pythonGetPossiblePairs = 'http://141.161.20.98/direwolf/pythonCgi/getPossiblePairs.cgi';
 var pythonGetMoreTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoreTags.cgi';
 var pythonGetMoreSpecificTypeOfTags = 'http://141.161.20.98/direwolf/pythonCgi/getMoreSpecificTypeOfTags.cgi';
-var pythonGetGraphStructure = 'http://141.161.20.98/direwolf/pythonCgi/getGraph.cgi';
+var pythonGetGraphStructure = 'http://141.161.20.98/direwolf/pythonCgi/getGraphStructure.cgi';
 
 /*
 var topicTreeUrl = "http://localhost/~jie/direwolf/pythonCgi/topicTree.cgi";
@@ -70,7 +70,6 @@ dumplingApp.service('phpService',function($http,$sce, $q,$rootScope){
 dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 	this.queryData = function (args){
 		 var defer = $q.defer();
-		 console.log(args);
 		 $.ajax({
 		 	method: 'post',
 		 	url: pythonSearch,
@@ -118,7 +117,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 
 	this.getPossiblePairs = function (args){
 		 var defer = $q.defer();
-		 console.log(args);
 		 $.ajax({
 		 	method: 'post',
 		 	url: pythonGetPossiblePairs,
@@ -128,7 +126,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 		},
 		 	success: function(response){
 		 		response=angular.fromJson(response);
-		 		console.log(response);
               	defer.resolve(response);
 		 	},
 		 	error: function(){
@@ -140,7 +137,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 
 	this.getMoreTags = function (args){
 		 var defer = $q.defer();
-		 console.log(args);
 		 $.ajax({
 		 	method: 'post',
 		 	url: pythonGetMoreTags,
@@ -150,7 +146,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 		},
 		 	success: function(response){
 		 		response=angular.fromJson(response);
-		 		console.log(response);
               	defer.resolve(response);
 		 	},
 		 	error: function(){
@@ -162,7 +157,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 
 	this.getMoreSpecificTypeOfTags = function (args){
 		 var defer = $q.defer();
-		 console.log(args);
 		 $.ajax({
 		 	method: 'post',
 		 	url: pythonGetMoreSpecificTypeOfTags,
@@ -173,7 +167,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 		},
 		 	success: function(response){
 		 		response=angular.fromJson(response);
-		 		console.log(response);
               	defer.resolve(response);
 		 	},
 		 	error: function(){
@@ -185,8 +178,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 
 	this.getGraphStructure = function (args){
 		 var defer = $q.defer();
-		 console.log("to cgi:");
-		 console.log(args);
 		 $.ajax({
 		 	method: 'post',
 		 	url: pythonGetGraphStructure,
@@ -196,7 +187,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 		},
 		 	success: function(response){
 		 		response=angular.fromJson(response);
-		 		console.log("from cgi:");
 		 		console.log(response);
               	defer.resolve(response);
 		 	},
@@ -204,204 +194,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 		 		defer.reject('Can not connect to server');
 		 	}
 		 });
-		/*
-		var json={"companies": 
-[
-{
-"id": "1", 
-"name": ["Chong Kin (HK) Enterprise Co.", "Chong Kin Electronics"], 
-"address": ["24F Hua Ming Ge Nan H, Shenzhen, China, 518032", "23B, Block A,Duhui Mansion ZhongHang Rd.,ShenZhen China", "Flat Front 2/F 10 Apliu Street Shamshuipo Ki"], 
-"website": "",
-"email": ["Chongkin1998@hotmail.com", "chongkin007@hotmail.com"], 
-"telephone": ["852-24724062", "0086 755 83686419", "86-755-93664839"],
-"qq": ["1765060718"],
-"employee": [],
-"bank": {"bankname": "Bank of China (HK) Limited", "account#": "01287792056316","bankaddress": "108 Cheung Sha Wan Road, Kowloon, HK", "swfitcode":""},
-"type": "Chinese Seller"
-}  ,
-{
-"id": "2", 
-"name": ["HK Potential Electronics", "HK WEIKU TECHNOLOGY COMPANY LIMITED"], 
-"address": ["30A JingHai Garden of Fuhua Road of FuTian district 518033"], 
-"website": "",
-"email": ["jane@hkpotnetial.com", "ben@hkpotential.com", "janehkpotentia189@hotmail.com", "judy@hkpotential.com"], 
-"telephone": ["86-731-82751003", "15802536432", "86-755-83676710", "86-731-82751003","15802536432","86-755-83676710","86-731-83880775","86-156-16179698","86-156-16179698"],
-"qq": [],
-"employee": [],
-"bank": {"bankname": "HSBC", "account#": "848-079000-838", "bankaddress":  "Head office 1 Queen's Road Central HongKong","swiftcode": "HSBCHKHHHKH"},
-"type": "Chinese Seller"
-},
-{
-"id": "3", 
-"name": ["V&C Technology"], 
-"address": ["15250 Flight Path Dr, Brooksville, FL 34604"], 
-"website" : ["http://vctechnologyinc.com/",
-"http://www.vctechnologyinc.org/",
-"https://vctechnologyinc.wordpress.com",
-"https://www.flickr.com/people/vc-technology-inc/",
-"https://www.facebook.com/vcdisplays",
-"https://plus.google.com/114562203059553648818?prsrc=3", 
-"https://www.linkedin.com/company/v&c-technology-inc." ,"https://twitter.com/#!/vcdisplays","https://www.youtube.com/results?search_query=vcdisplays"],
-"email": ["sales@vctechnologyinc.com","rob@vctechnologyinc.com"], 
-"telephone": ["(352) 796-0060",  "352-796-0790", "352-796-0401"],
-"qq": [],
-"employee": [
-"Greg Potter",
-"Rob Bauer", 
-"Mike Smith",
-"Allen Rothey",
-"Charlotte Carter" ,"Dorothy"],
-"bank": {"bankname": "Bank of America", "account#": "848-079000-838", "bankaddress":  "FL, 34617","swiftcode": ""},
-"type": "US Seller"
-} ,
-
-{
-"id": "4", 
-"name": ["Tri-Tech International"], 
-"address": ["15250 Flight Path Dr, Brooksville, FL 34604"], 
-"website" : ["http://vctechnologyinc.com/",
-"http://www.vctechnologyinc.org/",
-"https://vctechnologyinc.wordpress.com",
-"https://www.flickr.com/people/vc-technology-inc/",
-"https://www.facebook.com/vcdisplays",
-"https://plus.google.com/114562203059553648818?prsrc=3", 
-"https://www.linkedin.com/company/v&c-technology-inc." ,"https://twitter.com/#!/vcdisplays","https://www.youtube.com/results?search_query=vcdisplays"],
-"email": ["sales@vctechnologyinc.com","rob@vctechnologyinc.com"], 
-"telephone": ["(352) 796-0060",  "352-796-0790", "352-796-0401"],
-"qq": [],
-"employee": [
-"Greg Potter",
-"Rob Bauer", 
-"Mike Smith",
-"Allen Rothey",
-"Charlotte Carter" ,"Dorothy"],
-"bank": {"bankname": "Bank of America", "account#": "848-079000-838", "bankaddress":  "FL, 34617","swiftcode": ""},
-"type": "US Seller"
-}, 
-{
-"id": "21", 
-"name": ["深圳市鹏盛达电子有限公司"], 
-"address": ["深圳市福田区中航路鼎诚国际北座1919室门","广州市越秀区惠福西路290号C1-C3档"], 
-"website": "",
-"email": ["jcdz_2015@hotmail.com"], 
-"telephone": ["0755-83252582", "13691991645", "13422219324"],
-"qq": ["2355605598"],
-"employee": ["陈锦洪"],
-"bank": {},
-"type": "Chinese seller"
-},
-{"id":"103","name":["杭州欧驰电子科技有限公司"],"address":["中国 浙江 杭州 拱墅区登云路 518 号 3 幢 911 室"],"email":[],"telephone":["86 0571 85777975-8002"],"qq":[],"employee":[],"bank":{}}
-]
-,
-"products": 
-[ 
-{"id": 5,
-"manufactor": "Xilinx", 
-"part #": "XCV1000-5BG560I", 
-"device type": "FPGA", 
-"package": "Virtex 1"
-} ,
-
-{"id": 6,
-"manufactor": "Xilinx", 
-"part #": "XC6SLX75-2FG676I", 
-"device type": "FPGA", 
-"package": "Spartan 6"
-} ,
-
-{"id": 7,
-"manufactor": "Xilinx", 
-"part #": "XQ4028EX-4HQ240N", 
-"device type": "FPGA", 
-"package": "Rad Hard 4000 series FPGA"
-} ,
-
-{"id": 8,
-"manufactor": "Xilinx", 
-"part #": "XC2S200-5FG456I", 
-"device type": "FPGA", 
-"package": "Spartan 2 FPGA"
-},
-{"id": 9,
-"manufactor": "Xilinx", 
-"part #": "XC4010E-3PQ208I", 
-"device type": "FPGA", 
-"package": "4000 Series FPGA"
-} ,
-{"id": 10,
-"manufactor": "Xilinx", 
-"part #": "XC4VLX100-11FF1148I", 
-"device type": "FPGA", 
-"package": "Virtex 4 without PowerPC (LX = Logic)"
-} ,
-{
-"id":23,
-"manufactor": "Cypress Semiconductor",
-"part #":"CY7C1470V33-167AXI",
-"device type":"Synchronous pipelined burst SRAM",
-"package":"QFP"
-},
-{"id":102,"manufacturer":"XILINX","partNumber":"XC6SLX25-2CSG324C","deviceType":"FBGA"}
-]
-
-,
-
-"links": 
-[ 
-{"linkid": 1001,
-"sourceid": "1",
-"destid": "5"
-} ,
-
-{"linkid": 1002,
-"sourceid": "1",
-"destid": "6"
-} ,
-
-{"id": 1003,
-"sourceid": "2",
-"destid": "7"
-} ,
-
-{"id": 1004,
-"sourceid": "2",
-"destid": "8"
-},
-{"id": 1005,
-"sourceid": "3",
-"destid": "5"
-} ,
-{"id": 1006,
-"sourceid": "3",
-"destid": "7"
-},
-{"id": 1007,
-"sourceid": "4",
-"destid": "8"
-},
-{"id": 1008,
-"sourceid": "4",
-"destid": "6"
-},
-{"id": 1009,
-"sourceid": "3",
-"destid": "6"
-},
-{"linkid": 1011,
-"sourceid": 22,
-"destid": 23
-},
-{"linkid": 1010,
-"sourceid": 23,
-"destid": "21"
-},
-{"id":"202","sourceid":"200","destid":"201"},
-{"id":"104","sourceid":"102","destid":"103"},
-{"id":"105","sourceid":"102","destid":"21"},
-{"id":"105","sourceid":"102","destid":"3"}
-]
-};
-		defer.resolve(json);*/
 		 return defer.promise;;
 	}
 });
@@ -409,7 +201,6 @@ dumplingApp.service('pythonService',function($http,$sce, $q,$rootScope){
 dumplingApp.service('topicService',function($http,$sce, $q,$rootScope){
 	this.getTopicTree = function (args){
 		 var defer = $q.defer();
-		 console.log(args);
 		 $.ajax({
 		 	method: 'post',
 		 	url: topicTreeUrl,
@@ -418,7 +209,6 @@ dumplingApp.service('topicService',function($http,$sce, $q,$rootScope){
 		 		data: args
 		 		},
 		 	success: function(response){
-		 		console.log(response);
 		 		response=angular.fromJson(response);
 		 		$rootScope.$broadcast('gotTopicTree',response.topics);
             	//resetCavas(topics);
@@ -433,7 +223,6 @@ dumplingApp.service('topicService',function($http,$sce, $q,$rootScope){
 
 	this.getSubtopicDocs = function (args){
 		 var defer = $q.defer();
-		 console.log(args);
 		 $.ajax({
 		 	method: 'post',
 		 	url: subtopicUrl,
@@ -442,7 +231,6 @@ dumplingApp.service('topicService',function($http,$sce, $q,$rootScope){
 		 		data: args
 		 		},
 		 	success: function(response){
-		 		console.log(response);
 		 		response=angular.fromJson(response);
 		 		$rootScope.$broadcast('gotSubtopicDocs',response);
             	//resetCavas(topics);
@@ -458,10 +246,8 @@ dumplingApp.service('topicService',function($http,$sce, $q,$rootScope){
 
 dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 	this.sendUpVote = function (doc){
-		console.log("up vote sent");
 	}
 	this.sendDownVote = function (doc){
-		console.log("down vote sent");
 	}
 	
 	this.clearHistory = function (query){
@@ -609,7 +395,6 @@ dumplingApp.service('solrService',function($http,$sce, $q,$rootScope){
 		            		$rootScope.nextInNavi="nextPage";
 		            	}*/
 		            	$rootScope.nextInNavi="nextPage";
-		            	console.log($rootScope.nextInNavi);
 		              	for (var prop in  response.highlighting) {
 		            	  	for (var doc in docs){
 		            		  	if (docs[doc].id==prop){
@@ -702,7 +487,6 @@ dumplingApp.controller('searchBoxController', function(pythonService, rootCookie
 	       success: function(response) {
 	        var batchQueries=angular.fromJson(response);
 	        for (var i=0; i<batchQueries.length; i++) {
-	        	console.log(batchQueries[i]);
 	        	$rootScope.stateHistory.push({query:batchQueries[i], transition: "Relevant. Find out more."});
 	        }
 	        $rootScope.$apply();
@@ -789,8 +573,10 @@ dumplingApp.controller('searchBoxController', function(pythonService, rootCookie
 		$rootScope.$broadcast('interactionEmit',{title:"Clear history", detail:""});
 	}
 	
+	$scope.lastGraphGraph = {};
+
 	$scope.clickShowGraph = function(){
-		$rootScope.$broadcast('clickShowGraph');
+		$rootScope.$broadcast('clickShowGraph',{title:"Clear history", detail:""});
 	}
 });
 
@@ -917,7 +703,6 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 
     	$scope.menuPosition.left=$event.clientX-45;
 		$scope.menuPosition.top=$event.clientY-10;
-		console.log($scope.menuPosition);
     	droppedText.showMenu=true;
     	$event.stopPropagation();
     }
@@ -1009,18 +794,27 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
 	}
 
 	$scope.$on('clickShowGraph',function(event, args){
-		var msg=[];
-		msg.push($scope.doc.plainContent);
-		msg.push($scope.droppedTextArray);
 		var popupWindow = window.open('graph/index.html');
-  		popupWindow.mySharedData = msg;
-
-  		/*
-		pythonService.getGraphStructure(msg)
+		var sharedData={};
+		sharedData.queryInfo=[];
+		var userTagList=[];
+		var docTagList=[];
+		for (var i=0; i<$scope.droppedTextArray.length; i++){
+			if ($scope.droppedTextArray[i].field==undefined) {
+				userTagList.push($scope.droppedTextArray[i].text
+					+"("+$scope.droppedTextArray[i].type+")");
+			} else {
+				docTagList.push($scope.droppedTextArray[i]);
+			}
+		}
+		sharedData.queryInfo.push(userTagList);
+		sharedData.queryInfo.push(docTagList);
+  		popupWindow.mySharedData = sharedData;
+		/*
+		pythonService.getGraphStructure()
 			.then(function(data){
-				var popupWindow = window.open('/direwolf/graph/index.html');
+				var popupWindow = window.open('graph/index.html');
   				popupWindow.mySharedData = data;
-				console.log(data);
 
 		});
 		*/
@@ -1029,7 +823,6 @@ dumplingApp.controller('docDetailController', function(rootCookie,topicService, 
     $scope.showPossiblePairsPanel=false;
     $scope.possiblePairArray=[];
     $scope.getPossiblePairs = function (text){
-    	console.log(text);
     	$scope.isLoading=true;
         $scope.showPossiblePairsPanel=true;
 		pythonService.getPossiblePairs(text)
@@ -1156,7 +949,6 @@ dumplingApp.controller('dynamicController', function(topicService, rootCookie,$s
 		solrService.queryData(args.query, args.start, "oldQuery").then(function (data){
 			$rootScope.docs = data.docs;
 			
-			console.log("dd");
 			var subtopicPostJson={};
 			subtopicPostJson.docno=new Array();
 			for (var i=0; i<data.docs.length; i++){
@@ -1236,7 +1028,6 @@ dumplingApp.controller('userStateController', function(solrService,topicService,
 		$rootScope.outterControllerQuery=clickedQuery;
 		$rootScope.doNotAddToUserStates = true;
 		$rootScope.$broadcast('outterControllerClickSubmit');
-		console.log(clickedQuery);
 	}
 });
 

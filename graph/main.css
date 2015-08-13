@@ -1,5 +1,6 @@
 body{
-	overflow:hidden;
+	overflow:hidden !important;
+	overflow-y: hidden !important;
 	height:100vh;
 	width:100vw;
 }
@@ -15,4 +16,8 @@ body{
     color: white;
     font-size:20px;
     font-weight:bold;
+}
+
+.sphere-clicked-dropdown-menu{
+	position:fixed;
 }

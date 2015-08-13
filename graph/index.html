@@ -26,18 +26,48 @@
 <link rel="stylesheet" href="main.css" />
 </head>
 
-<body ng-app="dumplingApp" layout="column">
+<body ng-app="dumplingApp" style="overflow-y: hidden;">
+<div ng-controller="sphereClickedDropdownMenuCtrl as menu" class="sphere-clicked-dropdown-menu" ng-style="{left:mousePos.x,top:mousePos.y}" ng-show="isOpen">
+      <md-fab-speed-dial md-open="isOpen" md-direction="'right'" ng-class="'md-scale'">
+        <md-fab-trigger style="opacity: 0;">
+          <md-button aria-label="menu" class="md-fab md-warn">
+            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+          </md-button>
+        </md-fab-trigger>
+
+        <md-fab-actions>
+          <md-button class="md-raised md-mini">
+            open
+          </md-button>
+          <md-button  class=" md-raised md-mini">
+            close
+          </md-button>
+          <md-button class="md-raised md-mini" ng-click="openAll();">
+            open all
+          </md-button>
+          <md-button class="md-raised md-mini" ng-click="closeAll();">
+            close all
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+</div>
+
+
 <div layout="row" class="header">
      <div class="title">Minerva</div>
 </div>
+<div ng-controller="dialogCtrl">
+ </div>
 
-<div ng-controller="popupWindowController" style="display:none;">
+
+<div ng-controller="popupWindowController">
 </div>
 
-<div  layout="row" id="graphCtrl" ng-controller="graphCtrl">
+<div ng-controller="graphCtrl" id="graphCtrl">
 	<div id="graph" >
 	</div>
 </div>
+
 
 
 <!-- threejs -->
