@@ -91,7 +91,7 @@ function init() {
     trackballControls.zoomSpeed = 1.0;
     trackballControls.panSpeed = 1.0;
     trackballControls.staticMoving = false;
-
+    //trackballControls.enabled = false;
 
     objectContainer=andrewThree.ObjectContainer();        
 
@@ -104,27 +104,13 @@ function init() {
     document.addEventListener('touchstart', onDocumentTouchStart, false);
     document.addEventListener('touchend', onDocumentTouchEnd, false);
 
-
-    // Tween
-    /*
-    var planeGeometry = new THREE.PlaneGeometry(60, 20);
-    var planeMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc});
-    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    var rabbit = { x: 0, y: -20 };
-    new TWEEN.Tween( rabbit ).to( { x: 0, y: 20 }, 3000 ).easing(TWEEN.Easing.Circular.InOut).onUpdate( function() {
-        console.log(this);
-                plane.position.x = this.x;
-                plane.position.y = this.y;
-            } ).start();
-    scene.add(plane);
-    */
-
     render();
 
     function render() {
         requestAnimationFrame(render);
         webGLRenderer.render(scene, camera);
 
+        TWEEN.update();
         var delta = clock.getDelta();
         trackballControls.update(delta);
 
@@ -151,33 +137,42 @@ function onDocumentTouchEnd(event) {
 }
 
 var lastClickTime=0;
+var scattered=true;
 function onDocumentMouseDown(event) {
+    if (scattered) {
+        objectContainer.allUnScatter();
+        scattered=false;
+    } else {
+        objectContainer.allScatter();
+        scattered=true;
+    }
+    var mousePos = {};
+    mousePos.x=event.pageX - $('#graph').offset().left;
+    mousePos.y=event.pageY - $('#graph').offset().top;
     var currentClickTime = Date.now();
     if (currentClickTime-lastClickTime<300){
         trackballControls.reset();
     } 
     lastClickTime=currentClickTime;
-    /*
+   
     // Click disappear 
-    var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
+    var vector = new THREE.Vector3(( mousePos.x / window.innerWidth ) * 2 - 1, -( mousePos.y / window.innerHeight ) * 2 + 1, 0.5);
     vector = vector.unproject(camera);
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     var intersects = raycaster.intersectObjects(objectContainer.clickableList);
     if (intersects.length > 0) {
+
+    //angular.element(document.getElementById('graphCtrl')).scope().clickSphere(event);
+
         intersects[0].object.clicked();
-    }*/
+    }
 }
 
 var updateStructure = function(){
     init();
-    objectContainer.removeAll(scene);
+    //objectContainer.removeAll(scene);
 
     var createObjects=function (){
-        /*
-        createCompanies(json["company"],objectContainer);
-        createProducts(json["product"],objectContainer);
-        createLinks(json["link"],objectContainer);
-        */
         createCompanies(json["companies"],objectContainer);
         createProducts(json["products"],objectContainer);
         createLinks(json["links"],objectContainer);

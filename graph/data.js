@@ -1,5 +1,4 @@
-/*
-var json={"companies": 
+var initialGraphJson={"companies": 
 [
 {
 "id": "1", 
@@ -195,6 +194,3 @@ var json={"companies":
 {"id":"105","sourceid":"102","destid":"3"}
 ]
 };
-console.log(json);
-*/
-       

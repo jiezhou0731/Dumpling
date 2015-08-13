@@ -79,17 +79,19 @@ andrewThree.SurroundedSphere=function(arg){
         var pickedColor={};    
         pickedColor.s="rgb(169,199,185)";
         pickedColor.t="rgb(255,255,255)";
+        var position =new THREE.Vector3(
+                (5+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
+                (5+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y, 
+                surroundedSphere.center.z
+        );
         var newSphere = andrewThree.Sphere({
             text:property, 
             sphereRadius:3, 
             fontSize:30, 
             backgroundColor:pickedColor,
-            position:new THREE.Vector3(
-                (5+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
-                (5+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y, 
-                surroundedSphere.center.z
-            )
+            position: position
         });
+        newSphere.originalPosition=position;
         newChildren.sphereArr.push(newSphere);
 
         // Create the following nodes
@@ -97,34 +99,38 @@ andrewThree.SurroundedSphere=function(arg){
         var sphereRadius=3;
         if (typeof surroundedSphere.data[property] == "string") {
             pickedColor=pickGradientColor(rowColor,10,8);
+            var position = new THREE.Vector3(
+                    (sphereRadius*2*(0+1)+5+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
+                    (sphereRadius*2*(0+1)+5+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y, 
+                    surroundedSphere.center.z
+            );
             var newSphere = andrewThree.Sphere({
                 text:surroundedSphere.data[property], 
                 sphereRadius:sphereRadius, 
                 fontSize:20, 
                 backgroundColor:pickedColor,
-                position:new THREE.Vector3(
-                    (sphereRadius*2*(0+1)+5+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
-                    (sphereRadius*2*(0+1)+5+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y, 
-                    surroundedSphere.center.z
-                )
+                position: position
             });
+            newSphere.originalPosition=position;
             newChildren.sphereArr.push(newSphere);
         } else {
             // If array of nodes follow
             var arr=surroundedSphere.data[property];
             for (var j=0; j<arr.length; j++){
                 pickedColor=pickGradientColor(rowColor,arr.length,j);
+                var position = new THREE.Vector3(
+                        (sphereRadius*2*(j+1)+5+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
+                        (sphereRadius*2*(j+1)+5+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y,
+                        surroundedSphere.center.z
+                );
                 var newSphere = andrewThree.Sphere({
                     text:arr[j], 
                     sphereRadius:sphereRadius, 
                     fontSize:20, 
                     backgroundColor:pickedColor,
-                    position:new THREE.Vector3(
-                        (sphereRadius*2*(j+1)+5+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
-                        (sphereRadius*2*(j+1)+5+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y,
-                        surroundedSphere.center.z
-                    )
+                    position:position
                 });
+                newSphere.originalPosition=position;
                 newChildren.sphereArr.push(newSphere);
             }
         }
@@ -149,16 +155,62 @@ andrewThree.SurroundedSphere=function(arg){
         }
     }
 
+    surroundedSphere.isScattered=true;
+
+    // Scatter surrounding spheres to all directions
+    surroundedSphere.scatter = function(){
+        for (var i=0; i<surroundedSphere.children.length; i++) {
+            surroundedSphere.children[i].sphereArr.forEach(function(animator){
+                var from = { 
+                        x:animator.sprite.position.x,
+                        y:animator.sprite.position.y
+                };
+                var to ={
+                        x:surroundedSphere.father.sprite.position.x,
+                        y:surroundedSphere.father.sprite.position.y
+                };
+
+                new TWEEN.Tween( from ).to( to, 500 ).easing(TWEEN.Easing.Circular.InOut).onUpdate( function() {
+                    console.log(animator.sprite.position);
+                    animator.sprite.position.x = this.x;
+                    animator.sprite.position.y = this.y;
+                } ).start();
+            });
+        }
+        surroundedSphere.isScattered=false;
+    }
+    surroundedSphere.unScatter = function(){
+        for (var i=0; i<surroundedSphere.children.length; i++) {
+            surroundedSphere.children[i].sphereArr.forEach(function(animator){
+                var from = { 
+                        x:animator.sprite.position.x,
+                        y:animator.sprite.position.y
+                };
+                var to ={
+                        x:animator.originalPosition.x,
+                        y:animator.originalPosition.y,
+                };
+
+                new TWEEN.Tween( from ).to( to, 500 ).easing(TWEEN.Easing.Circular.InOut).onUpdate( function() {
+                    console.log(animator.sprite.position);
+                    animator.sprite.position.x = this.x;
+                    animator.sprite.position.y = this.y;
+                } ).start();
+            });
+        }
+        surroundedSphere.isScattered=true;
+    }
+
+
     surroundedSphere.getClickable = function(){
         // Set click handler
         surroundedSphere.father.sprite.clicked = function(){
-            for (var i=0; i<surroundedSphere.children.length; i++) {
-                for (var j=0; j<surroundedSphere.children[i].sphereArr.length; j++) {
-                    surroundedSphere.children[i].sphereArr[j].toggle();
-                }
+            if (surroundedSphere.isScattered) {
+                surroundedSphere.scatter();
+            } else {
+                surroundedSphere.unScatter();
             }
         }
-
         return surroundedSphere.father.sprite;
     }
 

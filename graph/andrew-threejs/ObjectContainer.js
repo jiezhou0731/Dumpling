@@ -46,5 +46,22 @@ andrewThree.ObjectContainer=function(){
         } 
         return undefined;
     }
+
+    objectContainer.allUnScatter = function(){
+        for (var i=0; i<objectContainer.objectList.length; i++) {
+            if (objectContainer.objectList[i].isScattered==true) {
+                objectContainer.objectList[i].scatter();
+            }
+        } 
+    }
+
+    objectContainer.allScatter = function(){
+        for (var i=0; i<objectContainer.objectList.length; i++) {
+            if (objectContainer.objectList[i].isScattered==false) {
+                objectContainer.objectList[i].unScatter();
+            }
+        } 
+    }
+
     return objectContainer;
 }
