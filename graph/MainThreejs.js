@@ -110,7 +110,7 @@ function init() {
         var delta = clock.getDelta();
         trackballControls.update(delta);
 
-        objectContainer.render();
+        objectContainer.render(delta);
     }
 }
 //window.onload = init;
@@ -156,7 +156,7 @@ function onDocumentMouseDown(event) {
         } else { //left click
            angular.element(document.getElementById('graphCtrl')).scope().clickSphere(event);
         }
-        //intersects[0].object.clicked();
+        intersects[0].object.clicked();
     }
 }
 

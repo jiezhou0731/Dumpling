@@ -49,12 +49,41 @@ andrewThree.Sphere=function(arg){
         sphere.sprite.material.map.needsUpdate = true;
     }
 
+    sphere.highlight=function(){
+        var sphereGeometry = new THREE.SphereGeometry(sphere.sphereRadius+0.2, 20, 20);
+        var sphereMaterial = new THREE.MeshBasicMaterial({color: 0xE08283});
+        sphereMaterial.opacity=0.5;
+        sphereMaterial.transparent=true;
+        sphere.highlightSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.highlightSphere.position.x=sphere.sprite.position.x;
+        sphere.highlightSphere.position.y=sphere.sprite.position.y;
+        sphere.highlightSphere.position.z=sphere.sprite.position.z;
+        if (sphere.scene!=undefined) {
+            scene.add(sphere.highlightSphere);
+        }
+    }
+
     sphere.addTo=function(scene){
         sphere.scene = scene;
         sphere.scene.add(sphere.sprite);
+        if (sphere.highlightSphere!=undefined) {
+            sphere.scene.add(sphere.highlightSphere);
+        }
     }
 
-    sphere.render=function(){
+    sphere.render=function(delta){
+        var speed=0.25*delta;
+        if (sphere.highlightSphere!=undefined){
+            sphere.highlightSphere.scale.x+=speed;
+            sphere.highlightSphere.scale.y+=speed;
+            sphere.highlightSphere.scale.z+=speed;
+            if (sphere.highlightSphere.scale.x>1.2){
+                sphere.highlightSphere.scale.x=1;
+                sphere.highlightSphere.scale.y=1;
+                sphere.highlightSphere.scale.z=1;
+            }
+        }
+       
         /*
         var a=sphere.sphereRadius*(camera.position.z-sphere.sprite.position.z);
         var b=sphere.sphereRadius*Math.sqrt(

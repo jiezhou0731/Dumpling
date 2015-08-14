@@ -80,8 +80,8 @@ andrewThree.SurroundedSphere=function(arg){
         pickedColor.s="rgb(169,199,185)";
         pickedColor.t="rgb(255,255,255)";
         var position =new THREE.Vector3(
-                (5+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
-                (5+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y, 
+                (6+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
+                (6+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y, 
                 surroundedSphere.center.z
         );
         var newSphere = andrewThree.Sphere({
@@ -100,8 +100,8 @@ andrewThree.SurroundedSphere=function(arg){
         if (typeof surroundedSphere.data[property] == "string") {
             pickedColor=pickGradientColor(rowColor,10,8);
             var position = new THREE.Vector3(
-                    (sphereRadius*2*(0+1)+5+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
-                    (sphereRadius*2*(0+1)+5+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y, 
+                    (sphereRadius*2*(0+1)+6+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
+                    (sphereRadius*2*(0+1)+6+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y, 
                     surroundedSphere.center.z
             );
             var newSphere = andrewThree.Sphere({
@@ -119,8 +119,8 @@ andrewThree.SurroundedSphere=function(arg){
             for (var j=0; j<arr.length; j++){
                 pickedColor=pickGradientColor(rowColor,arr.length,j);
                 var position = new THREE.Vector3(
-                        (sphereRadius*2*(j+1)+5+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
-                        (sphereRadius*2*(j+1)+5+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y,
+                        (sphereRadius*2*(j+1)+6+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
+                        (sphereRadius*2*(j+1)+6+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y,
                         surroundedSphere.center.z
                 );
                 var newSphere = andrewThree.Sphere({
@@ -146,11 +146,11 @@ andrewThree.SurroundedSphere=function(arg){
         }
     }
 
-    surroundedSphere.render = function(){
-        surroundedSphere.father.render();
+    surroundedSphere.render = function(delta){
+        surroundedSphere.father.render(delta);
         for (var i=0; i<surroundedSphere.children.length; i++) {
             for (var j=0; j<surroundedSphere.children[i].sphereArr.length; j++) {
-                surroundedSphere.children[i].sphereArr[j].render();
+                surroundedSphere.children[i].sphereArr[j].render(delta);
             }
         }
     }
@@ -203,11 +203,7 @@ andrewThree.SurroundedSphere=function(arg){
     surroundedSphere.getClickable = function(){
         // Set click handler
         surroundedSphere.father.sprite.clicked = function(){
-            if (surroundedSphere.isOpen) {
-                surroundedSphere.open();
-            } else {
-                surroundedSphere.close();
-            }
+            surroundedSphere.father.highlight();
         }
         return surroundedSphere.father.sprite;
     }

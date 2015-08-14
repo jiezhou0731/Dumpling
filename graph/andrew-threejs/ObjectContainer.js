@@ -32,9 +32,9 @@ andrewThree.ObjectContainer=function(){
         }
     }
 
-    objectContainer.render = function(){
+    objectContainer.render = function(delta){
         for (var i=0; i<objectContainer.objectList.length; i++) {
-            objectContainer.objectList[i].render();
+            objectContainer.objectList[i].render(delta);
         }
     }
 
