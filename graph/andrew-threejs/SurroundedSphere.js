@@ -54,7 +54,8 @@ andrewThree.SurroundedSphere=function(arg){
         backgroundColor:{s:"rgb(95,154,184)",t:"rgb(141,198,227)"}, 
         position:surroundedSphere.center
     });
-    
+    surroundedSphere.father.sprite.surroundedSphere=surroundedSphere;
+
     // create children spheres
     surroundedSphere.children=[];
     var rowColor={};
@@ -199,6 +200,9 @@ andrewThree.SurroundedSphere=function(arg){
         surroundedSphere.isOpen=true;
     }
 
+    surroundedSphere.removeHighlight = function(){
+        surroundedSphere.father.removeHighlight();
+    }
 
     surroundedSphere.getClickable = function(){
         // Set click handler

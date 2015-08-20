@@ -1,24 +1,24 @@
 var createCompanies = function(list,objectContainer){
 	var centers=[
-		new THREE.Vector3(-11, 11, -61),
-		new THREE.Vector3(32, -12, -42),
-		new THREE.Vector3(-13, -13, -23),
-		new THREE.Vector3(14, 34, 4),
-        new THREE.Vector3(-25, -25, 15),
-        new THREE.Vector3(36, 6, 27),
-        new THREE.Vector3(-27, -18, 46),
-        new THREE.Vector3(-38, -19, 47),
-	];
-	for (var i=0; i<list.length; i++){
-		var arg={};
-	    arg.data = list[i];
-	    arg.data.fatherNodeName=arg.data.type;
-	    delete arg.data.type;
+  new THREE.Vector3(-11, 11, -61),
+  new THREE.Vector3(32, -12, -42),
+  new THREE.Vector3(-13, -13, -23),
+  new THREE.Vector3(14, 34, 4),
+  new THREE.Vector3(-25, -25, 15),
+  new THREE.Vector3(36, 6, 27),
+  new THREE.Vector3(-27, -18, 46),
+  new THREE.Vector3(-38, -19, 47),
+  ];
+  for (var i=0; i<list.length; i++){
+      var arg={};
+      arg.data = list[i];
+      arg.data.fatherNodeName=arg.data.type;
+      delete arg.data.type;
 
-	    arg.center = centers[i];
-	    var newObject = andrewThree.SurroundedSphere(arg);
-	    objectContainer.push(newObject);
-    }
+      arg.center = centers[i];
+      var newObject = andrewThree.SurroundedSphere(arg);
+      objectContainer.push(newObject);
+  }
 }
 
 var createProducts = function(list,objectContainer){
@@ -35,32 +35,32 @@ var createProducts = function(list,objectContainer){
         new THREE.Vector3(0,0, 0),
         new THREE.Vector3(0,0, 0),
         new THREE.Vector3(0,0, 0)
-	];
+        ];
 
 	for (var i=0; i<list.length; i++){//i<list.length; i++){
-		var arg={};
-	    arg.data = list[i];
-	    arg.data.fatherNodeName="Product";
-	    delete arg.data.type;
+  var arg={};
+  arg.data = list[i];
+  arg.data.fatherNodeName="Product";
+  delete arg.data.type;
 
-	    arg.center = centers[i];
-	    var newObject = andrewThree.SurroundedSphere(arg);
-	    objectContainer.push(newObject);
-    }
+  arg.center = centers[i];
+  var newObject = andrewThree.SurroundedSphere(arg);
+  objectContainer.push(newObject);
+}
 }
 
 var createLinks = function(list,objectContainer){
 	for (var i=0; i<list.length; i++){
         try {
-    	var newObject= andrewThree.Link({
-    		sourceId : list[i]['sourceid'],
-    		targetId : list[i]['destid']
-    	});
-    	objectContainer.push(newObject);
-        } catch (exception) {
+           var newObject= andrewThree.Link({
+              sourceId : list[i]['sourceid'],
+              targetId : list[i]['destid']
+          });
+           objectContainer.push(newObject);
+       } catch (exception) {
 
-        }
-    }
+       }
+   }
 }
 
 
@@ -143,7 +143,7 @@ function onDocumentMouseDown(event) {
         trackballControls.reset();
     } 
     lastClickTime=currentClickTime;
-   
+
     // Click disappear 
     var vector = new THREE.Vector3(( mousePos.x / window.innerWidth ) * 2 - 1, -( mousePos.y / window.innerHeight ) * 2 + 1, 0.5);
     vector = vector.unproject(camera);
@@ -152,12 +152,15 @@ function onDocumentMouseDown(event) {
     if (intersects.length > 0) {
         if(event.which == 3) // right click
         {
-           angular.element(document.getElementById('graphCtrl')).scope().rightClickSphere(event,mousePos);
+            var msg = {};
+            msg.mousePos=mousePos;
+            msg.clickedObject = intersects[0].object;
+            angular.element(document.getElementById('graphCtrl')).scope().rightClickSphere(event,msg);
         } else { //left click
-           angular.element(document.getElementById('graphCtrl')).scope().clickSphere(event);
-        }
-        intersects[0].object.clicked();
-    }
+            angular.element(document.getElementById('graphCtrl')).scope().clickSphere(event);
+     }
+     intersects[0].object.clicked();
+ }
 }
 
 var updateStructure = function(){

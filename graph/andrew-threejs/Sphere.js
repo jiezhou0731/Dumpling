@@ -50,17 +50,34 @@ andrewThree.Sphere=function(arg){
     }
 
     sphere.highlight=function(){
-        var sphereGeometry = new THREE.SphereGeometry(sphere.sphereRadius+0.2, 20, 20);
-        var sphereMaterial = new THREE.MeshBasicMaterial({color: 0xE08283});
-        sphereMaterial.opacity=0.5;
-        sphereMaterial.transparent=true;
-        sphere.highlightSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        objectContainer.removeHighlight();
+        var geom = new THREE.TorusGeometry(
+            sphere.sphereRadius+0.8,//radius
+            0.8,  //tube, 
+            20,  //radialSegments, 
+            20, //tubularSegments, 
+            Math.PI*2  //arc
+        );
+        var meshMaterial = new THREE.MeshBasicMaterial({color: 0xE08283});
+        meshMaterial.side = THREE.DoubleSide;
+        var meshMaterial = new THREE.MeshBasicMaterial({color: 0xE08283});
+        meshMaterial.opacity=0.5;
+        meshMaterial.transparent=true;
+        sphere.highlightSphere = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial, meshMaterial]);
+        
         sphere.highlightSphere.position.x=sphere.sprite.position.x;
         sphere.highlightSphere.position.y=sphere.sprite.position.y;
         sphere.highlightSphere.position.z=sphere.sprite.position.z;
         if (sphere.scene!=undefined) {
             scene.add(sphere.highlightSphere);
         }
+    }
+
+    sphere.removeHighlight=function(){
+        if (sphere.scene!=undefined && sphere.highlightSphere!=undefined) {
+            scene.remove(sphere.highlightSphere);
+        }
+        sphere.highlightSphere = undefined;
     }
 
     sphere.addTo=function(scene){
@@ -72,16 +89,11 @@ andrewThree.Sphere=function(arg){
     }
 
     sphere.render=function(delta){
-        var speed=0.25*delta;
+        var speed=2.5*delta;
         if (sphere.highlightSphere!=undefined){
-            sphere.highlightSphere.scale.x+=speed;
-            sphere.highlightSphere.scale.y+=speed;
-            sphere.highlightSphere.scale.z+=speed;
-            if (sphere.highlightSphere.scale.x>1.2){
-                sphere.highlightSphere.scale.x=1;
-                sphere.highlightSphere.scale.y=1;
-                sphere.highlightSphere.scale.z=1;
-            }
+            sphere.highlightSphere.rotateX(speed);
+            sphere.highlightSphere.rotateY(speed);
+            sphere.highlightSphere.rotateZ(speed);
         }
        
         /*

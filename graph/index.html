@@ -27,47 +27,8 @@
 </head>
 
 <body ng-app="dumplingApp" style="overflow-y: hidden;">
-<div ng-controller="sphereClickedDropdownMenuCtrl as menu" class="sphere-clicked-dropdown-menu" ng-style="{left:mousePos.x,top:mousePos.y}" ng-show="isOpen">
-      <md-fab-speed-dial md-open="isOpen" md-direction="'right'" ng-class="'md-scale'">
-        <md-fab-trigger style="opacity: 0;">
-          <md-button aria-label="menu" class="md-fab md-warn">
-            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
-          </md-button>
-        </md-fab-trigger>
 
-        <md-fab-actions>
-          <md-button class="md-raised md-mini">
-            open
-          </md-button>
-          <md-button  class=" md-raised md-mini">
-            close
-          </md-button>
-          <md-button class="md-raised md-mini" ng-click="openAll();">
-            open all
-          </md-button>
-          <md-button class="md-raised md-mini" ng-click="closeAll();">
-            close all
-          </md-button>
-        </md-fab-actions>
-      </md-fab-speed-dial>
-</div>
-
-
-<div layout="row" class="header">
-     <div class="title">Minerva</div>
-</div>
-<div ng-controller="dialogCtrl">
- </div>
-
-
-<div ng-controller="popupWindowController">
-</div>
-
-<div ng-controller="graphCtrl" id="graphCtrl">
-	<div id="graph" >
-	</div>
-</div>
-
+<div ng-view></div>
 
 
 <!-- threejs -->
@@ -80,7 +41,9 @@
 <script type="text/javascript" src="andrew-threejs/SurroundedSphere.js"></script>
 <script type="text/javascript" src="libs/threejs/Projector.js"></script>
 <script type="text/javascript" src="MainThreejs.js"></script>
-<script type="text/javascript" src="MainAngularjs.js"></script>
+<script type="text/javascript" src="app/js/config.js"></script>
+<script type="text/javascript" src="app/js/service.js"></script>
+<script type="text/javascript" src="app/js/controller.js"></script>
 
 <script>
 

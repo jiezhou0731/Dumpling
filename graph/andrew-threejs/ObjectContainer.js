@@ -63,5 +63,13 @@ andrewThree.ObjectContainer=function(){
         } 
     }
 
+    objectContainer.removeHighlight = function(){
+        for (var i=0; i<objectContainer.objectList.length; i++) {
+            if (objectContainer.objectList[i].removeHighlight!=undefined) {
+                objectContainer.objectList[i].removeHighlight();
+            }
+        } 
+    }
+
     return objectContainer;
 }

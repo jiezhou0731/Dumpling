@@ -1,5 +1,5 @@
 // Popup Window controller
-dumplingApp.controller('popupWindowController', function(pythonService, $window, $scope, $rootScope) {
+app.controller('popupWindowController', function(pythonService, $window, $scope, $rootScope) {
 	/*
     console.log($window.mySharedData);
     var msg = $window.mySharedData.queryInfo;
@@ -16,7 +16,7 @@ updateStructure();
 
 });
 
-dumplingApp.controller('dialogCtrl', function($scope, $mdDialog, $rootScope) {
+app.controller('dialogCtrl', function($scope, $mdDialog, $rootScope) {
 	$scope.alert = '';
 
 	$scope.$on('showDialog', function(event, args) {
@@ -27,7 +27,7 @@ dumplingApp.controller('dialogCtrl', function($scope, $mdDialog, $rootScope) {
 		trackballControls.enabled = false;
 		$mdDialog.show({
 			controller: DialogController,
-			templateUrl: 'app/template/docDetail.html',
+			templateUrl: 'app/view/spheres/docDetail.html',
 			parent: angular.element(document.body),
 			targetEvent: event,
 			clickOutsideToClose:true
@@ -37,12 +37,12 @@ dumplingApp.controller('dialogCtrl', function($scope, $mdDialog, $rootScope) {
 });
 
 
-dumplingApp.controller('graphCtrl', function($scope, $mdDialog,$rootScope) {
+app.controller('graphCtrl', function($scope, $mdDialog,$rootScope) {
 	$scope.clickSphere = function (event){
 		$rootScope.$broadcast('showDialog', event);
 	}
-	$scope.rightClickSphere = function (event,mousePos){
-		$rootScope.$broadcast('rightClickSphere', mousePos);
+	$scope.rightClickSphere = function (event,msg){
+		$rootScope.$broadcast('rightClickSphere', msg);
 	}
 });
 
@@ -55,7 +55,7 @@ function DialogController($scope, $mdDialog) {
 };
 
 
-dumplingApp.controller('sphereClickedDropdownMenuCtrl', function($scope) {
+app.controller('sphereClickedDropdownMenuCtrl', function($scope) {
 	$scope.topDirections = ['left', 'up'];
 	$scope.bottomDirections = ['down', 'right'];
 
@@ -67,7 +67,9 @@ dumplingApp.controller('sphereClickedDropdownMenuCtrl', function($scope) {
 	$scope.availableDirections = ['up', 'down', 'left', 'right'];
 	$scope.selectedDirection = 'down';
 
-	$scope.$on('rightClickSphere', function(event, mousePos) {
+	$scope.$on('rightClickSphere', function(event, msg) {
+		$scope.latestClickedObject = msg.clickedObject;
+		mousePos = msg.mousePos;
 		mousePos.x-=20;
 		mousePos.y-=0;
 		mousePos.x+="px";
@@ -76,6 +78,14 @@ dumplingApp.controller('sphereClickedDropdownMenuCtrl', function($scope) {
 		$scope.isOpen = true;
 		$scope.$apply();
 	},true);
+
+	$scope.open = function(){
+		$scope.latestClickedObject.surroundedSphere.open();
+	}
+
+	$scope.close= function(){
+		$scope.latestClickedObject.surroundedSphere.close();
+	}
 
 	$scope.openAll=function(){
 		objectContainer.openAll();

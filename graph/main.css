@@ -21,3 +21,10 @@ body{
 .sphere-clicked-dropdown-menu{
 	position:fixed;
 }
+.sphere-clicked-dropdown-menu .md-fab-action-item{
+	margin-left:30px;
+}
+
+.sphere-clicked-dropdown-menu .menu-item{
+	margin:2px;
+}
