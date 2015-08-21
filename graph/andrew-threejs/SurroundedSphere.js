@@ -47,6 +47,7 @@ andrewThree.SurroundedSphere=function(arg){
         }
     }
     
+    surroundedSphere.clickables=[];
     // create father sphere
     surroundedSphere.father = andrewThree.Sphere({
         text:surroundedSphere.data.fatherNodeName, 
@@ -55,6 +56,7 @@ andrewThree.SurroundedSphere=function(arg){
         position:surroundedSphere.center
     });
     surroundedSphere.father.sprite.surroundedSphere=surroundedSphere;
+    surroundedSphere.clickables.push(surroundedSphere.father.sprite);
 
     // create children spheres
     surroundedSphere.children=[];
@@ -94,6 +96,8 @@ andrewThree.SurroundedSphere=function(arg){
         });
         newSphere.originalPosition=position;
         newChildren.sphereArr.push(newSphere);
+        surroundedSphere.clickables.push(newSphere.sprite);
+        newSphere.sprite.surroundedSphere=surroundedSphere;
 
         // Create the following nodes
         // If only one node follows
@@ -114,6 +118,8 @@ andrewThree.SurroundedSphere=function(arg){
             });
             newSphere.originalPosition=position;
             newChildren.sphereArr.push(newSphere);
+            newSphere.sprite.surroundedSphere=surroundedSphere;
+            surroundedSphere.clickables.push(newSphere.sprite);
         } else {
             // If array of nodes follow
             var arr=surroundedSphere.data[property];
@@ -133,6 +139,8 @@ andrewThree.SurroundedSphere=function(arg){
                 });
                 newSphere.originalPosition=position;
                 newChildren.sphereArr.push(newSphere);
+                newSphere.sprite.surroundedSphere=surroundedSphere;
+                surroundedSphere.clickables.push(newSphere.sprite);
             }
         }
         surroundedSphere.children.push(newChildren);
@@ -209,7 +217,7 @@ andrewThree.SurroundedSphere=function(arg){
         surroundedSphere.father.sprite.clicked = function(){
             surroundedSphere.father.highlight();
         }
-        return surroundedSphere.father.sprite;
+        return surroundedSphere.clickables;
     }
 
     return surroundedSphere;

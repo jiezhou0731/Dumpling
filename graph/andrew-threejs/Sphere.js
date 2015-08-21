@@ -91,9 +91,11 @@ andrewThree.Sphere=function(arg){
     sphere.render=function(delta){
         var speed=2.5*delta;
         if (sphere.highlightSphere!=undefined){
+            /*
             sphere.highlightSphere.rotateX(speed);
             sphere.highlightSphere.rotateY(speed);
             sphere.highlightSphere.rotateZ(speed);
+            */
         }
        
         /*

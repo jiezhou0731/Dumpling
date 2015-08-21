@@ -13,8 +13,10 @@ andrewThree.ObjectContainer=function(){
 
     objectContainer.push=function(object){
         objectContainer.objectList.push(object);
-        if (object.getClickable!=undefined) {
-            objectContainer.clickableList.push(object.getClickable());
+        if (object.getClickable()!=undefined) {
+            for (var i=0; i<object.getClickable().length; i++) {
+                objectContainer.clickableList.push(object.getClickable()[i]);
+            }
         }
     }
 
@@ -30,6 +32,7 @@ andrewThree.ObjectContainer=function(){
                 scene.remove(scene.children[i]);
             }
         }
+        objectContainer.clickableList=[];
     }
 
     objectContainer.render = function(delta){
