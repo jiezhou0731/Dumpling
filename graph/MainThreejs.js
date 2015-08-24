@@ -87,7 +87,7 @@ function init() {
 
     document.getElementById("graph").appendChild(webGLRenderer.domElement);
 
-    trackballControls = new THREE.TrackballControls(camera);
+    trackballControls = new THREE.TrackballControls(camera,document.getElementById("graph"));
 
     trackballControls.rotateSpeed = 0.5;
     trackballControls.zoomSpeed = 1.0;
@@ -149,7 +149,7 @@ function onDocumentMouseDown(event) {
     vector = vector.unproject(camera);
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     var intersects = raycaster.intersectObjects(objectContainer.clickableList);
-    console.log(objectContainer.clickableList.length);
+
     if (intersects.length > 0) {
         if(event.which == 3) // right click
         {
@@ -158,7 +158,9 @@ function onDocumentMouseDown(event) {
             msg.clickedObject = intersects[0].object;
             angular.element(document.getElementById('graphCtrl')).scope().rightClickSphere(event,msg);
         } else { //left click
-            angular.element(document.getElementById('graphCtrl')).scope().clickSphere(event);
+            var msg = {};            
+            msg.clickedObject = intersects[0].object;
+            angular.element(document.getElementById('graphCtrl')).scope().clickSphere(event,msg);
      }
      intersects[0].object.clicked();
  }

@@ -44,6 +44,7 @@ body{
 	position:fixed;
 	z-index: 4;
 	padding:5px;
+	padding-top:10px;
 }
 
 .conversation .talking-girl{
@@ -53,4 +54,13 @@ body{
 }
 .conversation .talking-girl img{
 	width:150px;
+}
+
+.conversation #conversationPanel{
+	margin-top: 15px;
+}
+
+.conversation hlt{
+	color:red;
+	font-weight: bold;
 }

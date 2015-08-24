@@ -1,7 +1,10 @@
-<div class="talking-girl">
-	<img src="img/talking-girl.gif">
-</div>
+<div ng-controller="conversationCtrl">
+	<div class="talking-girl">
+		<img ng-show="isTalking" src="img/talking-girl.gif">
+		<img ng-hide="isTalking" src="img/shut-up-girl.gif">
+	</div>
 
-<div id="conversationPanel" ng-controller="conversationCtrl">
-</div>
+	<div id="conversationPanel" >
+	</div>
 
+</div>

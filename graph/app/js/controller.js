@@ -23,7 +23,7 @@ app.controller('dialogCtrl', function($scope, $mdDialog, $rootScope) {
 		$scope.showDialog(args);
 	},true);
 
-	$scope.showDialog = function(event) {
+	$scope.showDialog = function(msg) {
 		trackballControls.enabled = false;
 		$mdDialog.show({
 			controller: DialogController,
@@ -38,8 +38,18 @@ app.controller('dialogCtrl', function($scope, $mdDialog, $rootScope) {
 
 
 app.controller('graphCtrl', function($scope, $mdDialog,$rootScope) {
-	$scope.clickSphere = function (event){
-		$rootScope.$broadcast('showDialog', event);
+	$scope.clickSphere = function (event,msg){
+		$rootScope.$broadcast('showDialog', msg);
+		var clickedObject=msg.clickedObject;
+		var entity="";
+		if (clickedObject.surroundedSphere!=undefined) {
+			entity+=clickedObject.surroundedSphere.data.fatherNodeName;
+		} 
+		var args={};
+		args.text="Hmm, you are interested in <hlt>"
+			+entity
+			+"</hlt>. Good, please go on."
+		$rootScope.$broadcast('MinervaSpeak',args);
 	}
 	$scope.rightClickSphere = function (event,msg){
 		$rootScope.$broadcast('rightClickSphere', msg);
@@ -97,32 +107,63 @@ app.controller('sphereClickedDropdownMenuCtrl', function($scope) {
 });
 
 
-app.controller('conversationCtrl', function($scope) {
+app.controller('conversationCtrl', function($scope,$rootScope) {
 	var delay=50;
 	$scope.remainText="";
 	$scope.isTalking=false;
-	$scope.addText = function(text){
-		$scope.remainText+="\n"+text;
-		$scope.isTalking=true;
-		addTextByDelay(elem,delay);
-	}
 
-	$scope.addText("Good morning, my friend. My name is Minerva. I will help you with your search task.");
 	var elem = $("#conversationPanel");
 
-	addTextByDelay = function(elem,delay){
-	    if($scope.remainText.length >0){ 
-	        elem.append($scope.remainText[0]);
+	$scope.addTextByDelay = function(elem,delay){
+	    if($scope.remainText.length >0){
+	    	var newWord="";
+	    	if ($scope.remainText[0]=='<'){
+	    		$scope.remainText=$scope.remainText.slice(1);
+	    		newWord="<";
+	    		while ($scope.remainText[0]!='>') {
+	    			newWord+=$scope.remainText[0];
+	    			$scope.remainText=$scope.remainText.slice(1);
+	    		}	
+	    		newWord+=$scope.remainText[0];
+	    		$scope.remainText=$scope.remainText.slice(1);
+
+	    		if (newWord=="<br/>"){
+
+	    		} else {
+					while ($scope.remainText[0]!='>' ) {
+		    			newWord+=$scope.remainText[0];
+		    			$scope.remainText=$scope.remainText.slice(1);
+		    		}	
+		    		newWord+=$scope.remainText[0];
+		    		$scope.remainText=$scope.remainText.slice(1);	    			
+	    		}
+	    	} else {
+	    		newWord=$scope.remainText[0];
+	    		$scope.remainText=$scope.remainText.slice(1);
+	    	}
+	        elem.append(newWord);
+	        
 	        setTimeout(
 	            function(){
-	            	$scope.remainText=$scope.remainText.slice(1);
-	                addTextByDelay(elem,delay);            
+	                $scope.addTextByDelay(elem,delay);            
 	             },delay                 
 	            );
 	    } else {
 	    	$scope.isTalking=false;
+	    	$scope.$apply();
 	    }
 	}
 
+	$scope.addText = function(text){
+		$scope.remainText+=text+"<br/><br/>";
+		$scope.isTalking=true;
+		$scope.addTextByDelay(elem,delay);
+	}
+
+	$scope.addText("Good morning, my friend. My name is <hlt>Minerva</hlt>. I will help you with your search task.");	
+	//$rootScope.$broadcast('MinervaSpeak',arg);
+	$scope.$on("MinervaSpeak",function(event, args){
+		$scope.addText(args.text);
+	},true);
 });
 
