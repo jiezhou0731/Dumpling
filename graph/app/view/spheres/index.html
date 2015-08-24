@@ -24,7 +24,7 @@
 </div>
 
 
-<div layout="row" class="header">
+<div class="header">
      <div class="title">Minerva</div>
 </div>
 <div ng-controller="dialogCtrl">
@@ -34,7 +34,12 @@
 <div ng-controller="popupWindowController">
 </div>
 
+<div class="conversation" ng-include="'app/view/conversation.html'"></div>
+
 <div ng-controller="graphCtrl" id="graphCtrl">
 	<div id="graph" >
 	</div>
 </div>
+
+
+

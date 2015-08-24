@@ -95,3 +95,34 @@ app.controller('sphereClickedDropdownMenuCtrl', function($scope) {
 		objectContainer.closeAll();
 	}
 });
+
+
+app.controller('conversationCtrl', function($scope) {
+	var delay=50;
+	$scope.remainText="";
+	$scope.isTalking=false;
+	$scope.addText = function(text){
+		$scope.remainText+="\n"+text;
+		$scope.isTalking=true;
+		addTextByDelay(elem,delay);
+	}
+
+	$scope.addText("Good morning, my friend. My name is Minerva. I will help you with your search task.");
+	var elem = $("#conversationPanel");
+
+	addTextByDelay = function(elem,delay){
+	    if($scope.remainText.length >0){ 
+	        elem.append($scope.remainText[0]);
+	        setTimeout(
+	            function(){
+	            	$scope.remainText=$scope.remainText.slice(1);
+	                addTextByDelay(elem,delay);            
+	             },delay                 
+	            );
+	    } else {
+	    	$scope.isTalking=false;
+	    }
+	}
+
+});
+
