@@ -214,8 +214,10 @@ andrewThree.SurroundedSphere=function(arg){
 
     surroundedSphere.getClickable = function(){
         // Set click handler
-        surroundedSphere.father.sprite.clicked = function(){
-            surroundedSphere.father.highlight();
+        for (var i=0; i<surroundedSphere.clickables.length; i++){
+            surroundedSphere.clickables[i].clicked=function(){
+                surroundedSphere.father.highlight();
+            };
         }
         return surroundedSphere.clickables;
     }

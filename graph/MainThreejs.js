@@ -157,7 +157,6 @@ function onDocumentMouseDown(event) {
             msg.mousePos=mousePos;
             msg.clickedObject = intersects[0].object;
             angular.element(document.getElementById('graphCtrl')).scope().rightClickSphere(event,msg);
-            console.log("????");
         } else { //left click
             angular.element(document.getElementById('graphCtrl')).scope().clickSphere(event);
      }
