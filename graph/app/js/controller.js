@@ -1,4 +1,6 @@
-// Popup Window controller
+var solrQueryUrl = 'http://141.161.20.98:8080/solr/counterfeit/winwin';
+
+
 app.controller('popupWindowController', function(pythonService, $window, $scope, $rootScope) {
 	/*
     console.log($window.mySharedData);
@@ -167,3 +169,125 @@ app.controller('conversationCtrl', function($scope,$rootScope) {
 	},true);
 });
 
+app.controller('SearchResultDocListCtrl', function($scope, $mdDialog) {
+  $scope.people = [
+    { name: 'Janet Perkins', img: 'img/100-0.jpeg', newMessage: true },
+    { name: 'Mary Johnson', img: 'img/100-1.jpeg', newMessage: false },
+    { name: 'Peter Carlsson', img: 'img/100-2.jpeg', newMessage: false }
+  ];
+  $scope.goToPerson = function(person, event) {
+  };
+});
+
+
+app.controller('SearchBoxCtrl', function(pythonService, rootCookie, $rootScope, $cookies, $scope, $sce, solrService) {
+	$scope.batchQueryFileChosen = function(){
+        var fd = new FormData();
+		fd.append("batchQuery", $('#batchQueryFile').prop('files')[0]);
+		    
+
+	    $.ajax({
+	       url: parseBatchQueryUrl,
+	       type: "POST",
+	       data: fd,
+	       processData: false,
+	       contentType: false,
+	       success: function(response) {
+	        var batchQueries=angular.fromJson(response);
+	        for (var i=0; i<batchQueries.length; i++) {
+	        	$rootScope.stateHistory.push({query:batchQueries[i], transition: "Relevant. Find out more."});
+	        }
+	        $rootScope.$apply();
+	        rootCookie.put("stateHistory",$rootScope.stateHistory);
+	       }
+	    });
+	}
+
+
+	$scope.searchboxMenu = {
+		        topDirections: ['left', 'up'],
+		        bottomDirections: ['down', 'right'],
+		        isOpen: false,
+		        availableModes: ['md-fling', 'md-scale'],
+		        selectedMode: 'md-fling',
+		        availableDirections: ['up', 'down', 'left', 'right'],
+		        selectedDirection: 'down'
+		      };
+	
+	$rootScope.numFound=0;
+	$rootScope.queryPhone={};
+	$rootScope.queryPhone.country="01";
+	
+	$rootScope.queryEmail={};
+	
+	$rootScope.queryAddress={};
+	
+	$rootScope.queryAdvanced={};
+	
+	$rootScope.queryMode="regular";
+	
+	$scope.$on("outterControllerClickSubmit",function(){
+		$scope.clickSubmit();
+	},true);
+
+	$scope.clickSubmit=function(){
+		$rootScope.nextInNavi="nextPage";
+		$rootScope.queryRegular=$rootScope.outterControllerQuery;
+		if ($rootScope.queryMode=="phone"){
+			$rootScope.query="";
+			if ($rootScope.queryPhone.country!="01"){
+				$rootScope.query+=$rootScope.queryPhone.country+" ";
+			}
+			$rootScope.query+=checkString($rootScope.queryPhone.area)+" ";
+			$rootScope.query+=checkString($rootScope.queryPhone.prefix)+" ";
+			$rootScope.query+=checkString($rootScope.queryPhone.line);
+		} else if ($rootScope.queryMode=="email"){
+			$rootScope.query="";
+			$rootScope.query+=checkString($rootScope.queryEmail.part1)+" ";
+			$rootScope.query+=checkString($rootScope.queryEmail.part2)+" ";
+			$rootScope.query+=checkString($rootScope.queryEmail.part1)+"@"+checkString($rootScope.queryEmail.part2);
+		} else if ($rootScope.queryMode=="address"){
+			$rootScope.query="";
+			$rootScope.query+=checkString($rootScope.queryAddress.part1)+" ";
+			$rootScope.query+=checkString($rootScope.queryAddress.part2)+" ";
+			$rootScope.query+=checkString($rootScope.queryAddress.part3)+" ";
+			$rootScope.query+=checkString($rootScope.queryAddress.part4);
+		} else if ($rootScope.queryMode=="structural"){
+			$rootScope.query=$rootScope.queryStructural;
+		} else if ($rootScope.queryMode=="regular"){
+			$rootScope.query=$rootScope.queryRegular;
+		}
+		$rootScope.query=$rootScope.query.trim().replace(/\s\s+/g, ' ');
+		$rootScope.lastQuery=$rootScope.query;
+		rootCookie.put("lastQuery",$rootScope.lastQuery);
+		$rootScope.page = 1;
+		$rootScope.$broadcast('sendQuery',{query:$rootScope.query, start:($rootScope.page-1)*$rootScope.resultPerPage});
+		$rootScope.$broadcast('interactionEmit',{title:"Send query", detail:"Query: "+$rootScope.query});
+	};
+	
+	$scope.clearHistory=function(){
+		$rootScope.numFound=0;
+		$rootScope.queryEmail={};
+		$rootScope.queryAddress={};
+		$rootScope.queryAdvanced={};
+		$rootScope.queryStructural={};
+		$rootScope.query="";
+		rootCookie.put("lastQuery","");
+		solrService.clearHistory();
+		$rootScope.stateHistory=[];
+		rootCookie.put("stateHistory",$rootScope.stateHistory);
+		$rootScope.readDocEvents=[]
+		$rootScope.docs=[];
+		$rootScope.$broadcast('interactionEmit',{title:"Clear history", detail:""});
+	}
+	
+	$scope.lastGraphGraph = {};
+
+	$scope.clickShowGraph = function(){
+		$rootScope.$broadcast('clickShowGraph',{title:"Clear history", detail:""});
+	}
+});
+
+app.controller('SearchResultDocDetailCtrl', function($scope) {
+	
+});

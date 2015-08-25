@@ -8,16 +8,16 @@
 
         <md-fab-actions>
           <md-button class="md-raised md-mini menu-item" ng-click="open();">
-            open
+            show
           </md-button>
           <md-button  class="md-raised md-mini menu-item" ng-click="close();">
-            close
+            hide
           </md-button>
           <md-button class="md-raised md-mini menu-item" ng-click="openAll();">
-            open all
+            show all
           </md-button>
           <md-button class="md-raised md-mini menu-item" ng-click="closeAll();">
-            close all
+            hide all
           </md-button>
         </md-fab-actions>
       </md-fab-speed-dial>
@@ -27,6 +27,7 @@
 <div class="header">
      <div class="title">Minerva</div>
 </div>
+
 <div ng-controller="dialogCtrl">
  </div>
 
@@ -36,10 +37,17 @@
 
 <div class="conversation" ng-include="'app/view/conversation.html'"></div>
 
-<div ng-controller="graphCtrl" id="graphCtrl">
+<!--
+<div ng-controller="graphCtrl" id="graphCtrl" ng-hide="true">
 	<div id="graph" >
 	</div>
 </div>
+-->
 
+<div class="search-result" ng-include="'app/view/spheres/searchResult.html'">
+  
+</div>
 
-
+<div class="toolbox" ng-include="'app/view/spheres/toolbox.html'">
+  
+</div>

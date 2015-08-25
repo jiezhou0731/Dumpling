@@ -167,6 +167,7 @@ function onDocumentMouseDown(event) {
 }
 
 var updateStructure = function(){
+  /*
     init();
     //objectContainer.removeAll(scene);
 
@@ -180,4 +181,5 @@ var updateStructure = function(){
         objectContainer.addTo(scene);
 
     });
+*/
 }

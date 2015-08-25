@@ -1,4 +1,4 @@
-var app = angular.module('dumplingApp',['ngSanitize','ngMaterial','ngRoute']).config(function($mdIconProvider) {
+var app = angular.module('dumplingApp',['ngSanitize','ngCookies','ngMaterial','ngRoute']).config(function($mdIconProvider) {
   $mdIconProvider
   .iconSet("call", 'img/icons/sets/communication-icons.svg', 24)
   .iconSet("social", 'img/icons/sets/social-icons.svg', 24);
