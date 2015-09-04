@@ -1,10 +1,13 @@
 <div ng-controller="SearchResultDocListCtrl" class="doc-list">
   <md-content>
-    <md-list-item class="md-3-line" ng-repeat="person in people"  ng-click="goToPerson(person.name, $event)">
+    <md-list-item class="md-3-line" ng-repeat="item in $root.docs"  ng-click="goToPerson(person.name, $event)">
       <div class="md-list-item-text">
-        <h3>{{item.what}}asdfasdf</h3>
-        <h4>{{item.who}}</h4>
-        <p>{{item.notes}}</p>
+        <div class="title">
+            {{item.title}}
+        </div>
+        <div class="snippet" ng-bind-html="item.highlighting">
+              {{item.highlighting}}
+        </div>
       </div>
       <md-divider ng-if="!$last"></md-divider>
     </md-list-item>

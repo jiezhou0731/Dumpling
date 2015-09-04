@@ -1,18 +1,108 @@
-<style>
-.search-box span{
-	float:left;
-}
-.search-menu{
-	padding:5px;
-}
-.search-found{
-	padding:5px;
-}
-</style>
+<div ng-controller="ToolboxCtrl" > 
+	<div class="tools">
+		 <md-radio-group ng-model="$root.state">
+		      <md-radio-button value="searchResult">
+		      	Show me search results
+		      </md-radio-button>
+		      <md-radio-button value="graph"> 
+		      	Show me 3D entity 
+		      </md-radio-button>
+	    </md-radio-group>
+	</div>
+	<div class="search-box" ng-keydown="$event.which === 13 && clickSubmit();">
+		<div class="input-part">
+			 <md-input-container  ng-show="$root.queryMode == 'regular';">
+		        <label></label>
+		        <input ng-model="$root.queryRegular" columns="1" rows="1" />
+		     </md-input-container>
+			 
+			 <div  ng-show="$root.queryMode == 'phone';"  id="phoneNumberForm">
+			 	<span>Phone Number:</span>
+			 	<span>+</span><input type="text" ng-model="$root.queryPhone.country" style="width:8%; float:left;" maxlength="3" onkeyup="toNextInput(this,this.value,event)"/>
+				<span>(</span><input type="text" placeholder="Area" ng-model="$root.queryPhone.area" style="width:11%; float:left;" maxlength="3" onkeyup="toNextInput(this,this.value,event)"/><span>)</span>
+				<input type="text" placeholder="Prefix" ng-model="$root.queryPhone.prefix" style="width:11%; float:left;" maxlength="3" onkeyup="toNextInput(this,this.value,event)"/>
+				<span>-</span><input type="text" placeholder="Line" ng-model="$root.queryPhone.line" style="width:14%; float:left;"  onkeyup="toNextInput(this,this.value,event)"/>
+			 </div>
+			 
+			  <div  ng-show="$root.queryMode == 'email';"  id="phoneNumberForm">
+			 	<span>Email:</span>
+			 	<input type="text" ng-model="$root.queryEmail.part1" style="width:20%; float:left;" />
+				<span>@</span>
+				<input type="text" ng-model="$root.queryEmail.part2" style="width:20%; float:left;"/><span></span>
+			 </div>
+			 
+			  <div  ng-show="$root.queryMode == 'address';"  id="phoneNumberForm">
+			 	<span>Street:</span>
+			 	<input type="text" ng-model="$root.queryAddress.part1" style="width:20%; float:left;" />
+				<span>City:</span>
+				<input type="text" ng-model="$root.queryAddress.part2" style="width:8%; float:left;"/>
+				<span>State:</span>
+				<input type="text" ng-model="$root.queryAddress.part3" style="width:8%; float:left;"/>
+				<span>Country:</span> 
+				<country-select ng-model="$root.queryAddress.part4"  style="width:8%; float:left; margin-top: 5px;"></country-select>
+			 </div>
+			 <!-- 
+			 <div  ng-show="$root.queryMode == 'advanced';">
+			 	<span>Include:</span>
+			 	<input type="text" ng-model="$root.query" style="width:37%; float:left;"/>
+				<span>Exclude:</span>
+				<input type="text" ng-model="$root.queryAdvanced.exclude" style="width:37%; float:left;" />
+			 </div>
+			  -->
+			 <div  ng-show="$root.queryMode == 'structural';">
+			 	<span>Structural Search:</span>
+			  	<input type="text" ng-model="$root.queryStructural" style="width:80%; float:left;"/>
+			 </div>
+			 
+			 <!--
+			 <md-fab-speed-dial style="position:absolute;left:95%; width:5%" md-open="searchboxMenu.isOpen" md-direction="{{searchboxMenu.selectedDirection}}"
+			                         ng-class="searchboxMenu.selectedMode">
+			        <md-fab-trigger>
+			          <div class="search-menu">
+			            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+			          </div>
+			        </md-fab-trigger>
+			        <md-fab-actions style="margin-left: -150px;">
+			           <md-button class="md-raised md-primary" ng-click="$root.queryMode = 'phone';">
+				       Phone Search
+				       </md-button>
+				        <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'email';">
+				       Email Search
+				       </md-button>
+				       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'address';">
+				       Address Search
+				       </md-button>
+				       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'regular';">
+				       Regular Search
+				       </md-button>
+				       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'advanced';">
+				       Exclude Search
+				       </md-button>
+				       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'structural';">
+				       Structural Search
+				       </md-button>
+			        </md-fab-actions>
+			</md-fab-speed-dial>
+			-->
+		</div>
+		<div  class="button-part">
+			<md-button class="md-raised" ng-click="clickSubmit();" >send</md-button>
+		</div>
+			<!--
+			<button class="btn btn-primary" ng-click="clearHistory();">Clear History</button>
+			-->
+
+		<!--
+		<div class="col-sm-1 search-found" >
+			{{$root.numFound.toLocaleString()}} found.
+		</div>
+		-->
+	</div>
+</div>
+
 <script type="text/javascript">
 function toNextInput(elmnt,content,event)
 {
-	console.log();
 	if (event.keyCode==8 && content.length==0){
 		$(elmnt).prevAll('input').first().focus();
 	} else if (content.length==elmnt.maxLength)
@@ -21,92 +111,3 @@ function toNextInput(elmnt,content,event)
 	}
 }
 </script>
-<div class="search-box" ng-controller="SearchBoxCtrl" ng-keydown="$event.which === 13 && clickSubmit();">
-	<div class="input-part">
-		 <md-input-container  ng-show="$root.queryMode == 'regular';">
-	        <label></label>
-	        <input ng-model="$root.queryRegular" columns="1" rows="1" />
-	     </md-input-container>
-		 
-		 <div  ng-show="$root.queryMode == 'phone';"  id="phoneNumberForm">
-		 	<span>Phone Number:</span>
-		 	<span>+</span><input type="text" ng-model="$root.queryPhone.country" style="width:8%; float:left;" maxlength="3" onkeyup="toNextInput(this,this.value,event)"/>
-			<span>(</span><input type="text" placeholder="Area" ng-model="$root.queryPhone.area" style="width:11%; float:left;" maxlength="3" onkeyup="toNextInput(this,this.value,event)"/><span>)</span>
-			<input type="text" placeholder="Prefix" ng-model="$root.queryPhone.prefix" style="width:11%; float:left;" maxlength="3" onkeyup="toNextInput(this,this.value,event)"/>
-			<span>-</span><input type="text" placeholder="Line" ng-model="$root.queryPhone.line" style="width:14%; float:left;"  onkeyup="toNextInput(this,this.value,event)"/>
-		 </div>
-		 
-		  <div  ng-show="$root.queryMode == 'email';"  id="phoneNumberForm">
-		 	<span>Email:</span>
-		 	<input type="text" ng-model="$root.queryEmail.part1" style="width:20%; float:left;" />
-			<span>@</span>
-			<input type="text" ng-model="$root.queryEmail.part2" style="width:20%; float:left;"/><span></span>
-		 </div>
-		 
-		  <div  ng-show="$root.queryMode == 'address';"  id="phoneNumberForm">
-		 	<span>Street:</span>
-		 	<input type="text" ng-model="$root.queryAddress.part1" style="width:20%; float:left;" />
-			<span>City:</span>
-			<input type="text" ng-model="$root.queryAddress.part2" style="width:8%; float:left;"/>
-			<span>State:</span>
-			<input type="text" ng-model="$root.queryAddress.part3" style="width:8%; float:left;"/>
-			<span>Country:</span> 
-			<country-select ng-model="$root.queryAddress.part4"  style="width:8%; float:left; margin-top: 5px;"></country-select>
-		 </div>
-		 <!-- 
-		 <div  ng-show="$root.queryMode == 'advanced';">
-		 	<span>Include:</span>
-		 	<input type="text" ng-model="$root.query" style="width:37%; float:left;"/>
-			<span>Exclude:</span>
-			<input type="text" ng-model="$root.queryAdvanced.exclude" style="width:37%; float:left;" />
-		 </div>
-		  -->
-		 <div  ng-show="$root.queryMode == 'structural';">
-		 	<span>Structural Search:</span>
-		  	<input type="text" ng-model="$root.queryStructural" style="width:80%; float:left;"/>
-		 </div>
-		 
-		 <!--
-		 <md-fab-speed-dial style="position:absolute;left:95%; width:5%" md-open="searchboxMenu.isOpen" md-direction="{{searchboxMenu.selectedDirection}}"
-		                         ng-class="searchboxMenu.selectedMode">
-		        <md-fab-trigger>
-		          <div class="search-menu">
-		            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
-		          </div>
-		        </md-fab-trigger>
-		        <md-fab-actions style="margin-left: -150px;">
-		           <md-button class="md-raised md-primary" ng-click="$root.queryMode = 'phone';">
-			       Phone Search
-			       </md-button>
-			        <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'email';">
-			       Email Search
-			       </md-button>
-			       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'address';">
-			       Address Search
-			       </md-button>
-			       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'regular';">
-			       Regular Search
-			       </md-button>
-			       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'advanced';">
-			       Exclude Search
-			       </md-button>
-			       <md-button class="md-raised md-primary" ng-click="$root.queryMode  = 'structural';">
-			       Structural Search
-			       </md-button>
-		        </md-fab-actions>
-		</md-fab-speed-dial>
-		-->
-	</div>
-	<div  class="button-part">
-		<md-button class="md-raised" ng-click="clickSubmit();" >send</md-button>
-	</div>
-		<!--
-		<button class="btn btn-primary" ng-click="clearHistory();">Clear History</button>
-		-->
-
-	<!--
-	<div class="col-sm-1 search-found" >
-		{{$root.numFound.toLocaleString()}} found.
-	</div>
-	-->
-</div>

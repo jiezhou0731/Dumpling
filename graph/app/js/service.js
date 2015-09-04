@@ -151,9 +151,11 @@ app.service('solrService',function($http,$sce, $q,$rootScope){
 	}
 
 	this.queryData = function (query,start,status){
+		/*
 		if (status!="oldQuery" && query==$rootScope.hackDoubleQuery){
 			return;
 		}
+		*/
 		$rootScope.cubeTestImageNumber=($rootScope.cubeTestImageNumber+1)%10;
 		$rootScope.nextInNavi="nextPage";
 		$rootScope.hackDoubleQuery=query;

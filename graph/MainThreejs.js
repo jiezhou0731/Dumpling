@@ -71,13 +71,24 @@ var scene;
 var objectContainer;
 var trackballControls;
 
+var canvasHeight = $("#graph").height();
+var canvasWidth = $("#graph").width();
+var webGLRenderer;
+
 function init() {
+    var canvasContainer = document.getElementById("graph");
+    /*
+    var canvasHeight = window.innerHeight;//$("#graph").height();
+    var canvasWidth = window.innerWidth;//$("#graph").width();
+    */
+    canvasHeight = $("#graph").height();
+    canvasWidth = $("#graph").width();
     clock = new THREE.Clock();
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    var webGLRenderer = new THREE.WebGLRenderer();
+    camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 0.1, 1000);
+    webGLRenderer = new THREE.WebGLRenderer( { preserveDrawingBuffer: true } );
     webGLRenderer.setClearColor(new THREE.Color(0xFFFFFF, 1.0));
-    webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+    webGLRenderer.setSize(canvasWidth, canvasHeight);
     webGLRenderer.shadowMapEnabled = true;
 
     camera.position.x = 0;
@@ -85,9 +96,9 @@ function init() {
     camera.position.z = 150;
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    document.getElementById("graph").appendChild(webGLRenderer.domElement);
+    canvasContainer.appendChild(webGLRenderer.domElement);
 
-    trackballControls = new THREE.TrackballControls(camera,document.getElementById("graph"));
+    trackballControls = new THREE.TrackballControls(camera,canvasContainer);
 
     trackballControls.rotateSpeed = 0.5;
     trackballControls.zoomSpeed = 1.0;
@@ -138,6 +149,7 @@ function onDocumentMouseDown(event) {
     var mousePos = {};
     mousePos.x=event.pageX - $('#graph').offset().left;
     mousePos.y=event.pageY - $('#graph').offset().top;
+    console.log(mousePos.x,mousePos.y);
     var currentClickTime = Date.now();
     if (currentClickTime-lastClickTime<300){
         trackballControls.reset();
@@ -145,7 +157,7 @@ function onDocumentMouseDown(event) {
     lastClickTime=currentClickTime;
 
     // Click disappear 
-    var vector = new THREE.Vector3(( mousePos.x / window.innerWidth ) * 2 - 1, -( mousePos.y / window.innerHeight ) * 2 + 1, 0.5);
+    var vector = new THREE.Vector3(( mousePos.x / canvasWidth ) * 2 - 1, -( mousePos.y / canvasHeight ) * 2 + 1, 0.5);
     vector = vector.unproject(camera);
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     var intersects = raycaster.intersectObjects(objectContainer.clickableList);
@@ -167,7 +179,7 @@ function onDocumentMouseDown(event) {
 }
 
 var updateStructure = function(){
-  /*
+
     init();
     //objectContainer.removeAll(scene);
 
@@ -179,7 +191,6 @@ var updateStructure = function(){
     }
     $.when(createObjects()).then(function(){
         objectContainer.addTo(scene);
-
     });
-*/
+
 }

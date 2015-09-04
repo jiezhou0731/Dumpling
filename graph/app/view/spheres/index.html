@@ -28,26 +28,27 @@
      <div class="title">Minerva</div>
 </div>
 
-<div ng-controller="dialogCtrl">
- </div>
+<div ng-show="$root.state=='graph'">
+  <div ng-controller="dialogCtrl">
+   </div>
 
+  <div ng-controller="popupWindowController">
+  </div>
 
-<div ng-controller="popupWindowController">
+  <div ng-controller="graphCtrl" id="graphCtrl" class="graph">
+    <div id="graph" >
+    </div>
+  </div>
 </div>
 
-<div class="conversation" ng-include="'app/view/conversation.html'"></div>
+<div class="conversation noselect" ng-include="'app/view/conversation.html'"></div>
 
-<!--
-<div ng-controller="graphCtrl" id="graphCtrl" ng-hide="true">
-	<div id="graph" >
-	</div>
-</div>
--->
 
-<div class="search-result" ng-include="'app/view/spheres/searchResult.html'">
+<div ng-show="$root.state=='searchResult'" class="search-result" ng-include="'app/view/spheres/searchResult.html'" id="searchResult">
   
 </div>
 
-<div class="toolbox" ng-include="'app/view/spheres/toolbox.html'">
+<div class="toolbox noselect" ng-include="'app/view/spheres/toolbox.html'">
   
 </div>
+
