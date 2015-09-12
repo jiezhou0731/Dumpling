@@ -1,0 +1,51 @@
+<div ng-controller="sphereClickedDropdownMenuCtrl as menu" class="sphere-clicked-dropdown-menu" ng-style="{left:mousePos.x,top:mousePos.y}" ng-show="isOpen">
+      <md-fab-speed-dial md-open="isOpen" md-direction="down" ng-class="'md-scale'">
+        <md-fab-trigger style="display:none;">
+          <md-button aria-label="menu" class="md-fab md-warn">
+            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+          </md-button>
+        </md-fab-trigger>
+
+        <md-fab-actions>
+          <md-button class="md-raised md-mini menu-item" ng-click="open();">
+            show
+          </md-button>
+          <md-button  class="md-raised md-mini menu-item" ng-click="close();">
+            hide
+          </md-button>
+          <md-button class="md-raised md-mini menu-item" ng-click="openAll();">
+            show all
+          </md-button>
+          <md-button class="md-raised md-mini menu-item" ng-click="closeAll();">
+            hide all
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+</div>
+
+
+
+<div>
+  <div ng-controller="dialogCtrl">
+   </div>
+
+  <div ng-controller="popupWindowController">
+  </div>
+
+  <div ng-controller="graphCtrl" id="graphCtrl" class="graph">
+    <div id="graph" >
+    </div>
+  </div>
+</div>
+
+<div class="conversation noselect" ng-include="'app/view/conversation.html'" style="display:none;"></div>
+
+
+<div ng-show="false" class="search-result" ng-include="'app/view/spheres/searchResult.html'" id="searchResult">
+  
+</div>
+
+<div class="toolbox noselect" ng-include="'app/view/spheres/toolbox.html'"  style="display:none;">
+  
+</div>
+
