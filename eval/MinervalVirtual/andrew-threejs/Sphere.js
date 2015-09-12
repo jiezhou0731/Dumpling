@@ -47,6 +47,7 @@ andrewThree.Sphere=function(arg){
         mat.map = canvasMap;
         sphere.sprite = new THREE.Mesh(geom, mat);
         sphere.sprite.material.map.needsUpdate = true;
+        sphere.sprite.text = sphere.text;
     }
 
     sphere.highlight=function(){

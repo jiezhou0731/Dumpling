@@ -27,6 +27,8 @@ app.controller('dialogCtrl', function($scope, $mdDialog, $rootScope) {
 
 	$scope.showDialog = function(msg) {
 		trackballControls.enabled = false;
+		$rootScope.dialog = {};
+		$rootScope.dialog.title = msg.clickedObject.text;
 		$mdDialog.show({
 			controller: DialogController,
 			templateUrl: 'app/view/spheres/docDetail.html',
@@ -59,7 +61,7 @@ app.controller('graphCtrl', function($scope, $mdDialog,$rootScope) {
 });
 
 
-function DialogController($scope, $mdDialog) {
+function DialogController($scope, $mdDialog,$rootScope) {
 	$scope.hide = function() {
 		trackballControls.enabled = true;
 		$mdDialog.hide();
