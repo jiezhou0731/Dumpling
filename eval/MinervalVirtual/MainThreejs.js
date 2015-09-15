@@ -85,7 +85,7 @@ function init() {
     canvasWidth = $("#graph").width();
     clock = new THREE.Clock();
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 0.001, 1000);
     webGLRenderer = new THREE.WebGLRenderer( { preserveDrawingBuffer: true } );
     webGLRenderer.setClearColor(new THREE.Color(0xFFFFFF, 1.0));
     webGLRenderer.setSize(canvasWidth, canvasHeight);

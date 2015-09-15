@@ -87,7 +87,14 @@ function init() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 0.1, 1000);
     webGLRenderer = new THREE.WebGLRenderer( { preserveDrawingBuffer: true } );
-    webGLRenderer.setClearColor(new THREE.Color(0x000000, 1.0));
+    //webGLRenderer.setClearColor(new THREE.Color(0x000000, 1.0));
+
+    webGLRenderer = new THREE.WebGLRenderer({
+  antialias: true,
+  alpha: true
+});
+webGLRenderer.setClearColor(0xffffff, 0);
+
     webGLRenderer.setSize(canvasWidth, canvasHeight);
     webGLRenderer.shadowMapEnabled = true;
 

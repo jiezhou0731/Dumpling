@@ -18,8 +18,8 @@ andrewThree.Link=function(arg){
 
     var material = new THREE.LineBasicMaterial( {
                     color:0xF9690E,
-                    blending: THREE.AdditiveBlending,
-                    transparent: true
+                    transparent: false,
+                    linewidth: 5
                 } );
 
     var geometry = new THREE.Geometry();

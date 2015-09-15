@@ -15,10 +15,9 @@ andrewThree.Sphere=function(arg){
     sphere.sphereRadius = arg.sphereRadius || 2;
     sphere.text = arg.text || "N/A";
     sphere.fontSize = arg.fontSize || "30";
-    sphere.backgroundColor = arg.backgroundColor || {s:"#d8e6bc",t:"#d8e6bc"};
+    sphere.backgroundColor = arg.backgroundColor || {s:"#FDE3A7",t:"#FDE3A7"};
     sphere.position = arg.position || new THREE.Vector3(0, 0, 0);
     sphere.sphereRadius =0.6;
-    sphere.backgroundColor = {s:"#FFFFFF",t:"#FFFFFF"};
 
     sphere.createSprite=function(){
         var geom = new THREE.SphereGeometry(sphere.sphereRadius, 20, 20);
@@ -44,12 +43,31 @@ andrewThree.Sphere=function(arg){
         ctx.fillStyle="black";
         ctx.font=sphere.fontSize+"px sans-serif";
         ctx.fillText("",40,110);
+
         var canvasMap = new THREE.Texture(canvas);
         var mat = new THREE.MeshBasicMaterial();
         mat.map = canvasMap;
         sphere.sprite = new THREE.Mesh(geom, mat);
         sphere.sprite.text = sphere.text;
         sphere.sprite.material.map.needsUpdate = true;
+
+
+        var geom = new THREE.PlaneGeometry(8, 4, 1);
+
+        var canvas = document.createElement('canvas');
+        canvas.width = 200;
+        canvas.height = 80;
+        var ctx=canvas.getContext("2d");
+        ctx.rect(0, 0, canvas.width/2, canvas.height);
+        ctx.font="40px sans-serif";
+        ctx.fillText(sphere.text,2,50);
+        var canvasMap = new THREE.Texture(canvas);
+        var mat = new THREE.MeshBasicMaterial({side:THREE.DoubleSide});
+        mat.map = canvasMap;
+        mat.transparent = true;
+        mat.opacity = 0.9;
+        sphere.textSprite = new THREE.Mesh(geom, mat);
+        sphere.textSprite.material.map.needsUpdate = true;
     }
 
     sphere.highlight=function(){
@@ -86,6 +104,7 @@ andrewThree.Sphere=function(arg){
     sphere.addTo=function(scene){
         sphere.scene = scene;
         sphere.scene.add(sphere.sprite);
+        sphere.scene.add(sphere.textSprite);
         if (sphere.highlightSphere!=undefined) {
             sphere.scene.add(sphere.highlightSphere);
         }
@@ -156,5 +175,9 @@ andrewThree.Sphere=function(arg){
     sphere.sprite.position.x = sphere.position.x;
     sphere.sprite.position.y = sphere.position.y;
     sphere.sprite.position.z = sphere.position.z;
+
+    sphere.textSprite.position.x = sphere.position.x;
+    sphere.textSprite.position.y = sphere.position.y+1;
+    sphere.textSprite.position.z = sphere.position.z-1;
     return sphere;
 }

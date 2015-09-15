@@ -31,7 +31,7 @@ andrewThree.SurroundedSphere=function(arg){
     surroundedSphere.father = andrewThree.Sphere({
         text:surroundedSphere.data.fatherNodeName, 
         sphereRadius:5, 
-        backgroundColor:{s:"rgb(95,154,184)",t:"rgb(141,198,227)"}, 
+        backgroundColor:{s:"#F9690E",t:"#F9690E"}, 
         position:surroundedSphere.center
     });
     surroundedSphere.father.sprite.surroundedSphere=surroundedSphere;
@@ -42,8 +42,8 @@ andrewThree.SurroundedSphere=function(arg){
     surroundedSphere.lines=[];
 
     var rowColor={};
-    rowColor.s="rgb(252,247,187)";
-    rowColor.t="rgb(230,84,71)";
+    rowColor.s="rgb(46, 204, 113)";
+    rowColor.t="rgb(46, 204, 113)";
     // Rotate an angle to ensure long tails are outward.
     var angleOffset=0;//Math.PI/2;;
     var a = surroundedSphere.center.x;
@@ -61,8 +61,8 @@ andrewThree.SurroundedSphere=function(arg){
 
         // Create the first node of a row
         var pickedColor={};    
-        pickedColor.s="rgb(169,199,185)";
-        pickedColor.t="rgb(255,255,255)";
+        pickedColor.s="rgb(154, 18, 179)";
+        pickedColor.t="rgb(154, 18, 179)";
         var position =new THREE.Vector3(
                 (6+3)*Math.cos(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.x,
                 (6+3)*Math.sin(i*2*Math.PI/surroundedSphere.numberOfChildren+angleOffset)+surroundedSphere.center.y, 
@@ -79,7 +79,7 @@ andrewThree.SurroundedSphere=function(arg){
         newChildren.sphereArr.push(newSphere);
         surroundedSphere.clickables.push(newSphere.sprite);
         newSphere.sprite.surroundedSphere=surroundedSphere;
-        var line = createLine(surroundedSphere.center, position,0x2ECC71);
+        var line = createLine(surroundedSphere.center, position,0x9A12B3);
         surroundedSphere.lines.push(line);
 
         // Create the following nodes
@@ -108,7 +108,7 @@ andrewThree.SurroundedSphere=function(arg){
             newSphere.sprite.surroundedSphere=surroundedSphere;
             surroundedSphere.clickables.push(newSphere.sprite);
 
-            var line = createLine(firstSpherePosition, position, 0xFFFFFF);
+            var line = createLine(firstSpherePosition, position, 0x2ECC71);
             surroundedSphere.lines.push(line);
         } else {
             // If array of nodes follow
@@ -132,7 +132,7 @@ andrewThree.SurroundedSphere=function(arg){
                 newSphere.sprite.surroundedSphere=surroundedSphere;
                 surroundedSphere.clickables.push(newSphere.sprite);
 
-                var line = createLine(firstSpherePosition, position, 0xFFFFFF);
+                var line = createLine(firstSpherePosition, position, 0x2ECC71);
                 surroundedSphere.lines.push(line);
             }
         }
@@ -263,8 +263,8 @@ function randomDistance(min,max){
 function createLine(s,t,color){
     var material = new THREE.LineBasicMaterial( {
                     color:color,
-                    blending: THREE.AdditiveBlending,
-                    transparent: true
+                    transparent: false,
+                    linewidth: 4
                 } );
 
     var geometry = new THREE.Geometry();
